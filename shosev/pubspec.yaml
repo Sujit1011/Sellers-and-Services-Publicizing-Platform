@@ -84,6 +84,26 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
+  fonts:
+  - family: Nunito Sans
+    fonts:
+      - asset: lib/assets/fonts/NunitoSans/NunitoSans-Regular.ttf
+      - asset: lib/assets/fonts/NunitoSans/NunitoSans-Bold.ttf
+        weight: 700
+      - asset: lib/assets/fonts/NunitoSans/NunitoSans-Italic.ttf
+        style: italic
+
+# {
+#   FontWeight.w100: 'Thin',
+#   FontWeight.w200: 'ExtraLight',
+#   FontWeight.w300: 'Light',
+#   FontWeight.w400: 'Regular',
+#   FontWeight.w500: 'Medium',
+#   FontWeight.w600: 'SemiBold',
+#   FontWeight.w700: 'Bold',
+#   FontWeight.w800: 'ExtraBold',
+#   FontWeight.w900: 'Black',
+# }
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
