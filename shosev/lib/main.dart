@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 import 'assets/design.dart' as design;
 
 
@@ -87,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title, style: Theme.of(context).textTheme.headline2,),
+        title: Text(widget.title, style: Theme.of(context).textTheme.headline1),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -111,20 +111,93 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Text(
               'You have pushed the button this many times:',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headline3,
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headline3,
             ),
+            Row(
+              children: const <Widget>[
+                design.LogoSimple(),
+                design.LogoOnWhite(),
+                design.LogoOnColored(),
+              ],
+            ),
+            // design.SmallTextButton(),
+            const MyThreeOptions(),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        
         onPressed: _incrementCounter,
         tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, size: 35),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class MyThreeOptions extends StatefulWidget {
+  const MyThreeOptions({Key? key}) : super(key: key);
+
+  @override
+  State<MyThreeOptions> createState() => _MyThreeOptionsState();
+}
+
+class _MyThreeOptionsState extends State<MyThreeOptions> {
+  int? _value = 0;
+  // 0 = none
+  // 1 = SUGGESTIONS
+  // 2 = FAVOURITES
+  // 3 = CATEGORIES
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 10.0,
+      children: <Widget>[
+        ChoiceChip(
+          disabledColor: const Color(0xFFD1D1D1),
+          selectedColor: const Color(0xFFFFC804),
+          backgroundColor: const Color(0xFFFCE48F),
+          label: const Text('SUGGESTIONS'),
+          labelStyle: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal, color: Color(0xFF333333), letterSpacing: -0.5),
+          selected: _value == 1,
+          onSelected: (bool selected) {
+            setState(() {
+              _value = selected ? 1 : 0;
+            });
+          },
+        ),
+        ChoiceChip(
+          disabledColor: const Color(0xFFD1D1D1),
+          selectedColor: const Color(0xFFFFC804),
+          backgroundColor: const Color(0xFFFCE48F),
+          label: const Text('FAVOURITES'),
+          labelStyle: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal, color: Color(0xFF333333), letterSpacing: -0.5),
+          selected: _value == 2,
+          onSelected: (bool selected) {
+            setState(() {
+              _value = selected ? 2 : 0;
+            });
+          },
+        ),
+        ChoiceChip(
+          disabledColor: const Color(0xFFD1D1D1),
+          selectedColor: const Color(0xFFFFC804),
+          backgroundColor: const Color(0xFFFCE48F),
+          label: const Text('CATEGORIES'),
+          labelStyle: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal, color: Color(0xFF333333), letterSpacing: -0.5),
+          selected: _value == 3,
+          onSelected: (bool selected) {
+            setState(() {
+              _value = selected ? 3 : 0;
+            });
+          },
+        )
+      ],
     );
   }
 }

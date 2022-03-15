@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 // My Colors
 const Color _primiaryColor = Color(0xFFFFC804);
-const Color _secondaryColor = Color(0xFFF9C201);
+const Color _secondaryColor = Color(0xFFFCE48F);
 const Color _textColor = Color(0xFF333333);
 const Color _textColor2 = Color(0xFFAAAAAA);
 const Color _placeholder = Color(0xFFE5E5E5);
@@ -22,6 +22,7 @@ const TextStyle _heading6Placeholder = TextStyle(fontSize: 14.0, fontWeight: Fon
 const TextStyle _bodyText = TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold, color: _textColor, letterSpacing: -0.5);
 
 
+// My ThemeData
 final my_theme_data = ThemeData(
   // primarySwatch: _primiary_color,
   primaryColor : _primiaryColor,
@@ -33,7 +34,7 @@ final my_theme_data = ThemeData(
     brightness: Brightness.light, 
     primary: _primiaryColor, 
     onPrimary: _textColor, 
-    secondary: _secondaryColor, 
+    secondary: _primiaryColor, 
     onSecondary: _textColor, 
     error: _red, 
     onError: _textColor, 
@@ -55,12 +56,64 @@ final my_theme_data = ThemeData(
   
 );
 
-
+// My Logos
 class LogoSimple extends StatelessWidget {
   const LogoSimple({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      height: 155,
+      width: 155,
+      margin: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.all(5.0),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: _white,
+        border: Border.all(
+          width: 1,
+          color: _textColor,
+        ),
+      ),
+      child: const Center(child: Text('ShoSev', style: _heading1,)),
+    );
+  }
+}
+
+class LogoOnWhite extends StatelessWidget {
+  const LogoOnWhite({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 155,
+      width: 155,
+      margin: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.all(5.0),
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: _primiaryColor,
+      ),
+      child: const Center(child: Text('ShoSev', style: _heading1,)),
+    );
+  }
+}
+
+class LogoOnColored extends StatelessWidget {
+  const LogoOnColored({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 155,
+      width: 155,
+      margin: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.all(5.0),
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: _white,
+      ),
+      child: const Center(child: Text('ShoSev', style: _heading1,)),
+    );
   }
 }
