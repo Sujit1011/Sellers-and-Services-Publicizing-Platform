@@ -23,13 +23,14 @@ const TextStyle _bodyText = TextStyle(fontSize: 12.0, fontWeight: FontWeight.bol
 
 
 // My ThemeData
-final my_theme_data = ThemeData(
+final myThemeData = ThemeData(
   // primarySwatch: _primiary_color,
   primaryColor : _primiaryColor,
   scaffoldBackgroundColor : _white,
   dividerColor : _placeholder2,
   fontFamily : 'Nunito Sans',
-  splashColor: _textColor,
+  splashColor: _secondaryColor,
+  visualDensity: VisualDensity.compact,
   colorScheme: const ColorScheme(
     brightness: Brightness.light, 
     primary: _primiaryColor, 
