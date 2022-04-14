@@ -7,7 +7,9 @@ void fadeSystemUI() {
 }
 
 class AppBarContents extends StatelessWidget {
-  const AppBarContents({Key? key, required this.title}) : super(key: key);
+  const AppBarContents({Key? key, required this.title, required this.scaffoldKey}) : super(key: key);
+
+  final GlobalKey<ScaffoldState> scaffoldKey;
   final String title;
 
   void onPressed() {
@@ -32,13 +34,13 @@ class AppBarContents extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(30.0, 10.0, 25.0, 0.0),
+            padding: const EdgeInsets.fromLTRB(35.0, 20.0, 30.0, 0.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
               children: [
                 Expanded(
-                  // flex: 10,
                   child: Marquee(
                     child: Text(title, style: Theme.of(context).textTheme.headline1),
                     animationDuration: const Duration(seconds: 2),
@@ -47,10 +49,10 @@ class AppBarContents extends StatelessWidget {
                     pauseDuration: const Duration(seconds: 2),
                   ),
                 ),
-                // const Spacer(),
                 IconButton(
-                  // alignment: Alignment.topCenter,
-                  onPressed: onPressed,
+                  onPressed: () {
+                    scaffoldKey.currentState?.openEndDrawer();
+                  },
                   tooltip: "User Menu",
                   icon: const Icon(
                     Icons.menu_rounded,
@@ -63,7 +65,7 @@ class AppBarContents extends StatelessWidget {
           Container(
             alignment: Alignment.topCenter,
             child: const Padding(
-                padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 7.0),
                 child: MyThreeOptions(),
               ),
           ),
