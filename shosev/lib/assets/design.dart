@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:shosev/shopProfile.dart' as shopProfile;
 
 // My Colors
 const Color _primiaryColor = Color(0xFFFFC804);
@@ -20,6 +20,27 @@ const TextStyle _heading5 = TextStyle(fontSize: 14.0, fontWeight: FontWeight.bol
 const TextStyle _heading6 = TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal, color: _textColor, letterSpacing: -0.5);
 const TextStyle _heading6Placeholder = TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold, color: _textColor2, letterSpacing: -0.5);
 const TextStyle _bodyText = TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold, color: _textColor, letterSpacing: -0.5);
+
+// My Buttton Styles
+final _boldButtonStyle = TextButton.styleFrom(
+  backgroundColor: const Color(0xFFFFC804),
+  primary: const Color(0xFF333333),
+  minimumSize: const Size(108, 32),
+  padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 14),
+  shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(30.0)),
+  ),
+);
+
+final _simpleButtonStyle = TextButton.styleFrom(
+  backgroundColor: const Color(0xFFFFC804),
+  primary: const Color(0xFF333333),
+  minimumSize: const Size(108, 23),
+  padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 14),
+  shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(30.0)),
+  ),
+);
 
 
 // My ThemeData
@@ -54,7 +75,13 @@ final myThemeData = ThemeData(
     bodyText1: _bodyText,
     overline: _heading6Placeholder,
   ),
-  
+  // dividerTheme: const DividerThemeData(
+  //   space: 42,
+  //   thickness: 2,
+  //   indent: 20,
+  //   endIndent: 20,
+  //   color: Color(0xFFE5E5E5),
+  // ),
 );
 
 // My Logos
@@ -115,6 +142,69 @@ class LogoOnColored extends StatelessWidget {
         color: _white,
       ),
       child: const Center(child: Text('ShoSev', style: _heading1,)),
+    );
+  }
+}
+
+class AllShopsServices extends StatelessWidget {
+  const AllShopsServices({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 13.0),
+      child: InkWell(
+        child: Container(
+          height: 78,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Color(0xFFD1D1D1),
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.black,
+                minRadius: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 0.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Sujit Soren",
+                        style: Theme.of(context).textTheme.headline2),
+                    Text("+91 987 654 3210"),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.double_arrow,
+                color: Color(0xFFD1D1D1),
+                size: 44.0,
+              )
+            ],
+          ),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const shopProfile.ShopProfilePage(
+                    rating: 4,
+                    shopName: "My Shops",
+                    joined: '2022',
+                    reviews: 22,
+                    contacted: 22,
+                    aboutUs: 'Hello World')),
+          );
+        },
+      ),
     );
   }
 }
