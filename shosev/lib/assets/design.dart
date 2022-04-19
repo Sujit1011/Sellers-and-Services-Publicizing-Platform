@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shosev/shopProfile.dart' as shopProfile;
+import 'package:shosev/serviceProfile.dart' as serviceProfile;
 
 // My Colors
 const Color _primiaryColor = Color(0xFFFFC804);
@@ -12,14 +13,46 @@ const Color _white = Color(0xFFFFFFFF);
 const Color _red = Color(0xFFEE4949);
 
 // My TextStyles
-const TextStyle _heading1 = TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold, color: _textColor, letterSpacing: -0.5);
-const TextStyle _heading2 = TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: _textColor, letterSpacing: -0.5);
-const TextStyle _heading3 = TextStyle(fontSize: 20.0, fontWeight: FontWeight.normal, color: _textColor, letterSpacing: -0.5);
-const TextStyle _heading4 = TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: _textColor, letterSpacing: -0.5);
-const TextStyle _heading5 = TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold, color: _textColor, letterSpacing: -0.5);
-const TextStyle _heading6 = TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal, color: _textColor, letterSpacing: -0.5);
-const TextStyle _heading6Placeholder = TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold, color: _textColor2, letterSpacing: -0.5);
-const TextStyle _bodyText = TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold, color: _textColor, letterSpacing: -0.5);
+const TextStyle _heading1 = TextStyle(
+    fontSize: 40.0,
+    fontWeight: FontWeight.bold,
+    color: _textColor,
+    letterSpacing: -0.5);
+const TextStyle _heading2 = TextStyle(
+    fontSize: 24.0,
+    fontWeight: FontWeight.bold,
+    color: _textColor,
+    letterSpacing: -0.5);
+const TextStyle _heading3 = TextStyle(
+    fontSize: 20.0,
+    fontWeight: FontWeight.normal,
+    color: _textColor,
+    letterSpacing: -0.5);
+const TextStyle _heading4 = TextStyle(
+    fontSize: 18.0,
+    fontWeight: FontWeight.bold,
+    color: _textColor,
+    letterSpacing: -0.5);
+const TextStyle _heading5 = TextStyle(
+    fontSize: 14.0,
+    fontWeight: FontWeight.bold,
+    color: _textColor,
+    letterSpacing: -0.5);
+const TextStyle _heading6 = TextStyle(
+    fontSize: 12.0,
+    fontWeight: FontWeight.normal,
+    color: _textColor,
+    letterSpacing: -0.5);
+const TextStyle _heading6Placeholder = TextStyle(
+    fontSize: 14.0,
+    fontWeight: FontWeight.bold,
+    color: _textColor2,
+    letterSpacing: -0.5);
+const TextStyle _bodyText = TextStyle(
+    fontSize: 12.0,
+    fontWeight: FontWeight.bold,
+    color: _textColor,
+    letterSpacing: -0.5);
 
 // My Buttton Styles
 final _boldButtonStyle = TextButton.styleFrom(
@@ -42,29 +75,27 @@ final _simpleButtonStyle = TextButton.styleFrom(
   ),
 );
 
-
 // My ThemeData
 final myThemeData = ThemeData(
   // primarySwatch: _primiary_color,
-  primaryColor : _primiaryColor,
-  scaffoldBackgroundColor : _white,
-  dividerColor : _placeholder2,
-  fontFamily : 'Nunito Sans',
+  primaryColor: _primiaryColor,
+  scaffoldBackgroundColor: _white,
+  dividerColor: _placeholder2,
+  fontFamily: 'Nunito Sans',
   splashColor: _secondaryColor,
   visualDensity: VisualDensity.compact,
   colorScheme: const ColorScheme(
-    brightness: Brightness.light, 
-    primary: _primiaryColor, 
-    onPrimary: _textColor, 
-    secondary: _primiaryColor, 
-    onSecondary: _textColor, 
-    error: _red, 
-    onError: _textColor, 
-    background: _placeholder, 
-    onBackground: _textColor, 
-    surface: _placeholder, 
-    onSurface: _textColor
-  ),
+      brightness: Brightness.light,
+      primary: _primiaryColor,
+      onPrimary: _textColor,
+      secondary: _primiaryColor,
+      onSecondary: _textColor,
+      error: _red,
+      onError: _textColor,
+      background: _placeholder,
+      onBackground: _textColor,
+      surface: _placeholder,
+      onSurface: _textColor),
   textTheme: const TextTheme(
     headline1: _heading1,
     headline2: _heading2,
@@ -103,7 +134,11 @@ class LogoSimple extends StatelessWidget {
           color: _textColor,
         ),
       ),
-      child: const Center(child: Text('ShoSev', style: _heading1,)),
+      child: const Center(
+          child: Text(
+        'ShoSev',
+        style: _heading1,
+      )),
     );
   }
 }
@@ -122,7 +157,11 @@ class LogoOnWhite extends StatelessWidget {
         shape: BoxShape.circle,
         color: _primiaryColor,
       ),
-      child: const Center(child: Text('ShoSev', style: _heading1,)),
+      child: const Center(
+          child: Text(
+        'ShoSev',
+        style: _heading1,
+      )),
     );
   }
 }
@@ -141,13 +180,52 @@ class LogoOnColored extends StatelessWidget {
         shape: BoxShape.circle,
         color: _white,
       ),
-      child: const Center(child: Text('ShoSev', style: _heading1,)),
+      child: const Center(
+          child: Text(
+        'ShoSev',
+        style: _heading1,
+      )),
     );
   }
 }
 
-class AllShopsServices extends StatelessWidget {
-  const AllShopsServices({Key? key}) : super(key: key);
+class AllShopsServices extends StatefulWidget {
+  const AllShopsServices({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  State<AllShopsServices> createState() => _AllShopsServicesState();
+}
+
+class _AllShopsServicesState extends State<AllShopsServices> {
+  void _choice() {
+    setState(() {
+      (widget.title == "My Shops")
+          ? Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const shopProfile.ShopProfilePage(
+                      rating: 4,
+                      shopName: "My Shops",
+                      joined: '2022',
+                      reviews: 22,
+                      contacted: 22,
+                      aboutUs: 'Hello World')),
+            )
+          : Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const serviceProfile.ServiceProfilePage(
+                      rating: 4,
+                      shopName: "My Services",
+                      joined: '2022',
+                      reviews: 22,
+                      contacted: 22,
+                      aboutUs: 'Hello World')),
+            );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -191,19 +269,7 @@ class AllShopsServices extends StatelessWidget {
             ],
           ),
         ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const shopProfile.ShopProfilePage(
-                    rating: 4,
-                    shopName: "My Shops",
-                    joined: '2022',
-                    reviews: 22,
-                    contacted: 22,
-                    aboutUs: 'Hello World')),
-          );
-        },
+        onTap: _choice,
       ),
     );
   }

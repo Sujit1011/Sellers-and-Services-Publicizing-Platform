@@ -89,7 +89,9 @@ class _All_Shops_ServicesState extends State<All_Shops_Services>
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.only(bottom: 47, right: 15),
                       child: Column(
-                        children: const [design.AllShopsServices()],
+                        children: [
+                          design.AllShopsServices(title: widget.title)
+                        ],
                       ),
                     ),
                   ),
@@ -116,12 +118,18 @@ class _All_Shops_ServicesState extends State<All_Shops_Services>
                   tooltip: 'Back/Left',
                   child: const Icon(Icons.chevron_left_rounded, size: 30),
                 ),
-                FloatingActionButton(
-                  mini: true,
-                  onPressed: _add,
-                  tooltip: 'Right',
-                  child: const Icon(Icons.add, size: 30),
-                )
+                widget.title == "My Shops" ||
+                        widget.title == "My Services" ||
+                        widget.title == "My Chats"
+                    ? FloatingActionButton(
+                        mini: true,
+                        onPressed: _add,
+                        tooltip: 'Right',
+                        child: const Icon(Icons.add, size: 30),
+                      )
+                    : Visibility(
+                        visible: false,
+                        child: FloatingActionButton(onPressed: _add)),
               ]),
         ));
   }
