@@ -241,7 +241,10 @@ class signupdrawer extends StatelessWidget {
 }
 
 class signindrawer1 extends StatelessWidget {
-  const signindrawer1({Key? key}) : super(key: key);
+  const signindrawer1({Key? key, required this.businessmember})
+      : super(key: key);
+
+  final bool businessmember;
 
   String generateRandomString(int len) {
     var r = Random();
@@ -314,81 +317,83 @@ class signindrawer1 extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
-                              child: TextButton.icon(
-                                style: TextButton.styleFrom(
-                                  backgroundColor: const Color(0xFFFFC804),
-                                  primary: const Color(0xFF333333),
-                                  minimumSize: const Size(204, 40),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 2.0, vertical: 14),
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(30.0)),
+                            if (businessmember == true)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: TextButton.icon(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: const Color(0xFFFFC804),
+                                    primary: const Color(0xFF333333),
+                                    minimumSize: const Size(204, 40),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 2.0, vertical: 14),
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(30.0)),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const all_shops_services
+                                                  .All_Shops_Services(
+                                                title: "My Shops",
+                                                aboutUs: "Sujit Soren",
+                                              )),
+                                    );
+                                  },
+                                  icon: const Icon(Icons.shopping_bag),
+                                  label: const Text(
+                                    "MY SHOPS",
+                                    style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.normal,
+                                        color: Color(0xFF333333),
+                                        letterSpacing: -0.5),
                                   ),
                                 ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const all_shops_services
-                                                .All_Shops_Services(
-                                              title: "My Shops",
-                                              aboutUs: "Sujit Soren",
-                                            )),
-                                  );
-                                },
-                                icon: const Icon(Icons.shopping_bag),
-                                label: const Text(
-                                  "MY SHOPS",
-                                  style: TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.normal,
-                                      color: Color(0xFF333333),
-                                      letterSpacing: -0.5),
-                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
-                              child: TextButton.icon(
-                                style: TextButton.styleFrom(
-                                  backgroundColor: const Color(0xFFFFC804),
-                                  primary: const Color(0xFF333333),
-                                  minimumSize: const Size(204, 40),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 2.0, vertical: 14),
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(30.0)),
+                            if (businessmember == true)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: TextButton.icon(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: const Color(0xFFFFC804),
+                                    primary: const Color(0xFF333333),
+                                    minimumSize: const Size(204, 40),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 2.0, vertical: 14),
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(30.0)),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const all_shops_services
+                                                  .All_Shops_Services(
+                                                title: "My Services",
+                                                aboutUs: "Sujit Soren",
+                                              )),
+                                    );
+                                  },
+                                  icon: const Icon(
+                                      Icons.home_repair_service_rounded),
+                                  label: const Text(
+                                    "MY SERVICES",
+                                    style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.normal,
+                                        color: Color(0xFF333333),
+                                        letterSpacing: -0.5),
                                   ),
                                 ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const all_shops_services
-                                                .All_Shops_Services(
-                                              title: "My Services",
-                                              aboutUs: "Sujit Soren",
-                                            )),
-                                  );
-                                },
-                                icon: const Icon(
-                                    Icons.home_repair_service_rounded),
-                                label: const Text(
-                                  "MY SERVICES",
-                                  style: TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.normal,
-                                      color: Color(0xFF333333),
-                                      letterSpacing: -0.5),
-                                ),
                               ),
-                            ),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 10.0),
                               child: TextButton.icon(
@@ -510,6 +515,43 @@ class signindrawer1 extends StatelessWidget {
                                 icon: const Icon(Icons.reviews),
                                 label: const Text(
                                   "MY REVIEWS",
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.normal,
+                                      color: Color(0xFF333333),
+                                      letterSpacing: -0.5),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 10.0),
+                              child: TextButton.icon(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: const Color(0xFFE5E5E5),
+                                  primary: const Color(0xFF333333),
+                                  minimumSize: const Size(204, 40),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 2.0, vertical: 14),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(30.0)),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const all_shops_services
+                                                .All_Shops_Services(
+                                              title: "Edit Profile",
+                                              aboutUs: "Sujit Soren",
+                                            )),
+                                  );
+                                },
+                                icon: const Icon(Icons.edit),
+                                label: const Text(
+                                  "EDIT PROFILE",
                                   style: TextStyle(
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.normal,

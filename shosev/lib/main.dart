@@ -110,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // |____Floating buttons
     return Scaffold(
         key: _scaffoldKey,
-        endDrawer: const nav.signindrawer1(),
+        endDrawer: const nav.signindrawer1(businessmember: true),
         body: Stack(
           children: <Widget>[
             Column(

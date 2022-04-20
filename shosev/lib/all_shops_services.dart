@@ -32,6 +32,8 @@ class _All_Shops_ServicesState extends State<All_Shops_Services>
 
   @override
   Widget build(BuildContext context) {
+    bool isSwitched = false;
+
     return Scaffold(
         body: Stack(
           children: <Widget>[
@@ -90,7 +92,43 @@ class _All_Shops_ServicesState extends State<All_Shops_Services>
                       padding: const EdgeInsets.only(bottom: 47, right: 15),
                       child: Column(
                         children: [
-                          design.AllShopsServices(title: widget.title)
+                          design.AllShopsServices(title: widget.title),
+                          design.AllShopsServices(title: widget.title),
+                          if (widget.title == "Edit Profile")
+                            Wrap(children: [
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 0, 0, 11),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        border: Border.all(
+                                            color: const Color(0xFFD1D1D1))),
+                                    child: Row(
+                                      children: [
+                                        Switch(
+                                          value: isSwitched,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              isSwitched = value;
+                                              print(isSwitched);
+                                            });
+                                          },
+                                          activeTrackColor:
+                                              Colors.lightGreenAccent,
+                                          activeColor: Colors.green,
+                                        ),
+                                        const Flexible(
+                                            child: Text(
+                                          "Become a Seller or Service provider",
+                                          // overflow: TextOverflow.clip,
+                                        )),
+                                      ],
+                                    ),
+                                  )),
+                            ]),
+                          design.AllShopsServices(title: widget.title),
+                          design.AllShopsServices(title: widget.title),
                         ],
                       ),
                     ),
@@ -110,14 +148,23 @@ class _All_Shops_ServicesState extends State<All_Shops_Services>
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                FloatingActionButton(
-                  mini: true,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  tooltip: 'Back/Left',
-                  child: const Icon(Icons.chevron_left_rounded, size: 30),
-                ),
+                widget.title == "Edit Profile"
+                    ? FloatingActionButton(
+                        mini: true,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        tooltip: 'Back/Left',
+                        child: const Icon(Icons.not_interested, size: 30),
+                      )
+                    : FloatingActionButton(
+                        mini: true,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        tooltip: 'Back/Left',
+                        child: const Icon(Icons.chevron_left_rounded, size: 30),
+                      ),
                 widget.title == "My Shops" ||
                         widget.title == "My Services" ||
                         widget.title == "My Chats"
@@ -127,9 +174,16 @@ class _All_Shops_ServicesState extends State<All_Shops_Services>
                         tooltip: 'Right',
                         child: const Icon(Icons.add, size: 30),
                       )
-                    : Visibility(
-                        visible: false,
-                        child: FloatingActionButton(onPressed: _add)),
+                    : widget.title == "Edit Profile"
+                        ? FloatingActionButton(
+                            mini: true,
+                            onPressed: _add,
+                            tooltip: 'Right',
+                            child: const Icon(Icons.done_rounded, size: 30),
+                          )
+                        : Visibility(
+                            visible: false,
+                            child: FloatingActionButton(onPressed: _add)),
               ]),
         ));
   }
