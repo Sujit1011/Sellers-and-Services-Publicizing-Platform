@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:marquee_widget/marquee_widget.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:card_swiper/card_swiper.dart';
-import 'assets/design.dart' as design;
-import 'appbar.dart' as appbar;
+import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:marquee_widget/marquee_widget.dart';
 
-class ServiceProfilePage extends StatefulWidget {
+import 'package:shosev/appbar.dart' as appbar;
+
+class ShopProfilePage extends StatefulWidget {
   final double rating;
   final String shopName;
   final String joined;
@@ -13,7 +13,7 @@ class ServiceProfilePage extends StatefulWidget {
   final int contacted;
   final String aboutUs;
 
-  const ServiceProfilePage(
+  const ShopProfilePage(
       {Key? key,
       required this.rating,
       required this.shopName,
@@ -24,11 +24,10 @@ class ServiceProfilePage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<ServiceProfilePage> createState() => _ServicelePageState();
+  State<ShopProfilePage> createState() => _ShopProfilePageState();
 }
 
-class _ServicelePageState extends State<ServiceProfilePage>
-    with SingleTickerProviderStateMixin {
+class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProviderStateMixin {
   bool _shareValue = false;
   final int pages = 3;
   late final TabController _controller;
@@ -105,7 +104,7 @@ class _ServicelePageState extends State<ServiceProfilePage>
               // Page 1, Page 2, Page 3
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.fromLTRB(35, 136, 30, 10),
+                  padding: const EdgeInsets.fromLTRB(35, 148, 30, 10),
                   child: TabBarView(
                     physics: const NeverScrollableScrollPhysics(),
                     controller: _controller,
@@ -117,11 +116,11 @@ class _ServicelePageState extends State<ServiceProfilePage>
                         children: [
                           Center(
                             child: SizedBox(
-                              height: 106,
+                              height: 80,
                               width: 243,
-                              child: Column(
+                              child: Row(
                                 children: [
-                                  Row(
+                                  Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -140,9 +139,7 @@ class _ServicelePageState extends State<ServiceProfilePage>
                                                 color: Color(0xFF333333),
                                                 letterSpacing: -0.5)),
                                       ),
-                                      const SizedBox(
-                                        width: 22,
-                                      ),
+                                      const Spacer(),
                                       TextButton.icon(
                                         style: _boldButtonStyle,
                                         icon: const Icon(Icons.call_rounded,
@@ -157,12 +154,17 @@ class _ServicelePageState extends State<ServiceProfilePage>
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(
-                                    height: 19,
+                                  const VerticalDivider(
+                                    width: 42,
+                                    thickness: 2,
+                                    indent: 20,
+                                    endIndent: 20,
+                                    color: Color(0xFFE5E5E5),
                                   ),
                                   Column(
-                                    // crossAxisAlignment: CrossAxisAlignment.center,
-                                    // mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.only(
@@ -305,7 +307,7 @@ class _ServicelePageState extends State<ServiceProfilePage>
                                           borderRadius: const BorderRadius.all(
                                               Radius.circular(10.0)),
                                           child: Image.asset(
-                                            'lib/assets/img/service.jpg',
+                                            'lib/assets/img/shop.png',
                                             width: 106,
                                             height: 124,
                                             fit: BoxFit.cover,
@@ -319,7 +321,7 @@ class _ServicelePageState extends State<ServiceProfilePage>
                                           borderRadius: const BorderRadius.all(
                                               Radius.circular(10.0)),
                                           child: Image.asset(
-                                            'lib/assets/img/service.jpg',
+                                            'lib/assets/img/shop.png',
                                             width: 106,
                                             height: 124,
                                             fit: BoxFit.cover,
@@ -333,7 +335,7 @@ class _ServicelePageState extends State<ServiceProfilePage>
                                           borderRadius: const BorderRadius.all(
                                               Radius.circular(10.0)),
                                           child: Image.asset(
-                                            'lib/assets/img/service.jpg',
+                                            'lib/assets/img/shop.png',
                                             width: 106,
                                             height: 124,
                                             fit: BoxFit.cover,
@@ -347,7 +349,7 @@ class _ServicelePageState extends State<ServiceProfilePage>
                                           borderRadius: const BorderRadius.all(
                                               Radius.circular(10.0)),
                                           child: Image.asset(
-                                            'lib/assets/img/service.jpg',
+                                            'lib/assets/img/shop.png',
                                             width: 106,
                                             height: 124,
                                             fit: BoxFit.cover,
@@ -389,25 +391,87 @@ class _ServicelePageState extends State<ServiceProfilePage>
                           Padding(
                             padding: const EdgeInsets.only(bottom: 8),
                             child: Text(
-                              "Services",
+                              "Products",
                               style: Theme.of(context).textTheme.headline4,
                             ),
                           ),
-                          Expanded(
-                            flex: 1,
-                            child: Padding(
-                                padding: const EdgeInsets.only(
-                                    bottom: 12, right: 15),
-                                child: SingleChildScrollView(
-                                  child: Text(
-                                    widget.aboutUs,
-                                    softWrap: true,
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1,
-                                    textAlign: TextAlign.left,
-                                  ),
-                                )),
-                          ),
+                          SizedBox(
+                              height: 180,
+                              child: Swiper(
+                                itemCount: 3,
+                                // containerHeight: 158,
+                                // containerWidth: 281,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Container(
+                                      padding: const EdgeInsets.all(8.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(15.0)),
+                                        border: Border.all(
+                                            color: const Color(0xFFFFC804),
+                                            width: 2.0),
+                                        boxShadow: const [
+                                          BoxShadow(
+                                            color: Color(0xFFAAAAAA),
+                                            blurRadius: 4.0,
+                                            offset: Offset(0, 4),
+                                          )
+                                        ],
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Expanded(
+                                              child: Padding(
+                                            padding: const EdgeInsets.all(2),
+                                            child: Image.asset(
+                                              'lib/assets/img/bread.jpg',
+                                              fit: BoxFit.fitWidth,
+                                            ),
+                                          )),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                  child: Text(
+                                                "Bread",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline5,
+                                              )),
+                                              Container(
+                                                height: 23,
+                                                width: 41,
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      const Color(0xFFFFC804),
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(
+                                                              20.0)),
+                                                  border: Border.all(
+                                                      color: const Color(
+                                                          0xFFFFC804),
+                                                      width: 2.0),
+                                                ),
+                                                child: const Text(
+                                                  "₹50",
+                                                ),
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      ));
+                                },
+                                itemWidth: 222.0,
+                                itemHeight: 158.0,
+                                // pagination: const SwiperPagination(
+                                //   margin: EdgeInsets.all(2.0),
+                                // ),
+                                // outer: true,
+                                axisDirection: AxisDirection.right,
+                                layout: SwiperLayout.STACK,
+                              )),
                           // Expanded(
                           //   child: Padding(
                           //     padding: const EdgeInsets.only(bottom: 12),
@@ -431,7 +495,7 @@ class _ServicelePageState extends State<ServiceProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Service 1",
+                                          child: Text("Product 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -460,7 +524,7 @@ class _ServicelePageState extends State<ServiceProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Service 1",
+                                          child: Text("Product 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -489,7 +553,7 @@ class _ServicelePageState extends State<ServiceProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Service 1",
+                                          child: Text("Product 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -518,7 +582,7 @@ class _ServicelePageState extends State<ServiceProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Service 1",
+                                          child: Text("Product 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -547,7 +611,7 @@ class _ServicelePageState extends State<ServiceProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Service 1",
+                                          child: Text("Product 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -576,7 +640,7 @@ class _ServicelePageState extends State<ServiceProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Service 1",
+                                          child: Text("Product 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -605,7 +669,7 @@ class _ServicelePageState extends State<ServiceProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Service 1",
+                                          child: Text("Product 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -634,7 +698,7 @@ class _ServicelePageState extends State<ServiceProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Service 1",
+                                          child: Text("Product 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -663,7 +727,7 @@ class _ServicelePageState extends State<ServiceProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Service 1",
+                                          child: Text("Product 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -692,7 +756,7 @@ class _ServicelePageState extends State<ServiceProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Service 1",
+                                          child: Text("Product 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -721,7 +785,7 @@ class _ServicelePageState extends State<ServiceProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Service 1",
+                                          child: Text("Product 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -750,7 +814,7 @@ class _ServicelePageState extends State<ServiceProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Service 1",
+                                          child: Text("Product 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -779,7 +843,7 @@ class _ServicelePageState extends State<ServiceProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Service 1",
+                                          child: Text("Product 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -1381,15 +1445,14 @@ class _ServicelePageState extends State<ServiceProfilePage>
           // Profile Image
           Positioned(
               top: 62,
-              height: 143,
               left: 35,
-              right: 35,
-              child: Center(
-                child: ClipOval(
-                  child: Image.asset(
-                    'lib/assets/img/service.jpg',
-                    fit: BoxFit.fitWidth,
-                  ),
+              width: 143,
+              height: 143,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+                child: Image.asset(
+                  'lib/assets/img/shop.png',
+                  fit: BoxFit.fitWidth,
                 ),
               )),
           // Shop Name
@@ -1397,15 +1460,13 @@ class _ServicelePageState extends State<ServiceProfilePage>
             top: 216,
             left: 35,
             right: 30,
-            child: Center(
-              child: Marquee(
-                child: Text(widget.shopName,
-                    style: Theme.of(context).textTheme.headline1),
-                animationDuration: const Duration(seconds: 2),
-                direction: Axis.horizontal,
-                backDuration: const Duration(milliseconds: 1000),
-                pauseDuration: const Duration(seconds: 2),
-              ),
+            child: Marquee(
+              child: Text(widget.shopName,
+                  style: Theme.of(context).textTheme.headline1),
+              animationDuration: const Duration(seconds: 2),
+              direction: Axis.horizontal,
+              backDuration: const Duration(milliseconds: 1000),
+              pauseDuration: const Duration(seconds: 2),
             ),
           ),
         ],
