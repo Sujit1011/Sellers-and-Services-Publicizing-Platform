@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:shosev/main.dart';
-import 'assets/design.dart' as design;
-import 'maps.dart' as maps;
-// import 'search.dart' as search;
-// import 'info.dart' as info;
+import 'package:shosev/assets/design.dart' as design;
 import 'appbar.dart' as appbar;
 
 class MyAboutUs extends StatefulWidget {
@@ -18,43 +13,13 @@ class MyAboutUs extends StatefulWidget {
   State<MyAboutUs> createState() => _MyAboutUsState();
 }
 
-class _MyAboutUsState extends State<MyAboutUs>
-    with SingleTickerProviderStateMixin {
+class _MyAboutUsState extends State<MyAboutUs>{
   bool _shareValue = false;
-  late final TabController _controller;
-  final int pages = 3;
 
   @override
   void initState() {
     super.initState();
-    _controller = TabController(length: 3, vsync: this);
   }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _left() {
-    appbar.fadeSystemUI();
-    setState(() {
-      (_controller.index == 0) ? null : --_controller.index;
-    });
-  }
-
-  void _right() {
-    appbar.fadeSystemUI();
-    setState(() {
-      (_controller.index == pages - 1) ? null : ++_controller.index;
-    });
-  }
-
-  void _chat() {
-    appbar.fadeSystemUI();
-  }
-
-  void _call() {}
 
   @override
   Widget build(BuildContext context) {
@@ -200,7 +165,7 @@ class _MyAboutUsState extends State<MyAboutUs>
                     selected: _shareValue,
                     onSelected: (bool selected) {
                       setState(() {
-                        appbar.fadeSystemUI();
+                        // appbar.fadeSystemUI();
                         _shareValue = selected ? true : false;
                       });
                     },
@@ -227,12 +192,12 @@ class _MyAboutUsState extends State<MyAboutUs>
               tooltip: 'Back/Left',
               child: const Icon(Icons.chevron_left_rounded, size: 30),
             ),
-            FloatingActionButton(
-              mini: true,
-              onPressed: _right,
-              tooltip: 'Right',
-              child: const Icon(Icons.chevron_right_rounded, size: 30),
-            ),
+            // FloatingActionButton(
+            //   mini: true,
+            //   onPressed: _right,
+            //   tooltip: 'Right',
+            //   child: const Icon(Icons.chevron_right_rounded, size: 30),
+            // ),
           ],
         ),
       ),

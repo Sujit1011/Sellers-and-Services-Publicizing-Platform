@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:marquee_widget/marquee_widget.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:card_swiper/card_swiper.dart';
-import 'assets/design.dart' as design;
+import 'package:marquee_widget/marquee_widget.dart';
+
 import 'appbar.dart' as appbar;
 
-class ShopProfilePage extends StatefulWidget {
+class ServiceProfilePage extends StatefulWidget {
   final double rating;
   final String shopName;
   final String joined;
@@ -13,7 +12,7 @@ class ShopProfilePage extends StatefulWidget {
   final int contacted;
   final String aboutUs;
 
-  const ShopProfilePage(
+  const ServiceProfilePage(
       {Key? key,
       required this.rating,
       required this.shopName,
@@ -24,11 +23,10 @@ class ShopProfilePage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<ShopProfilePage> createState() => _ShopProfilePageState();
+  State<ServiceProfilePage> createState() => _ServicelePageState();
 }
 
-class _ShopProfilePageState extends State<ShopProfilePage>
-    with SingleTickerProviderStateMixin {
+class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerProviderStateMixin {
   bool _shareValue = false;
   final int pages = 3;
   late final TabController _controller;
@@ -55,21 +53,21 @@ class _ShopProfilePageState extends State<ShopProfilePage>
   }
 
   void _left() {
-    appbar.fadeSystemUI();
+    // appbar.fadeSystemUI();
     setState(() {
       (_controller.index == 0) ? Navigator.pop(context) : --_controller.index;
     });
   }
 
   void _right() {
-    appbar.fadeSystemUI();
+    // appbar.fadeSystemUI();
     setState(() {
       (_controller.index == pages - 1) ? null : ++_controller.index;
     });
   }
 
   void _chat() {
-    appbar.fadeSystemUI();
+    // appbar.fadeSystemUI();
   }
 
   void _call() {}
@@ -96,16 +94,17 @@ class _ShopProfilePageState extends State<ShopProfilePage>
             children: [
               // Cover
               SizedBox(
-                  height: 146.0,
-                  width: double.infinity,
-                  child: Image.asset(
-                    'lib/assets/img/cover.jpg',
-                    fit: BoxFit.fitWidth,
-                  )),
+                height: 146.0,
+                width: double.infinity,
+                child: Image.asset(
+                  'lib/assets/img/cover.jpg',
+                  fit: BoxFit.fitWidth,
+                )
+              ),
               // Page 1, Page 2, Page 3
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.fromLTRB(35, 148, 30, 10),
+                  padding: const EdgeInsets.fromLTRB(35, 136, 30, 10),
                   child: TabBarView(
                     physics: const NeverScrollableScrollPhysics(),
                     controller: _controller,
@@ -117,73 +116,69 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                         children: [
                           Center(
                             child: SizedBox(
-                              height: 80,
+                              height: 106,
                               width: 243,
-                              child: Row(
+                              child: Column(
                                 children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       // Chat Button
                                       TextButton.icon(
                                         style: _boldButtonStyle,
                                         icon: const Icon(
-                                            Icons.chat_bubble_rounded,
-                                            size: 18),
+                                          Icons.chat_bubble_rounded,
+                                          size: 18
+                                        ),
                                         onPressed: _chat,
                                         label: const Text("CHAT",
-                                            style: TextStyle(
-                                                fontSize: 14.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: Color(0xFF333333),
-                                                letterSpacing: -0.5)),
+                                        style: TextStyle(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF333333),
+                                          letterSpacing: -0.5)
+                                        ),
                                       ),
-                                      const Spacer(),
+                                      const SizedBox(
+                                        width: 22,
+                                      ),
                                       TextButton.icon(
                                         style: _boldButtonStyle,
-                                        icon: const Icon(Icons.call_rounded,
-                                            size: 18),
+                                        icon: const Icon(
+                                          Icons.call_rounded,
+                                          size: 18
+                                        ),
                                         onPressed: _call,
                                         label: const Text("CALL",
-                                            style: TextStyle(
-                                                fontSize: 14.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: Color(0xFF333333),
-                                                letterSpacing: -0.5)),
+                                          style: TextStyle(
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xFF333333),
+                                            letterSpacing: -0.5
+                                          )
+                                        ),
                                       ),
                                     ],
                                   ),
-                                  const VerticalDivider(
-                                    width: 42,
-                                    thickness: 2,
-                                    indent: 20,
-                                    endIndent: 20,
-                                    color: Color(0xFFE5E5E5),
+                                  const SizedBox(
+                                    height: 19,
                                   ),
                                   Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    // crossAxisAlignment: CrossAxisAlignment.center,
+                                    // mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            bottom: 8.0, left: 0),
+                                        padding: const EdgeInsets.only(bottom: 8.0, left: 0),
                                         child: Text(
-                                          "Ratings (" +
-                                              widget.rating.toString() +
-                                              ")",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline5,
+                                          "Ratings (" +widget.rating.toString() +")",
+                                          style: Theme.of(context).textTheme.headline5,
                                         ),
                                       ),
                                       RatingBarIndicator(
                                         rating: widget.rating,
                                         unratedColor: const Color(0xFFD1D1D1),
-                                        itemBuilder: (context, index) =>
-                                            const Icon(
+                                        itemBuilder: (context, index) => const Icon(
                                           Icons.star,
                                           color: Color(0xFFFFC804),
                                         ),
@@ -197,11 +192,9 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 28.0,
-                          ),
+                          const SizedBox(height: 28.0),
                           Expanded(
-                              child: ListView(
+                            child: ListView(
                             shrinkWrap: true,
                             children: [
                               Padding(
@@ -308,7 +301,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                           borderRadius: const BorderRadius.all(
                                               Radius.circular(10.0)),
                                           child: Image.asset(
-                                            'lib/assets/img/shop.png',
+                                            'lib/assets/img/service.jpg',
                                             width: 106,
                                             height: 124,
                                             fit: BoxFit.cover,
@@ -322,7 +315,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                           borderRadius: const BorderRadius.all(
                                               Radius.circular(10.0)),
                                           child: Image.asset(
-                                            'lib/assets/img/shop.png',
+                                            'lib/assets/img/service.jpg',
                                             width: 106,
                                             height: 124,
                                             fit: BoxFit.cover,
@@ -336,7 +329,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                           borderRadius: const BorderRadius.all(
                                               Radius.circular(10.0)),
                                           child: Image.asset(
-                                            'lib/assets/img/shop.png',
+                                            'lib/assets/img/service.jpg',
                                             width: 106,
                                             height: 124,
                                             fit: BoxFit.cover,
@@ -350,7 +343,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                           borderRadius: const BorderRadius.all(
                                               Radius.circular(10.0)),
                                           child: Image.asset(
-                                            'lib/assets/img/shop.png',
+                                            'lib/assets/img/service.jpg',
                                             width: 106,
                                             height: 124,
                                             fit: BoxFit.cover,
@@ -392,87 +385,25 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                           Padding(
                             padding: const EdgeInsets.only(bottom: 8),
                             child: Text(
-                              "Products",
+                              "Services",
                               style: Theme.of(context).textTheme.headline4,
                             ),
                           ),
-                          SizedBox(
-                              height: 180,
-                              child: Swiper(
-                                itemCount: 3,
-                                // containerHeight: 158,
-                                // containerWidth: 281,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Container(
-                                      padding: const EdgeInsets.all(8.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(15.0)),
-                                        border: Border.all(
-                                            color: const Color(0xFFFFC804),
-                                            width: 2.0),
-                                        boxShadow: const [
-                                          BoxShadow(
-                                            color: Color(0xFFAAAAAA),
-                                            blurRadius: 4.0,
-                                            offset: Offset(0, 4),
-                                          )
-                                        ],
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Expanded(
-                                              child: Padding(
-                                            padding: const EdgeInsets.all(2),
-                                            child: Image.asset(
-                                              'lib/assets/img/bread.jpg',
-                                              fit: BoxFit.fitWidth,
-                                            ),
-                                          )),
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                  child: Text(
-                                                "Bread",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline5,
-                                              )),
-                                              Container(
-                                                height: 23,
-                                                width: 41,
-                                                alignment: Alignment.center,
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0xFFFFC804),
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                          Radius.circular(
-                                                              20.0)),
-                                                  border: Border.all(
-                                                      color: const Color(
-                                                          0xFFFFC804),
-                                                      width: 2.0),
-                                                ),
-                                                child: const Text(
-                                                  "₹50",
-                                                ),
-                                              )
-                                            ],
-                                          )
-                                        ],
-                                      ));
-                                },
-                                itemWidth: 222.0,
-                                itemHeight: 158.0,
-                                // pagination: const SwiperPagination(
-                                //   margin: EdgeInsets.all(2.0),
-                                // ),
-                                // outer: true,
-                                axisDirection: AxisDirection.right,
-                                layout: SwiperLayout.STACK,
-                              )),
+                          Expanded(
+                            flex: 1,
+                            child: Padding(
+                                padding: const EdgeInsets.only(
+                                    bottom: 12, right: 15),
+                                child: SingleChildScrollView(
+                                  child: Text(
+                                    widget.aboutUs,
+                                    softWrap: true,
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                    textAlign: TextAlign.left,
+                                  ),
+                                )),
+                          ),
                           // Expanded(
                           //   child: Padding(
                           //     padding: const EdgeInsets.only(bottom: 12),
@@ -496,7 +427,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Product 1",
+                                          child: Text("Service 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -525,7 +456,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Product 1",
+                                          child: Text("Service 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -554,7 +485,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Product 1",
+                                          child: Text("Service 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -583,7 +514,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Product 1",
+                                          child: Text("Service 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -612,7 +543,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Product 1",
+                                          child: Text("Service 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -641,7 +572,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Product 1",
+                                          child: Text("Service 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -670,7 +601,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Product 1",
+                                          child: Text("Service 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -699,7 +630,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Product 1",
+                                          child: Text("Service 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -728,7 +659,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Product 1",
+                                          child: Text("Service 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -757,7 +688,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Product 1",
+                                          child: Text("Service 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -786,7 +717,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Product 1",
+                                          child: Text("Service 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -815,7 +746,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Product 1",
+                                          child: Text("Service 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -844,7 +775,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                       const Spacer(),
                                       Expanded(
                                           flex: 3,
-                                          child: Text("Product 1",
+                                          child: Text("Service 1",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5)),
@@ -1381,7 +1312,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                           selected: _shareValue,
                           onSelected: (bool selected) {
                             setState(() {
-                              appbar.fadeSystemUI();
+                              // appbar.fadeSystemUI();
                               _shareValue = selected ? true : false;
                             });
                           },
@@ -1446,14 +1377,15 @@ class _ShopProfilePageState extends State<ShopProfilePage>
           // Profile Image
           Positioned(
               top: 62,
-              left: 35,
-              width: 143,
               height: 143,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-                child: Image.asset(
-                  'lib/assets/img/shop.png',
-                  fit: BoxFit.fitWidth,
+              left: 35,
+              right: 35,
+              child: Center(
+                child: ClipOval(
+                  child: Image.asset(
+                    'lib/assets/img/service.jpg',
+                    fit: BoxFit.fitWidth,
+                  ),
                 ),
               )),
           // Shop Name
@@ -1461,13 +1393,15 @@ class _ShopProfilePageState extends State<ShopProfilePage>
             top: 216,
             left: 35,
             right: 30,
-            child: Marquee(
-              child: Text(widget.shopName,
-                  style: Theme.of(context).textTheme.headline1),
-              animationDuration: const Duration(seconds: 2),
-              direction: Axis.horizontal,
-              backDuration: const Duration(milliseconds: 1000),
-              pauseDuration: const Duration(seconds: 2),
+            child: Center(
+              child: Marquee(
+                child: Text(widget.shopName,
+                    style: Theme.of(context).textTheme.headline1),
+                animationDuration: const Duration(seconds: 2),
+                direction: Axis.horizontal,
+                backDuration: const Duration(milliseconds: 1000),
+                pauseDuration: const Duration(seconds: 2),
+              ),
             ),
           ),
         ],
@@ -1483,6 +1417,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
               mini: true,
               onPressed: _left,
               tooltip: 'Back/Left',
+              heroTag: 'Service Back/Left',
               child: const Icon(Icons.chevron_left_rounded, size: 30),
             ),
             Visibility(
@@ -1491,6 +1426,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                 mini: true,
                 onPressed: _right,
                 tooltip: 'Right',
+                heroTag: 'Service Right',
                 child: const Icon(Icons.chevron_right_rounded, size: 30),
               ),
             )
