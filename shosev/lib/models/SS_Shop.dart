@@ -8,7 +8,7 @@ class SS_Shop {
   String name;
   String address;
   String? category;
-  String? workingHours;
+  List<String>? workingHours;
   String description;
   List<String>? licensesAndCertificates;
   List<String>? products;
@@ -18,8 +18,9 @@ class SS_Shop {
   String joinDate;
   String? reviews;
   String? ratings;
-
-
+  double latitute;
+  double longtitide;
+  
   SS_Shop({
     required this.id,
     required this.businessId,
@@ -36,7 +37,11 @@ class SS_Shop {
     required this.joinDate,
     this.reviews,
     this.ratings,
+    required this.latitute,
+    required this.longtitide,
   });
+
+  
 
   SS_Shop copyWith({
     String? id,
@@ -44,7 +49,7 @@ class SS_Shop {
     String? name,
     String? address,
     String? category,
-    String? workingHours,
+    List<String>? workingHours,
     String? description,
     List<String>? licensesAndCertificates,
     List<String>? products,
@@ -54,6 +59,8 @@ class SS_Shop {
     String? joinDate,
     String? reviews,
     String? ratings,
+    double? latitute,
+    double? longtitide,
   }) {
     return SS_Shop(
       id: id ?? this.id,
@@ -71,6 +78,8 @@ class SS_Shop {
       joinDate: joinDate ?? this.joinDate,
       reviews: reviews ?? this.reviews,
       ratings: ratings ?? this.ratings,
+      latitute: latitute ?? this.latitute,
+      longtitide: longtitide ?? this.longtitide,
     );
   }
 
@@ -79,45 +88,37 @@ class SS_Shop {
   
     result.addAll({'id': id});
     result.addAll({'businessId': businessId});
-    if(name != null){
-      result.addAll({'name': name});
-    }
-    if(address != null){
-      result.addAll({'address': address});
-    }
+    result.addAll({'name': name});
+    result.addAll({'address': address});
     if(category != null){
       result.addAll({'category': category});
     }
     if(workingHours != null){
       result.addAll({'workingHours': workingHours});
     }
-    if(description != null){
-      result.addAll({'description': description});
-    }
+    result.addAll({'description': description});
     if(licensesAndCertificates != null){
       result.addAll({'licensesAndCertificates': licensesAndCertificates});
     }
     if(products != null){
       result.addAll({'products': products});
     }
-    if(phoneNo != null){
-      result.addAll({'phoneNo': phoneNo});
-    }
+    result.addAll({'phoneNo': phoneNo});
     if(email != null){
       result.addAll({'email': email});
     }
     if(photo != null){
       result.addAll({'photo': photo});
     }
-    if(joinDate != null){
-      result.addAll({'joinDate': joinDate});
-    }
+    result.addAll({'joinDate': joinDate});
     if(reviews != null){
       result.addAll({'reviews': reviews});
     }
     if(ratings != null){
       result.addAll({'ratings': ratings});
     }
+    result.addAll({'latitute': latitute});
+    result.addAll({'longtitide': longtitide});
   
     return result;
   }
@@ -126,19 +127,21 @@ class SS_Shop {
     return SS_Shop(
       id: map['id'] ?? '',
       businessId: map['businessId'] ?? '',
-      name: map['name'],
-      address: map['address'],
+      name: map['name'] ?? '',
+      address: map['address'] ?? '',
       category: map['category'],
-      workingHours: map['workingHours'],
-      description: map['description'],
+      workingHours: List<String>.from(map['workingHours']),
+      description: map['description'] ?? '',
       licensesAndCertificates: List<String>.from(map['licensesAndCertificates']),
       products: List<String>.from(map['products']),
-      phoneNo: map['phoneNo'],
+      phoneNo: map['phoneNo'] ?? '',
       email: map['email'],
       photo: map['photo'],
-      joinDate: map['joinDate'],
+      joinDate: map['joinDate'] ?? '',
       reviews: map['reviews'],
       ratings: map['ratings'],
+      latitute: map['latitute']?.toDouble() ?? 0.0,
+      longtitide: map['longtitide']?.toDouble() ?? 0.0,
     );
   }
 
@@ -148,7 +151,7 @@ class SS_Shop {
 
   @override
   String toString() {
-    return 'SS_Shop(id: $id, businessId: $businessId, name: $name, address: $address, category: $category, workingHours: $workingHours, description: $description, licensesAndCertificates: $licensesAndCertificates, products: $products, phoneNo: $phoneNo, email: $email, photo: $photo, joinDate: $joinDate, reviews: $reviews, ratings: $ratings)';
+    return 'SS_Shop(id: $id, businessId: $businessId, name: $name, address: $address, category: $category, workingHours: $workingHours, description: $description, licensesAndCertificates: $licensesAndCertificates, products: $products, phoneNo: $phoneNo, email: $email, photo: $photo, joinDate: $joinDate, reviews: $reviews, ratings: $ratings, latitute: $latitute, longtitide: $longtitide)';
   }
 
   @override
@@ -161,7 +164,7 @@ class SS_Shop {
       other.name == name &&
       other.address == address &&
       other.category == category &&
-      other.workingHours == workingHours &&
+      listEquals(other.workingHours, workingHours) &&
       other.description == description &&
       listEquals(other.licensesAndCertificates, licensesAndCertificates) &&
       listEquals(other.products, products) &&
@@ -170,7 +173,9 @@ class SS_Shop {
       other.photo == photo &&
       other.joinDate == joinDate &&
       other.reviews == reviews &&
-      other.ratings == ratings;
+      other.ratings == ratings &&
+      other.latitute == latitute &&
+      other.longtitide == longtitide;
   }
 
   @override
@@ -189,6 +194,8 @@ class SS_Shop {
       photo.hashCode ^
       joinDate.hashCode ^
       reviews.hashCode ^
-      ratings.hashCode;
+      ratings.hashCode ^
+      latitute.hashCode ^
+      longtitide.hashCode;
   }
 }

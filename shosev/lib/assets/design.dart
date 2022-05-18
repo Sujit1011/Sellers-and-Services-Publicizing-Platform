@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // My Colors
 const Color _primiaryColor = Color(0xFFFFC804);
-const Color _secondaryColor = Color(0xFFFCE48F);
+const Color _secondaryColor = Color(0xFFD1D1D1);
 const Color _textColor = Color(0xFF333333);
 const Color _textColor2 = Color(0xFFAAAAAA);
 const Color _placeholder = Color(0xFFE5E5E5);
@@ -92,7 +92,7 @@ final myThemeData = ThemeData(
       onError: _textColor,
       background: _placeholder,
       onBackground: _textColor,
-      surface: _placeholder,
+      surface: _white,
       onSurface: _textColor),
   textTheme: const TextTheme(
     headline1: _heading1,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'appbar.dart' as appbar;
 import 'assets/design.dart' as design;
+import 'models/SS_User.dart';
 
 class ListPage extends StatelessWidget {
 
@@ -36,7 +38,7 @@ class ListPage extends StatelessWidget {
   ): super(key: key);
 
   void _left() {
-    appbar.fadeSystemUI();
+    // appbar.fadeSystemUI();
     // setState(() {
     //   // (_controller.index == 0) ? null : --_controller.index;
     // });
@@ -44,13 +46,15 @@ class ListPage extends StatelessWidget {
   }
 
   void _right() {
-    appbar.fadeSystemUI();
+    // appbar.fadeSystemUI();
     // setState(() {});
     rightClick();
   }
 
   @override
   Widget build(BuildContext context) {
+    final _myUser = Provider.of<SS_User?>(context);
+    print(_myUser);
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -93,8 +97,7 @@ class ListPage extends StatelessWidget {
               ),
             ],
           ),
-          Expanded(
-            child: Container(
+          Container(
               padding: const EdgeInsets.fromLTRB(35, 120, 30, 10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -204,7 +207,6 @@ class ListPage extends StatelessWidget {
                 ],
               ),
             )
-          )
         ],
       ),
       //Floating Buttons

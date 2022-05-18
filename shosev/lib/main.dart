@@ -24,6 +24,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
+  appbar.fadeSystemUI();
 }
 
 class MyApp extends StatelessWidget {
@@ -32,16 +33,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ShoSev',
-      theme: design.myThemeData,
-      home: const splash.Splash(),
-      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-      // home: shopProfile.ShopProfilePage(shopName: "My Shop Name", rating: 3.5, joined: "Feb 22", reviews: 350, contacted: 1000, aboutUs: generateRandomString(1000),),
-      // home: serviceProfile.ServiceProfilePage(shopName: "My Service Name", rating: 3.5, joined: "Feb 22", reviews: 350, contacted: 1000, aboutUs: generateRandomString(1000),),
-      // home: about.MyAboutUs(title: "About Us", aboutUs: generateRandomString(1000))
-      // home: listpage.listpage(title: "My Services", aboutUs: generateRandomString(5000)),
-      // home: const chat.Chat(name: "Shop Name", phoneNo: "+91 XXX XXX XXXX", address: "Address, XYZ Street",),
+    return StreamProvider<SS_User?>.value(
+      value: AuthService().user,
+      initialData: null,
+      child: MaterialApp(
+        title: 'ShoSev',
+        theme: design.myThemeData,
+        home: const splash.Splash(),
+        // home: const MyHomePage(title: 'Flutter Demo Home Page'),
+        // home: shopProfile.ShopProfilePage(shopName: "My Shop Name", rating: 3.5, joined: "Feb 22", reviews: 350, contacted: 1000, aboutUs: generateRandomString(1000),),
+        // home: serviceProfile.ServiceProfilePage(shopName: "My Service Name", rating: 3.5, joined: "Feb 22", reviews: 350, contacted: 1000, aboutUs: generateRandomString(1000),),
+        // home: about.MyAboutUs(title: "About Us", aboutUs: generateRandomString(1000))
+        // home: listpage.listpage(title: "My Services", aboutUs: generateRandomString(5000)),
+        // home: const chat.Chat(name: "Shop Name", phoneNo: "+91 XXX XXX XXXX", address: "Address, XYZ Street",),
+      )
     );
   }
 
@@ -71,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isSwitched = false;
 
   void _clear() {
-    appbar.fadeSystemUI();
+    // appbar.fadeSystemUI();
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
@@ -242,11 +247,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     );
                   },
                   tooltip: 'My Chats',
+                  heroTag: 'My Chats',
                   child: const Icon(Icons.chat_bubble_rounded),
                 ),
                 FloatingActionButton(
                   onPressed: _myLocation,
                   tooltip: 'My Location',
+                  heroTag: 'My Location',
                   child: const Icon(Icons.gps_fixed_rounded),
                 ),
               ],
@@ -357,7 +364,7 @@ class _MySearchState extends State<MySearch> {
   void _shrink() {
     setState(() {
       _short = true;
-      appbar.fadeSystemUI();
+      // appbar.fadeSystemUI();
       FocusManager.instance.primaryFocus?.unfocus();
     });
   }

@@ -24,11 +24,7 @@ class _SplashState extends State<Splash> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => StreamProvider<SS_User?>.value(
-          value: AuthService().user,
-          initialData: null,
-          child: const MyHomePage(title: 'Flutter Demo Home Page')
-        )
+        builder: (context) => const MyHomePage(title: 'Flutter Demo Home Page')
       )
     );
   }

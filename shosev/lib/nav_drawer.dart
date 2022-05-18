@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:shosev/about.dart' as about;
+import 'package:shosev/add_service.dart';
+import 'package:shosev/add_shop.dart';
 import 'package:shosev/appbar.dart' as appbar;
 import 'package:shosev/assets/design.dart' as design;
 import 'package:shosev/edit_profile.dart';
@@ -255,6 +257,7 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
                                 dashPattern: const [8, 4],
                                 strokeWidth: 2,
                                 padding: EdgeInsets.zero,
+                                strokeCap: StrokeCap.round,
                                 child: Container(
                                   width: 195,
                                   height: 30.0,
@@ -468,7 +471,7 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
                         selected: _aboutUsSelected,
                         onSelected: (bool selected) {
                           setState(() {
-                            appbar.fadeSystemUI();
+                            // appbar.fadeSystemUI();
                           });
                         },
                       ),
@@ -497,7 +500,7 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
                         selected: _helpSelected,
                         onSelected: (bool selected) {
                           setState(() {
-                            appbar.fadeSystemUI();
+                            // appbar.fadeSystemUI();
                           });
                         },
                       ),
@@ -647,6 +650,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<SS_User?>(context);
+    // print(user);
     String user_id = user?.uid as String;
     if (data == null) {
       DataRepository repository = DataRepository();
@@ -691,7 +695,12 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                       color: Color(0xFFE5E5E5),
                     )
                   ),
-                  Expanded(
+                  (data == null)?
+                  const LinearProgressIndicator(
+                    color: Color(0xFFFFC804),
+                    minHeight: 4,
+                  )
+                  :Expanded(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(35, 80, 30, 10),
                       // child: SingleChildScrollView(
@@ -752,7 +761,26 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           leftClick: () => {
                                             Navigator.pop(context)
                                           },
-                                          rightClick: () => {},
+                                          rightClick: () => {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => AddShop(
+                                                  username: (data != null)?data['username']:"", 
+                                                  phoneNo: (data != null)?data['phoneNo']:"", 
+                                                  title: "Add Shop", 
+                                                  isLeftFloattingButton: true, 
+                                                  isRightFloattingButton: false, 
+                                                  leftClick: () => {
+                                                    Navigator.pop(context)
+                                                  },
+                                                  rightClick: () => {}, 
+                                                  leftIcon: const Icon(Icons.chevron_left_rounded),
+                                                  rightIcon: const Icon(Icons.add_rounded),
+                                                )
+                                              )
+                                            )
+                                          },
                                           leftIcon: const Icon(Icons.chevron_left_rounded),
                                           rightIcon: const Icon(Icons.add_rounded),
                                           heroLeft: "shop_left",
@@ -799,7 +827,26 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           leftClick: () => {
                                             Navigator.pop(context)
                                           },
-                                          rightClick: () => {},
+                                          rightClick: () => {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => AddService(
+                                                  username: (data != null)?data['username']:"", 
+                                                  phoneNo: (data != null)?data['phoneNo']:"", 
+                                                  title: "Add Services", 
+                                                  isLeftFloattingButton: true, 
+                                                  isRightFloattingButton: false, 
+                                                  leftClick: () => {
+                                                    Navigator.pop(context)
+                                                  },
+                                                  rightClick: () => {}, 
+                                                  leftIcon: const Icon(Icons.chevron_left_rounded),
+                                                  rightIcon: const Icon(Icons.add_rounded),
+                                                )
+                                              )
+                                            )
+                                          },
                                           leftIcon: const Icon(Icons.chevron_left_rounded),
                                           rightIcon: const Icon(Icons.add_rounded),
                                           heroLeft: "shop_left",
@@ -827,6 +874,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                               strokeWidth: 2,
                               padding: EdgeInsets.zero,
                               color: const Color(0xFFFFC804),
+                              strokeCap: StrokeCap.round,
                               child: TextButton.icon(
                                 style: TextButton.styleFrom(
                                   alignment: Alignment.centerLeft,
@@ -864,8 +912,8 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           rightClick: () => {},
                                           leftIcon: const Icon(Icons.chevron_left_rounded),
                                           rightIcon: const Icon(Icons.chevron_right_rounded),
-                                          heroLeft: "shop_left",
-                                          heroRight: "shop_right",
+                                          heroLeft: "history_left",
+                                          heroRight: "history_right",
                                         )
                                     ),
                                   );
@@ -890,6 +938,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                               strokeWidth: 2,
                               padding: EdgeInsets.zero,
                               color: const Color(0xFFFFC804),
+                              strokeCap: StrokeCap.round,
                               child: TextButton.icon(
                                 style: TextButton.styleFrom(
                                   alignment: Alignment.centerLeft,
@@ -926,8 +975,8 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           rightClick: () => {},
                                           leftIcon: const Icon(Icons.chevron_left_rounded),
                                           rightIcon: const Icon(Icons.chevron_right_rounded),
-                                          heroLeft: "shop_left",
-                                          heroRight: "shop_right",
+                                          heroLeft: "favourites_left",
+                                          heroRight: "favourites_right",
                                         )
                                     ),
                                   );
@@ -952,6 +1001,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                               strokeWidth: 2,
                               padding: EdgeInsets.zero,
                               color: const Color(0xFFFFC804),
+                              strokeCap: StrokeCap.round,
                               child: TextButton.icon(
                                 style: TextButton.styleFrom(
                                   alignment: Alignment.centerLeft,
@@ -988,8 +1038,8 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           rightClick: () => {},
                                           leftIcon: const Icon(Icons.chevron_left_rounded),
                                           rightIcon: const Icon(Icons.chevron_right_rounded),
-                                          heroLeft: "shop_left",
-                                          heroRight: "shop_right",
+                                          heroLeft: "reviews_left",
+                                          heroRight: "reviews_right",
                                         )
                                     ),
                                   );

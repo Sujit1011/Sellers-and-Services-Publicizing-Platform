@@ -165,7 +165,7 @@ class _MyAboutUsState extends State<MyAboutUs>{
                     selected: _shareValue,
                     onSelected: (bool selected) {
                       setState(() {
-                        appbar.fadeSystemUI();
+                        // appbar.fadeSystemUI();
                         _shareValue = selected ? true : false;
                       });
                     },

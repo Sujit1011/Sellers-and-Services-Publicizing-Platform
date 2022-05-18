@@ -53,21 +53,21 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
   }
 
   void _left() {
-    appbar.fadeSystemUI();
+    // appbar.fadeSystemUI();
     setState(() {
       (_controller.index == 0) ? Navigator.pop(context) : --_controller.index;
     });
   }
 
   void _right() {
-    appbar.fadeSystemUI();
+    // appbar.fadeSystemUI();
     setState(() {
       (_controller.index == pages - 1) ? null : ++_controller.index;
     });
   }
 
   void _chat() {
-    appbar.fadeSystemUI();
+    // appbar.fadeSystemUI();
   }
 
   void _call() {}
@@ -1312,7 +1312,7 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                           selected: _shareValue,
                           onSelected: (bool selected) {
                             setState(() {
-                              appbar.fadeSystemUI();
+                              // appbar.fadeSystemUI();
                               _shareValue = selected ? true : false;
                             });
                           },
@@ -1417,6 +1417,7 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
               mini: true,
               onPressed: _left,
               tooltip: 'Back/Left',
+              heroTag: 'Service Back/Left',
               child: const Icon(Icons.chevron_left_rounded, size: 30),
             ),
             Visibility(
@@ -1425,6 +1426,7 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                 mini: true,
                 onPressed: _right,
                 tooltip: 'Right',
+                heroTag: 'Service Right',
                 child: const Icon(Icons.chevron_right_rounded, size: 30),
               ),
             )
