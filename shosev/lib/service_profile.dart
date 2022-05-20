@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:marquee_widget/marquee_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
 import 'appbar.dart' as appbar;
 
@@ -11,6 +15,8 @@ class ServiceProfilePage extends StatefulWidget {
   final int reviews;
   final int contacted;
   final String aboutUs;
+  final List<dynamic> services;
+  final dynamic data;
 
   const ServiceProfilePage(
       {Key? key,
@@ -19,7 +25,9 @@ class ServiceProfilePage extends StatefulWidget {
       required this.joined,
       required this.reviews,
       required this.contacted,
-      required this.aboutUs})
+      required this.aboutUs, 
+      required this.services, 
+      required this.data})
       : super(key: key);
 
   @override
@@ -66,11 +74,47 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
     });
   }
 
-  void _chat() {
-    // appbar.fadeSystemUI();
+  void _chat(String? name) async {
+    if(name == null) {
+      return;
+    }
+    String text = "Hi, this  is $name";
+    var link = WhatsAppUnilink(
+      phoneNumber: widget.data['phoneNo'].toString(),
+      text: text,
+    );
+    await launch('$link');
   }
 
-  void _call() {}
+  void _call() async {
+    String url = 'tel:' + widget.data['phoneNo'].toString();
+    showDialog(
+      context: context, 
+      builder: (BuildContext builderContext) {
+        return AlertDialog(
+          title: Text("Call " + widget.shopName),
+          content: Text(widget.data['phoneNo']),
+          actions: [
+            TextButton(
+              child: const Text("Yes"),
+              onPressed: () async {
+                FlutterPhoneDirectCaller.callNumber(url);
+              },
+            ),
+            TextButton(
+              child: const Text("Cancel"),
+              onPressed: () async {
+                Navigator.of(builderContext).pop();
+              },
+            )
+          ],
+        );
+      }).then((val) {
+        Navigator.of(context).pop();
+      });
+    
+    // await launch(url);
+  }
 
   void _writeReview() {}
 
@@ -131,7 +175,9 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                                           Icons.chat_bubble_rounded,
                                           size: 18
                                         ),
-                                        onPressed: _chat,
+                                        onPressed: () {
+                                          _chat(FirebaseAuth.instance.currentUser?.phoneNumber);
+                                        },
                                         label: const Text("CHAT",
                                         style: TextStyle(
                                           fontSize: 14.0,
@@ -422,384 +468,47 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                                 // child: SizedBox(
                                 //   height: 200,
                                 children: [
-                                  Row(
-                                    children: [
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text("Service 1",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5)),
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            "₹50",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5,
-                                            textAlign: TextAlign.end,
-                                          )),
-                                      const Spacer(),
-                                    ],
-                                  ),
-                                  const Divider(
-                                    height: 10,
-                                    thickness: 1,
-                                    indent: 50,
-                                    endIndent: 50,
-                                    color: Color(0xFFE5E5E5),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text("Service 1",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5)),
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            "₹50",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5,
-                                            textAlign: TextAlign.end,
-                                          )),
-                                      const Spacer(),
-                                    ],
-                                  ),
-                                  const Divider(
-                                    height: 10,
-                                    thickness: 1,
-                                    indent: 50,
-                                    endIndent: 50,
-                                    color: Color(0xFFE5E5E5),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text("Service 1",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5)),
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            "₹50",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5,
-                                            textAlign: TextAlign.end,
-                                          )),
-                                      const Spacer(),
-                                    ],
-                                  ),
-                                  const Divider(
-                                    height: 10,
-                                    thickness: 1,
-                                    indent: 50,
-                                    endIndent: 50,
-                                    color: Color(0xFFE5E5E5),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text("Service 1",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5)),
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            "₹50",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5,
-                                            textAlign: TextAlign.end,
-                                          )),
-                                      const Spacer(),
-                                    ],
-                                  ),
-                                  const Divider(
-                                    height: 10,
-                                    thickness: 1,
-                                    indent: 50,
-                                    endIndent: 50,
-                                    color: Color(0xFFE5E5E5),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text("Service 1",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5)),
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            "₹50",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5,
-                                            textAlign: TextAlign.end,
-                                          )),
-                                      const Spacer(),
-                                    ],
-                                  ),
-                                  const Divider(
-                                    height: 10,
-                                    thickness: 1,
-                                    indent: 50,
-                                    endIndent: 50,
-                                    color: Color(0xFFE5E5E5),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text("Service 1",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5)),
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            "₹50",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5,
-                                            textAlign: TextAlign.end,
-                                          )),
-                                      const Spacer(),
-                                    ],
-                                  ),
-                                  const Divider(
-                                    height: 10,
-                                    thickness: 1,
-                                    indent: 50,
-                                    endIndent: 50,
-                                    color: Color(0xFFE5E5E5),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text("Service 1",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5)),
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            "₹50",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5,
-                                            textAlign: TextAlign.end,
-                                          )),
-                                      const Spacer(),
-                                    ],
-                                  ),
-                                  const Divider(
-                                    height: 10,
-                                    thickness: 1,
-                                    indent: 50,
-                                    endIndent: 50,
-                                    color: Color(0xFFE5E5E5),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text("Service 1",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5)),
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            "₹50",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5,
-                                            textAlign: TextAlign.end,
-                                          )),
-                                      const Spacer(),
-                                    ],
-                                  ),
-                                  const Divider(
-                                    height: 10,
-                                    thickness: 1,
-                                    indent: 50,
-                                    endIndent: 50,
-                                    color: Color(0xFFE5E5E5),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text("Service 1",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5)),
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            "₹50",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5,
-                                            textAlign: TextAlign.end,
-                                          )),
-                                      const Spacer(),
-                                    ],
-                                  ),
-                                  const Divider(
-                                    height: 10,
-                                    thickness: 1,
-                                    indent: 50,
-                                    endIndent: 50,
-                                    color: Color(0xFFE5E5E5),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text("Service 1",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5)),
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            "₹50",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5,
-                                            textAlign: TextAlign.end,
-                                          )),
-                                      const Spacer(),
-                                    ],
-                                  ),
-                                  const Divider(
-                                    height: 10,
-                                    thickness: 1,
-                                    indent: 50,
-                                    endIndent: 50,
-                                    color: Color(0xFFE5E5E5),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text("Service 1",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5)),
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            "₹50",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5,
-                                            textAlign: TextAlign.end,
-                                          )),
-                                      const Spacer(),
-                                    ],
-                                  ),
-                                  const Divider(
-                                    height: 10,
-                                    thickness: 1,
-                                    indent: 50,
-                                    endIndent: 50,
-                                    color: Color(0xFFE5E5E5),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text("Service 1",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5)),
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            "₹50",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5,
-                                            textAlign: TextAlign.end,
-                                          )),
-                                      const Spacer(),
-                                    ],
-                                  ),
-                                  const Divider(
-                                    height: 10,
-                                    thickness: 1,
-                                    indent: 50,
-                                    endIndent: 50,
-                                    color: Color(0xFFE5E5E5),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 3,
-                                          child: Text("Service 1",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5)),
-                                      const Spacer(),
-                                      Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            "₹50",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5,
-                                            textAlign: TextAlign.end,
-                                          )),
-                                      const Spacer(),
-                                    ],
-                                  ),
-                                  const Divider(
-                                    height: 10,
-                                    thickness: 1,
-                                    indent: 50,
-                                    endIndent: 50,
-                                    color: Color(0xFFE5E5E5),
-                                  ),
-                                ]),
+                                  ListView.builder(
+                                  itemCount: widget.services.length,
+                                  padding: const EdgeInsets.only(bottom: 12, right: 15, top: 8),
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            const Spacer(),
+                                            Expanded(
+                                                flex: 3,
+                                                child: Text(widget.services[index]["productName"],
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline5)),
+                                            const Spacer(),
+                                            Expanded(
+                                                flex: 1,
+                                                child: Text(
+                                                  "₹"+widget.services[index]["cost"].toString(),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline5,
+                                                  textAlign: TextAlign.end,
+                                                )),
+                                            const Spacer(),
+                                          ],
+                                        ),
+                                        const Divider(
+                                          height: 10,
+                                          thickness: 1,
+                                          indent: 50,
+                                          endIndent: 50,
+                                          color: Color(0xFFE5E5E5),
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                )
+                                ]
+                              ),
                           ),
                           // Expanded(
                           //   child: Padding(

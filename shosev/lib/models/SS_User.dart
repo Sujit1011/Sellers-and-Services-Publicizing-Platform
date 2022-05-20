@@ -39,7 +39,7 @@ class SS_User {
     this.myShops,
     this.myServices,
   });
-  
+
 
   SS_User copyWith({
     String? uid,

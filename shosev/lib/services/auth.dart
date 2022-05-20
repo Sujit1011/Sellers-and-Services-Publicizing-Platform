@@ -86,7 +86,7 @@ class AuthService {
       verificationFailed: _onVerificationFailed,
       codeSent: _onCodeSent,
       codeAutoRetrievalTimeout: _onCodeTimeout,
-      timeout: const Duration(seconds: 30)
+      timeout: const Duration(seconds: 15)
     );
   }
   // Future signInWithPhoneNumberOnMobile(String phoneNo, String? otp, String username) async {

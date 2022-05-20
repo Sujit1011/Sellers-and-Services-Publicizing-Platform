@@ -14,8 +14,10 @@ import 'package:shosev/assets/design.dart' as design;
 import 'package:shosev/edit_profile.dart';
 import 'package:shosev/list_page.dart';
 import 'package:shosev/models/SS_User.dart';
+import 'package:shosev/service_profile.dart';
 import 'package:shosev/services/auth.dart';
 import 'package:shosev/services/data_repository.dart';
+import 'package:shosev/shop_profile.dart';
 
 enum AuthState {
   phoneNo,
@@ -53,7 +55,7 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
     //   widget.state = AuthState.loggedIn;
     // }
     return Padding(
-      padding: const EdgeInsets.all(11.0),
+      padding: const EdgeInsets.only(top:15.0, bottom: 15, right: 11),
       child: SizedBox(
         width: 272,
         child: Drawer(
@@ -192,9 +194,8 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
                                     onCodeSent: _onCodeSent,
                                     onCodeTimeout: _onCodeTimeout
                                   );
-                                  // await phoneSignIn(phoneNumber: _phoneNoController.text);
-                                  }
                                 }
+                              }
                             ):const CircularProgressIndicator(
                               color: Color(0xFF333333),
                               strokeWidth: 3,
@@ -313,6 +314,7 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
                                     onVerificationFailed: _onVerificationFailed,
                                     onCodeSent: _onCodeSent,
                                     onCodeTimeout: _onCodeTimeout
+                                    
                                   );
                                   }
                                 }
@@ -547,7 +549,19 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
       DataRepository repository = DataRepository();
       repository.ss_users_collection.doc(user?.uid).set({
         "phoneNo": _phoneNoController.text,
-        "username": _usernameController.text
+        "username": _usernameController.text,
+        "email" : "",
+        "searchHistory" : [""],
+        "favouriteShops" : [""],
+        "favouriteServices" : [""],
+        "shopReviews" : [""],
+        "serviceReviews" : [""],
+        "businessUser" : false,
+        "businessName" : "",
+        "licensesAndCertificates" : [""],
+        "myShops" : [""],
+        "myServices" : [""],
+
       });
       setState(() {
         _isLoading = false;
@@ -587,7 +601,18 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
     DataRepository repository = DataRepository();
     repository.ss_users_collection.doc(user?.uid).set({
       "phoneNo": _phoneNoController.text,
-      "username": _usernameController.text
+      "username": _usernameController.text,
+      "email" : "",
+      "searchHistory" : [""],
+      "favouriteShops" : [""],
+      "favouriteServices" : [""],
+      "shopReviews" : [""],
+      "serviceReviews" : [""],
+      "businessUser" : false,
+      "businessName" : "",
+      "licensesAndCertificates" : [""],
+      "myShops" : [""],
+      "myServices" : [""],
     });
     
   }
@@ -639,6 +664,7 @@ class SignedInDrawer extends StatefulWidget {
 class _SignedInDrawerState extends State<SignedInDrawer> {
 
   dynamic data;
+  final DataRepository repository = DataRepository();
 
   @override
   void initState() {
@@ -696,9 +722,104 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                     )
                   ),
                   (data == null)?
-                  const LinearProgressIndicator(
-                    color: Color(0xFFFFC804),
-                    minHeight: 4,
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(35, 80, 30, 10),
+                      child: Column(
+                        children: [
+                          const LinearProgressIndicator(
+                            color: Color(0xFFFFC804),
+                            minHeight: 4,
+                          ),
+                          const Spacer(),
+                          // const Spacer(flex: 5),
+                          OutlinedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFFEE4949)),
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+                              ),
+                            ),
+                            onPressed: () async {
+                              await widget.authService.auth.signOut();
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) =>
+                              //       const all_shops_services
+                              //           .All_Shops_Services(
+                              //         title: "My Reviews",
+                              //         aboutUs: "Sujit Soren",
+                              //       )
+                              //   ),
+                              // );
+                            },
+                            child: const Text(
+                              "Logout",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          // const Spacer(flex: 5),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              OutlinedButton(
+                                style: ButtonStyle(
+                                  backgroundColor:MaterialStateProperty.all<Color>(const Color(0xFFFCE48F)),
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius:BorderRadius.circular(18.0),
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => about.MyAboutUs(
+                                        title: "About Us",
+                                        aboutUs: widget.generateRandomString(2000)
+                                      )
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  "About Us",
+                                  style: TextStyle(color: Color(0xFF333333)),
+                                ),
+                              ),
+                              OutlinedButton(
+                                style: ButtonStyle(
+                                  backgroundColor:MaterialStateProperty.all<Color>(const Color(0xFFFCE48F)),
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => about.MyAboutUs(
+                                        title: "About Us",
+                                        aboutUs: widget.generateRandomString(2000)
+                                      )
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  "Help",
+                                  style: TextStyle(color: Color(0xFF333333)),
+                                ),
+                              )
+                            ],
+                          ),
+                          
+                        ],
+                      ),
+                    ) 
                   )
                   :Expanded(
                     child: Padding(
@@ -708,12 +829,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            // Padding(
-                            //   padding: const EdgeInsets.only(top: 0, bottom: 20.0),
-                            //   child: 
-                            // ),
-                            SizedBox(
-                              height: 55,
+                            FittedBox(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -734,7 +850,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                 ],
                               ),
                             ),
-                            const Spacer(flex: 3),
+                            const Spacer(flex: 2),
                             if (data != null && data['businessUser'] == true)
                               TextButton.icon(
                                 style: TextButton.styleFrom(
@@ -757,6 +873,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           username: (data != null)?data['username']:"",
                                           phoneNo: (data != null)?data['phoneNo']:"",
                                           isLeftFloattingButton: true,
+                                          isEditFloattingButton: true,
                                           isRightFloattingButton: true,
                                           leftClick: () => {
                                             Navigator.pop(context)
@@ -785,6 +902,14 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           rightIcon: const Icon(Icons.add_rounded),
                                           heroLeft: "shop_left",
                                           heroRight: "shop_right",
+                                          documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: user_id).snapshots(),
+                                          onClickWidget: true,
+                                          type: listPageType.shop,
+                                          deleteItemFn: (id) {
+                                            repository.ss_shops_collection.doc(id).delete();
+                                            print(data["id"].toString() + "deleted");
+                                          },
+                                          updateItemFn: (id){},
                                         )
                                     ),
                                   );
@@ -823,6 +948,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           username: (data != null)?data['username']:"",
                                           phoneNo: (data != null)?data['phoneNo']:"",
                                           isLeftFloattingButton: true,
+                                          isEditFloattingButton: true,
                                           isRightFloattingButton: true,
                                           leftClick: () => {
                                             Navigator.pop(context)
@@ -849,8 +975,16 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           },
                                           leftIcon: const Icon(Icons.chevron_left_rounded),
                                           rightIcon: const Icon(Icons.add_rounded),
-                                          heroLeft: "shop_left",
-                                          heroRight: "shop_right",
+                                          heroLeft: "service_left",
+                                          heroRight: "service_right",
+                                          documentFieldStream: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
+                                          onClickWidget: true,
+                                          type: listPageType.service,
+                                          deleteItemFn: (id) {
+                                            repository.ss_services_collection.doc(id).delete();
+                                            print(data["id"].toString() + "deleted");
+                                          },
+                                          updateItemFn: (id){},
                                         )
                                     ),
                                   );
@@ -905,6 +1039,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           username: (data != null)?data['username']:"",
                                           phoneNo: (data != null)?data['phoneNo']:"",
                                           isLeftFloattingButton: true,
+                                          isEditFloattingButton: false,
                                           isRightFloattingButton: false,
                                           leftClick: () => {
                                             Navigator.pop(context)
@@ -914,6 +1049,11 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           rightIcon: const Icon(Icons.chevron_right_rounded),
                                           heroLeft: "history_left",
                                           heroRight: "history_right",
+                                          documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: user_id).snapshots(),
+                                          onClickWidget: false,
+                                          type: listPageType.history,
+                                          deleteItemFn: (id){},
+                                          updateItemFn: (id){},
                                         )
                                     ),
                                   );
@@ -968,6 +1108,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           username: (data != null)?data['username']:"",
                                           phoneNo: (data != null)?data['phoneNo']:"",
                                           isLeftFloattingButton: true,
+                                          isEditFloattingButton: false,
                                           isRightFloattingButton: false,
                                           leftClick: () => {
                                             Navigator.pop(context)
@@ -977,18 +1118,25 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           rightIcon: const Icon(Icons.chevron_right_rounded),
                                           heroLeft: "favourites_left",
                                           heroRight: "favourites_right",
+                                          documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: user_id).snapshots(),
+                                          onClickWidget: false,
+                                          type: listPageType.favourites,
+                                          deleteItemFn: (id){},
+                                          updateItemFn: (id){},
                                         )
                                     ),
                                   );
                                 },
                                 icon: const Icon(Icons.favorite),
-                                label: const Text(
-                                  "MY FAVOURITES",
-                                  style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.normal,
-                                    color: Color(0xFF333333),
-                                    letterSpacing: -0.5
+                                label: const FittedBox(
+                                  child: Text(
+                                    "MY FAVOURITES",
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.normal,
+                                      color: Color(0xFF333333),
+                                      letterSpacing: -0.5
+                                    ),
                                   ),
                                 ),
                               )
@@ -1031,6 +1179,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           username: (data != null)?data['username']:"",
                                           phoneNo: (data != null)?data['phoneNo']:"",
                                           isLeftFloattingButton: true,
+                                          isEditFloattingButton: false,
                                           isRightFloattingButton: false,
                                           leftClick: () => {
                                             Navigator.pop(context)
@@ -1040,6 +1189,11 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           rightIcon: const Icon(Icons.chevron_right_rounded),
                                           heroLeft: "reviews_left",
                                           heroRight: "reviews_right",
+                                          documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: user_id).snapshots(),
+                                          onClickWidget: false,
+                                          type: listPageType.reviews,
+                                          deleteItemFn: (id){},
+                                          updateItemFn: (id){},
                                         )
                                     ),
                                   );
@@ -1086,6 +1240,8 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                         rightClick: () => {},
                                         leftIcon: const Icon(Icons.chevron_left_rounded),
                                         rightIcon: const Icon(Icons.chevron_right_rounded),
+                                        authService: widget.authService,
+                                        data: data,
                                       )
                                   ),
                                 );

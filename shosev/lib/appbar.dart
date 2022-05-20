@@ -13,7 +13,7 @@ class AppBarContents extends StatelessWidget {
   final String title;
 
   void onPressed() {
-    fadeSystemUI();
+    // fadeSystemUI();
   }
 
   @override
@@ -65,7 +65,7 @@ class AppBarContents extends StatelessWidget {
           Container(
             alignment: Alignment.topCenter,
             child: const Padding(
-                padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 7.0),
+                padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 7.0),
                 child: MyThreeOptions(),
               ),
           ),
@@ -114,7 +114,7 @@ class _MyThreeOptionsState extends State<MyThreeOptions> {
             selected: _value == 1,
             onSelected: (bool selected) {
               setState(() {
-                fadeSystemUI();
+                // fadeSystemUI();
                 _value = selected ? 1 : 0;
               });
             },
@@ -135,7 +135,7 @@ class _MyThreeOptionsState extends State<MyThreeOptions> {
             selected: _value == 2,
             onSelected: (bool selected) {
               setState(() {
-                fadeSystemUI();
+                // fadeSystemUI();
                 _value = selected ? 2 : 0;
               });
             },
@@ -157,7 +157,7 @@ class _MyThreeOptionsState extends State<MyThreeOptions> {
             selected: _value == 3,
             onSelected: (bool selected) {
               setState(() {
-                fadeSystemUI();
+                // fadeSystemUI();
                 _value = selected ? 3 : 0;
               });
             },
