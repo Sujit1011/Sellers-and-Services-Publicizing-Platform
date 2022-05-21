@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
-import 'package:flutter/material.dart' show AlertDialog, BorderRadius, BoxDecoration, BuildContext, Center, CircleAvatar, Color, Colors, Column, Container, CrossAxisAlignment, Divider, DropdownButtonFormField, DropdownMenuItem, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontWeight, Form, FormState, GlobalKey, Icon, Icons, InkWell, InputDecoration, Key, MainAxisAlignment, Navigator, OutlineInputBorder, Padding, Row, Scaffold, SingleChildScrollView, SizedBox, Spacer, Stack, State, StatefulWidget, Text, TextButton, TextEditingController, TextFormField, TextInputAction, TextInputType, TextStyle, Theme, TimeOfDay, Widget, WidgetsBinding, showDialog, showTimePicker;
+import 'package:flutter/material.dart' show AlertDialog, BorderRadius, BoxDecoration, BuildContext, Center, CircleAvatar, Color, Colors, Column, Container, CrossAxisAlignment, Divider, DropdownButtonFormField, DropdownMenuItem, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontWeight, Form, FormState, GlobalKey, Icon, Icons, InkWell, InputDecoration, Key, MainAxisAlignment, MediaQuery, Navigator, OutlineInputBorder, Padding, Positioned, Row, Scaffold, SingleChildScrollView, SizedBox, Spacer, Stack, State, StatefulWidget, Text, TextButton, TextEditingController, TextFormField, TextInputAction, TextInputType, TextStyle, Theme, TimeOfDay, Widget, WidgetsBinding, showDialog, showTimePicker;
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:provider/provider.dart' show Provider;
 import 'package:shosev/models/SS_User.dart' show SS_User;
@@ -75,6 +76,7 @@ class _AddServiceState extends State<AddService> {
   final TextEditingController _timeinput_sat1 = TextEditingController();
   final TextEditingController _timeinput_sat2 = TextEditingController();
   String _category = "";
+  late GoogleMapController googleMapController;
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
@@ -937,6 +939,33 @@ class _AddServiceState extends State<AddService> {
                           const Divider(),
                           Text("Services", style: Theme.of(context).textTheme.headline4),
                           ..._getServices(),
+                          const Divider(),
+                          Text("Add Location", style: Theme.of(context).textTheme.headline4),
+                          Padding(padding: const EdgeInsets.only(top:8.0),
+                          child:Stack(
+                            children: [SizedBox(
+                                height: 300,
+                                width: double.infinity,
+                                child: GoogleMap(
+                                  mapType: MapType.normal,
+                                  initialCameraPosition: const CameraPosition(
+                                      target: LatLng(23.176890894138687, 80.0233220952035), zoom: 14),
+                                  onMapCreated: (GoogleMapController controller) {
+                                    googleMapController = controller;
+                                  },
+                                  myLocationButtonEnabled: true,
+                                  compassEnabled: true,
+                                  zoomControlsEnabled: true,
+                                ),                              
+                              ),
+                              const Positioned(
+                                top: 142,
+                                left: 150,
+                                child: Icon(Icons.circle_sharp, color: Colors.blue,)
+                                )
+                              ],
+                          ),
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(top:28.0, bottom: 15.0),
                             child: Row(
@@ -960,6 +989,16 @@ class _AddServiceState extends State<AddService> {
                                   onTap: () async {
                                     // FirebaseService service = new FirebaseService();
                                     if (_formKey.currentState!.validate() && _category != "" && _myUser != null) {
+                                        double screenWidth = MediaQuery.of(context).size.width *MediaQuery.of(context).devicePixelRatio;
+                                        double screenHeight = MediaQuery.of(context).size.height *MediaQuery.of(context).devicePixelRatio;
+
+                                        double middleX = (screenWidth / 2);
+                                        double middleY = (screenHeight / 2);
+
+                                        ScreenCoordinate screenCoordinate =ScreenCoordinate(x: middleX.round(),y: middleY.round());
+
+                                        LatLng middlePoint = await googleMapController.getLatLng(screenCoordinate);
+
                                         String userId = _myUser.uid;
                                         DataRepository repository = DataRepository();
                                         List servicesList = [];
@@ -998,8 +1037,8 @@ class _AddServiceState extends State<AddService> {
                                             "description": _description_t.text,
                                             "phoneNo": _phoneNo_t.text,
                                             "email": _email_t.text,
-                                            "latitute": 23.0,
-                                            "longtitide": 23.0,
+                                            "latitute": middlePoint.latitude,
+                                            "longtitide": middlePoint.longitude,
                                             "rating": 1.0,
                                             "contacted": 0,
                                             "joined": Timestamp.now(),

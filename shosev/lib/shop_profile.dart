@@ -1,6 +1,7 @@
 import "package:whatsapp_unilink/whatsapp_unilink.dart" show WhatsAppUnilink;
 import 'package:card_swiper/card_swiper.dart' show Swiper, SwiperLayout;
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
+import 'package:shosev/services/data_repository.dart' show DataRepository;
 import 'package:flutter/material.dart' show AlertDialog, Alignment, AlwaysStoppedAnimation, Axis, AxisDirection, Border, BorderRadius, BoxDecoration, BoxFit, BoxShadow, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, Navigator, NeverScrollableScrollPhysics, Offset, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart' show FlutterPhoneDirectCaller;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart' show RatingBarIndicator;
@@ -8,6 +9,7 @@ import 'package:marquee_widget/marquee_widget.dart' show Marquee;
 import 'package:url_launcher/url_launcher.dart' show launch;
 
 class ShopProfilePage extends StatefulWidget {
+  // final String shopname;
   final double rating;
   final String shopName;
   final String joined;
@@ -19,6 +21,7 @@ class ShopProfilePage extends StatefulWidget {
 
   const ShopProfilePage(
       {Key? key,
+      // required this.shopname,
       required this.rating,
       required this.shopName,
       required this.joined,
@@ -97,6 +100,8 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
             TextButton(
               child: const Text("Yes"),
               onPressed: () async {
+                DataRepository repository = DataRepository();
+                repository.ss_shops_collection.doc(widget.data['id']).update(widget.data['contacted']+1);
                 FlutterPhoneDirectCaller.callNumber(url);
               },
             ),
