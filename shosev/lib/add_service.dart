@@ -1010,7 +1010,7 @@ class _AddServiceState extends State<AddService> {
                                         ScreenCoordinate screenCoordinate =ScreenCoordinate(x: middleX.round(),y: middleY.round());
 
                                         LatLng middlePoint = await googleMapController.getLatLng(screenCoordinate);
-                                        
+
                                         String userId = _myUser.uid;
                                         DataRepository repository = DataRepository();
                                         List servicesList = [];
