@@ -199,8 +199,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         key: _scaffoldKey,
         endDrawer: (user == null)?(nav.RegisterDrawer(authService: _authService,)):(nav.SignedInDrawer(authService: _authService)),
-        // endDrawer: const nav.signindrawer1(businessmember: true),
-        // endDrawer: nav.signupdrawer(),
         body: Stack(
           children: <Widget>[
             Column(
@@ -254,8 +252,6 @@ class _MyHomePageState extends State<MyHomePage> {
               right: 30,
               left: 30,
               child: MySearch(
-                history: const ["Place 1", "Place 2", "Place 3", "Place 4", "Place 5", "Place 6"],
-                history_loc: const ["Sadar Point", "Jawal Point", "Rajdan Chowk", "Sretha St", "Sadar Point", "Jawal Point"],
                 fabFn: fabFn,
                 showResultDropbox: showResultDropbox,
                 hideResultDropbox: hideResultDropbox,
@@ -415,15 +411,10 @@ class _MyHomePageState extends State<MyHomePage> {
 class MySearch extends StatefulWidget {
   MySearch(
     {Key? key,
-    required this.history,
-    required this.history_loc,
     required this.fabFn,
     required this.showResultDropbox,
     required this.hideResultDropbox})
     : super(key: key);
-
-  final List<String> history;
-  final List<String> history_loc;
 
   Function fabFn;
   Function showResultDropbox;
@@ -434,6 +425,8 @@ class MySearch extends StatefulWidget {
 }
 
 class _MySearchState extends State<MySearch> {
+  List<String> history = [];
+  List<String> historyLocation = [];
   bool _short = true;
   final TextEditingController _controller = TextEditingController();
   Widget divider() {
@@ -468,7 +461,7 @@ class _MySearchState extends State<MySearch> {
   @override
   Widget build(BuildContext context) {
     final historyWidgets = <Widget>[];
-    for (int i = 0; i < widget.history.length; i++) {
+    for (int i = 0; i < history.length; i++) {
       historyWidgets.add(divider());
       historyWidgets.add(GestureDetector(
         onTap: () {},
@@ -477,7 +470,7 @@ class _MySearchState extends State<MySearch> {
           textBaseline: TextBaseline.alphabetic,
           children: [
             Text(
-              widget.history[i],
+              history[i],
               style: const TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.normal,
@@ -487,7 +480,7 @@ class _MySearchState extends State<MySearch> {
             ),
             const Spacer(),
             Text(
-              widget.history_loc[i],
+              historyLocation[i],
               style: const TextStyle(
                 fontSize: 11.0,
                 fontStyle: FontStyle.italic,
