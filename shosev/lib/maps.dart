@@ -1,11 +1,6 @@
-// import 'dart:html';
-
-import 'package:flutter/material.dart';
-// import 'package:flutter_gmaps/directions_model.dart';
-// import 'package:flutter_gmaps/directions_repository.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:location/location.dart';
+import 'package:flutter/material.dart' show BuildContext, Key, State, StatefulWidget, Widget;
+import 'package:google_maps_flutter/google_maps_flutter.dart' show CameraPosition, GoogleMap, GoogleMapController, LatLng, MapType;
+import 'package:location/location.dart' show Location, LocationData, PermissionStatus;
 
 class MyMap extends StatefulWidget {
   const MyMap({Key? key, required this.latitude, required this.longitude})

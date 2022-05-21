@@ -1,23 +1,21 @@
-import 'dart:math';
+import 'dart:math' show Random;
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' show DocumentSnapshot, QuerySnapshot;
+import 'package:firebase_core/firebase_core.dart' show Firebase;
+import 'package:flutter/material.dart' show Border, BorderRadius, BorderSide, BoxConstraints, BoxDecoration, BoxShadow, BuildContext, CircularProgressIndicator, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FocusManager, FontStyle, FontWeight, GestureDetector, GlobalKey, Icon, IconButton, Icons, InputBorder, InputDecoration, Key, ListView, MainAxisAlignment, MaterialApp, Offset, Padding, Positioned, Radius, Row, Scaffold, ScaffoldState, SizedBox, Spacer, Stack, State, StatefulWidget, StatelessWidget, StreamBuilder, Text, TextBaseline, TextEditingController, TextField, TextInputAction, TextInputType, TextStyle, Visibility, Widget, WidgetsFlutterBinding, runApp;
+import 'package:geocoding/geocoding.dart' show Placemark, placemarkFromCoordinates;
+import 'package:geolocator/geolocator.dart' show Geolocator, LocationPermission, Position;
+import 'package:google_maps_flutter/google_maps_flutter.dart' show CameraPosition, CameraUpdate, GoogleMap, GoogleMapController, LatLng, MapType, Marker;
+import 'package:provider/provider.dart' show Provider, StreamProvider;
 
 import 'package:shosev/appbar.dart' as appbar;
 import 'package:shosev/assets/design.dart' as design;
-import 'package:shosev/firebase_options.dart';
+import 'package:shosev/firebase_options.dart' show DefaultFirebaseOptions;
 import 'package:shosev/licenses.dart' as lic;
-import 'package:shosev/list_page.dart' as listpage;
-import 'package:shosev/maps.dart' as maps;
-import 'package:shosev/models/SS_User.dart';
+import 'package:shosev/models/SS_User.dart' show SS_User;
 import 'package:shosev/nav_drawer.dart' as nav;
-import 'package:shosev/services/auth.dart';
-import 'package:shosev/services/data_repository.dart';
+import 'package:shosev/services/auth.dart' show AuthService;
+import 'package:shosev/services/data_repository.dart' show DataRepository;
 import 'package:shosev/splash.dart' as splash;
 
 Future<void> main() async {
@@ -43,7 +41,7 @@ class MyApp extends StatelessWidget {
         title: 'ShoSev',
         theme: design.myThemeData,
         home: const splash.Splash(),
-        debugShowCheckedModeBanner: false,
+        // debugShowCheckedModeBanner: false,
         // home: const MyHomePage(title: 'Flutter Demo Home Page'),
         // home: shopProfile.ShopProfilePage(shopName: "My Shop Name", rating: 3.5, joined: "Feb 22", reviews: 350, contacted: 1000, aboutUs: generateRandomString(1000),),
         // home: serviceProfile.ServiceProfilePage(shopName: "My Service Name", rating: 3.5, joined: "Feb 22", reviews: 350, contacted: 1000, aboutUs: generateRandomString(1000),),

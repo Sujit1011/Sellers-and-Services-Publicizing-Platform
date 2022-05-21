@@ -1,10 +1,9 @@
-import 'dart:convert';
+import 'dart:convert' show json;
 
 import 'package:flutter/foundation.dart' show listEquals, mapEquals;
-import 'package:flutter/foundation.dart';
 
-import 'package:shosev/models/SS_Service.dart';
-import 'package:shosev/models/SS_Shop.dart';
+import 'package:shosev/models/SS_Service.dart' show SS_Service;
+import 'package:shosev/models/SS_Shop.dart' show SS_Shop;
 
 class SS_User {
   final String uid;

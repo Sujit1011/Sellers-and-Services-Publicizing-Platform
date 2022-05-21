@@ -1,6 +1,6 @@
-import 'dart:convert';
+import 'dart:convert' show json;
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show listEquals;
 
 class SS_Shop {
   final String id;
@@ -20,6 +20,7 @@ class SS_Shop {
   String? ratings;
   double latitute;
   double longtitide;
+  List<String> searchKeywords;
 
   SS_Shop({
     required this.id,
@@ -39,13 +40,14 @@ class SS_Shop {
     this.ratings,
     required this.latitute,
     required this.longtitide,
+    required this.searchKeywords,
   });
   
 
 
   @override
   String toString() {
-    return 'SS_Shop(id: $id, businessId: $businessId, name: $name, address: $address, category: $category, workingHours: $workingHours, description: $description, licensesAndCertificates: $licensesAndCertificates, products: $products, phoneNo: $phoneNo, email: $email, photo: $photo, joinDate: $joinDate, reviews: $reviews, ratings: $ratings, latitute: $latitute, longtitide: $longtitide)';
+    return 'SS_Shop(id: $id, businessId: $businessId, name: $name, address: $address, category: $category, workingHours: $workingHours, description: $description, licensesAndCertificates: $licensesAndCertificates, products: $products, phoneNo: $phoneNo, email: $email, photo: $photo, joinDate: $joinDate, reviews: $reviews, ratings: $ratings, latitute: $latitute, longtitide: $longtitide, searchKeywords: $searchKeywords)';
   }
 
   @override
@@ -69,7 +71,8 @@ class SS_Shop {
       other.reviews == reviews &&
       other.ratings == ratings &&
       other.latitute == latitute &&
-      other.longtitide == longtitide;
+      other.longtitide == longtitide &&
+      listEquals(other.searchKeywords, searchKeywords);
   }
 
   @override
@@ -90,7 +93,8 @@ class SS_Shop {
       reviews.hashCode ^
       ratings.hashCode ^
       latitute.hashCode ^
-      longtitide.hashCode;
+      longtitide.hashCode ^
+      searchKeywords.hashCode;
   }
 
   SS_Shop copyWith({
@@ -111,6 +115,7 @@ class SS_Shop {
     String? ratings,
     double? latitute,
     double? longtitide,
+    List<String>? searchKeywords,
   }) {
     return SS_Shop(
       id: id ?? this.id,
@@ -130,6 +135,7 @@ class SS_Shop {
       ratings: ratings ?? this.ratings,
       latitute: latitute ?? this.latitute,
       longtitide: longtitide ?? this.longtitide,
+      searchKeywords: searchKeywords ?? this.searchKeywords,
     );
   }
 
@@ -167,6 +173,7 @@ class SS_Shop {
     }
     result.addAll({'latitute': latitute});
     result.addAll({'longtitide': longtitide});
+    result.addAll({'searchKeywords': searchKeywords});
   
     return result;
   }
@@ -190,6 +197,7 @@ class SS_Shop {
       ratings: map['ratings'],
       latitute: map['latitute']?.toDouble() ?? 0.0,
       longtitide: map['longtitide']?.toDouble() ?? 0.0,
+      searchKeywords: List<String>.from(map['searchKeywords']),
     );
   }
 

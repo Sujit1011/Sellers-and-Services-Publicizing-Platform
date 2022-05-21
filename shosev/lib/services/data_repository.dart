@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shosev/models/SS_Service.dart';
-import 'package:shosev/models/SS_Shop.dart';
-import 'package:shosev/models/SS_User.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' show CollectionReference, DocumentReference, FirebaseFirestore, QuerySnapshot;
+import 'package:shosev/models/SS_Service.dart' show SS_Service;
+import 'package:shosev/models/SS_Shop.dart' show SS_Shop;
+import 'package:shosev/models/SS_User.dart' show SS_User;
 
 class DataRepository {
   

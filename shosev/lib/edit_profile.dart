@@ -1,12 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shosev/models/SS_User.dart';
-import 'package:shosev/services/auth.dart';
-import 'package:shosev/services/data_repository.dart';
+import 'package:flutter/material.dart' show AlertDialog, Border, BorderRadius, BoxDecoration, BuildContext, Center, CircleAvatar, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, Flexible, FloatingActionButton, FloatingActionButtonLocation, FontWeight, Form, FormState, GlobalKey, Icon, InkWell, InputDecoration, Key, MainAxisAlignment, Navigator, OutlineInputBorder, Padding, Row, Scaffold, SingleChildScrollView, SizedBox, Spacer, Stack, State, StatefulWidget, Switch, Text, TextButton, TextEditingController, TextFormField, TextInputAction, TextInputType, TextStyle, Theme, Widget, Wrap, showDialog;
+import 'package:provider/provider.dart' show Provider;
+import 'package:shosev/models/SS_User.dart' show SS_User;
+import 'package:shosev/services/auth.dart' show AuthService;
+import 'package:shosev/services/data_repository.dart' show DataRepository;
 
-import 'appbar.dart' as appbar;
-import 'assets/design.dart' as design;
 
 
 class EditProfile extends StatefulWidget {

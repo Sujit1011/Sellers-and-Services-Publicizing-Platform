@@ -1,11 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:shosev/models/SS_User.dart';
-import 'package:shosev/services/data_repository.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
+import 'package:flutter/material.dart' show AlertDialog, BorderRadius, BoxDecoration, BuildContext, Center, CircleAvatar, Color, Colors, Column, Container, CrossAxisAlignment, Divider, DropdownButtonFormField, DropdownMenuItem, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontWeight, Form, FormState, GlobalKey, Icon, Icons, InkWell, InputDecoration, Key, MainAxisAlignment, Navigator, OutlineInputBorder, Padding, Row, Scaffold, SingleChildScrollView, SizedBox, Spacer, Stack, State, StatefulWidget, Text, TextButton, TextEditingController, TextFormField, TextInputAction, TextInputType, TextStyle, Theme, TimeOfDay, Widget, WidgetsBinding, showDialog, showTimePicker;
+import 'package:intl/intl.dart' show DateFormat;
+import 'package:provider/provider.dart' show Provider;
+import 'package:shosev/models/SS_User.dart' show SS_User;
+import 'package:shosev/services/data_repository.dart' show DataRepository;
 
-import 'appbar.dart' as appbar;
+import 'package:shosev/appbar.dart' as appbar;
 
 class AddShop extends StatefulWidget {
 

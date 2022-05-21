@@ -1,23 +1,20 @@
-import 'dart:math';
+import 'dart:math' show Random;
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dotted_border/dotted_border.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' show DocumentSnapshot;
+import 'package:dotted_border/dotted_border.dart' show BorderType, DottedBorder;
+import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth, FirebaseAuthException, PhoneAuthCredential, PhoneAuthProvider, User, UserCredential;
+import 'package:flutter/material.dart' show AlertDialog, Alignment, Border, BorderRadius, BorderSide, BoxDecoration, BuildContext, ButtonStyle, Center, ChoiceChip, CircularProgressIndicator, Color, Colors, Column, Container, CrossAxisAlignment, Drawer, EdgeInsets, Expanded, FittedBox, FontWeight, Form, FormState, GlobalKey, Icon, Icons, InkWell, InputDecoration, Key, LinearProgressIndicator, MainAxisAlignment, MaterialPageRoute, MaterialStateProperty, Navigator, OutlineInputBorder, OutlinedButton, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Size, SizedBox, Spacer, Stack, State, StatefulWidget, StrokeCap, Text, TextAlign, TextButton, TextEditingController, TextFormField, TextInputAction, TextInputType, TextStyle, Theme, VisualDensity, Widget, showDialog;
+import 'package:provider/provider.dart' show Provider;
 
 import 'package:shosev/about.dart' as about;
-import 'package:shosev/add_service.dart';
-import 'package:shosev/add_shop.dart';
-import 'package:shosev/appbar.dart' as appbar;
+import 'package:shosev/add_service.dart' show AddService;
+import 'package:shosev/add_shop.dart' show AddShop;
 import 'package:shosev/assets/design.dart' as design;
-import 'package:shosev/edit_profile.dart';
-import 'package:shosev/list_page.dart';
-import 'package:shosev/models/SS_User.dart';
-import 'package:shosev/service_profile.dart';
-import 'package:shosev/services/auth.dart';
-import 'package:shosev/services/data_repository.dart';
-import 'package:shosev/shop_profile.dart';
+import 'package:shosev/edit_profile.dart' show EditProfile;
+import 'package:shosev/list_page.dart' show ListPage, listPageType;
+import 'package:shosev/models/SS_User.dart' show SS_User;
+import 'package:shosev/services/auth.dart' show AuthService;
+import 'package:shosev/services/data_repository.dart' show DataRepository;
 
 enum AuthState {
   phoneNo,

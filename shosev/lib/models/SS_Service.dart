@@ -1,6 +1,6 @@
-import 'dart:convert';
+import 'dart:convert' show json;
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show listEquals;
 
 class SS_Service {
   final String id;
@@ -18,6 +18,9 @@ class SS_Service {
   String? joinDate;
   String? reviews;
   String? ratings;
+  double latitute;
+  double longtitide;
+  List<String> searchKeywords;
 
 
   SS_Service({
@@ -36,6 +39,9 @@ class SS_Service {
     this.joinDate,
     this.reviews,
     this.ratings,
+    required this.latitute,
+    required this.longtitide,
+    required this.searchKeywords,
   });
 
   SS_Service copyWith({
@@ -54,6 +60,9 @@ class SS_Service {
     String? joinDate,
     String? reviews,
     String? ratings,
+    double? latitute,
+    double? longtitide,
+    List<String>? searchKeywords,
   }) {
     return SS_Service(
       id: id ?? this.id,
@@ -71,6 +80,9 @@ class SS_Service {
       joinDate: joinDate ?? this.joinDate,
       reviews: reviews ?? this.reviews,
       ratings: ratings ?? this.ratings,
+      latitute: latitute ?? this.latitute,
+      longtitide: longtitide ?? this.longtitide,
+      searchKeywords: searchKeywords ?? this.searchKeywords,
     );
   }
 
@@ -79,30 +91,22 @@ class SS_Service {
   
     result.addAll({'id': id});
     result.addAll({'businessId': businessId});
-    if(name != null){
-      result.addAll({'name': name});
-    }
-    if(address != null){
-      result.addAll({'address': address});
-    }
+    result.addAll({'name': name});
+    result.addAll({'address': address});
     if(category != null){
       result.addAll({'category': category});
     }
     if(workingHours != null){
       result.addAll({'workingHours': workingHours});
     }
-    if(description != null){
-      result.addAll({'description': description});
-    }
+    result.addAll({'description': description});
     if(licensesAndCertificates != null){
       result.addAll({'licensesAndCertificates': licensesAndCertificates});
     }
     if(products != null){
       result.addAll({'products': products});
     }
-    if(phoneNo != null){
-      result.addAll({'phoneNo': phoneNo});
-    }
+    result.addAll({'phoneNo': phoneNo});
     if(email != null){
       result.addAll({'email': email});
     }
@@ -118,6 +122,9 @@ class SS_Service {
     if(ratings != null){
       result.addAll({'ratings': ratings});
     }
+    result.addAll({'latitute': latitute});
+    result.addAll({'longtitide': longtitide});
+    result.addAll({'searchKeywords': searchKeywords});
   
     return result;
   }
@@ -126,19 +133,22 @@ class SS_Service {
     return SS_Service(
       id: map['id'] ?? '',
       businessId: map['businessId'] ?? '',
-      name: map['name'],
-      address: map['address'],
+      name: map['name'] ?? '',
+      address: map['address'] ?? '',
       category: map['category'],
       workingHours: map['workingHours'],
-      description: map['description'],
+      description: map['description'] ?? '',
       licensesAndCertificates: List<String>.from(map['licensesAndCertificates']),
       products: List<String>.from(map['products']),
-      phoneNo: map['phoneNo'],
+      phoneNo: map['phoneNo'] ?? '',
       email: map['email'],
       photo: map['photo'],
       joinDate: map['joinDate'],
       reviews: map['reviews'],
       ratings: map['ratings'],
+      latitute: map['latitute']?.toDouble() ?? 0.0,
+      longtitide: map['longtitide']?.toDouble() ?? 0.0,
+      searchKeywords: List<String>.from(map['searchKeywords']),
     );
   }
 
@@ -148,7 +158,7 @@ class SS_Service {
 
   @override
   String toString() {
-    return 'SS_Service(id: $id, businessId: $businessId, name: $name, address: $address, category: $category, workingHours: $workingHours, description: $description, licensesAndCertificates: $licensesAndCertificates, products: $products, phoneNo: $phoneNo, email: $email, photo: $photo, joinDate: $joinDate, reviews: $reviews, ratings: $ratings)';
+    return 'SS_Service(id: $id, businessId: $businessId, name: $name, address: $address, category: $category, workingHours: $workingHours, description: $description, licensesAndCertificates: $licensesAndCertificates, products: $products, phoneNo: $phoneNo, email: $email, photo: $photo, joinDate: $joinDate, reviews: $reviews, ratings: $ratings, latitute: $latitute, longtitide: $longtitide, searchKeywords: $searchKeywords)';
   }
 
   @override
@@ -170,7 +180,10 @@ class SS_Service {
       other.photo == photo &&
       other.joinDate == joinDate &&
       other.reviews == reviews &&
-      other.ratings == ratings;
+      other.ratings == ratings &&
+      other.latitute == latitute &&
+      other.longtitide == longtitide &&
+      listEquals(other.searchKeywords, searchKeywords);
   }
 
   @override
@@ -189,6 +202,9 @@ class SS_Service {
       photo.hashCode ^
       joinDate.hashCode ^
       reviews.hashCode ^
-      ratings.hashCode;
+      ratings.hashCode ^
+      latitute.hashCode ^
+      longtitide.hashCode ^
+      searchKeywords.hashCode;
   }
 }

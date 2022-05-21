@@ -1,6 +1,6 @@
-import 'dart:convert';
+import 'dart:convert' show json;
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show listEquals;
 
 class SS_Category {
   final String id;

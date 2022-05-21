@@ -1,16 +1,11 @@
-import 'package:card_swiper/card_swiper.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:marquee_widget/marquee_widget.dart';
-import 'package:provider/provider.dart';
-
-import 'package:shosev/appbar.dart' as appbar;
-import 'package:shosev/models/SS_User.dart';
-import 'package:shosev/services/auth.dart';
-import 'package:url_launcher/url_launcher.dart';
-import "package:whatsapp_unilink/whatsapp_unilink.dart";
+import "package:whatsapp_unilink/whatsapp_unilink.dart" show WhatsAppUnilink;
+import 'package:card_swiper/card_swiper.dart' show Swiper, SwiperLayout;
+import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
+import 'package:flutter/material.dart' show AlertDialog, Alignment, AlwaysStoppedAnimation, Axis, AxisDirection, Border, BorderRadius, BoxDecoration, BoxFit, BoxShadow, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, Navigator, NeverScrollableScrollPhysics, Offset, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart' show FlutterPhoneDirectCaller;
+import 'package:flutter_rating_bar/flutter_rating_bar.dart' show RatingBarIndicator;
+import 'package:marquee_widget/marquee_widget.dart' show Marquee;
+import 'package:url_launcher/url_launcher.dart' show launch;
 
 class ShopProfilePage extends StatefulWidget {
   final double rating;

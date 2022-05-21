@@ -1,12 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shosev/service_profile.dart';
-import 'package:shosev/shop_profile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' show QuerySnapshot;
+import 'package:flutter/material.dart' show AlertDialog, AsyncSnapshot, BuildContext, Center, CircleAvatar, CircularProgressIndicator, Color, Colors, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, Icon, Icons, Key, ListView, MainAxisAlignment, MaterialPageRoute, Navigator, Padding, Row, Scaffold, SizedBox, Spacer, Stack, State, StatefulWidget, StreamBuilder, Text, TextButton, Theme, Widget, showDialog;
+import 'package:provider/provider.dart' show Provider;
 
-import 'appbar.dart' as appbar;
-import 'assets/design.dart' as design;
-import 'models/SS_User.dart';
+import 'package:shosev/assets/design.dart' as design;
+import 'package:shosev/models/SS_User.dart' show SS_User;
+import 'package:shosev/service_profile.dart' show ServiceProfilePage;
+import 'package:shosev/shop_profile.dart' show ShopProfilePage;
 
 enum listPageType {
   shop,
