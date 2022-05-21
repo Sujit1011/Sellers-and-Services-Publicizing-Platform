@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show Align, Alignment, BuildContext, Center, ChoiceChip, Color, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontWeight, Icon, Icons, Key, MainAxisAlignment, Navigator, Padding, Positioned, Row, Scaffold, SingleChildScrollView, SizedBox, Stack, State, StatefulWidget, Text, TextAlign, TextStyle, Theme, VerticalDivider, VisualDensity, Widget;
 import 'package:shosev/assets/design.dart' as design;
-import 'appbar.dart' as appbar;
 
 class MyAboutUs extends StatefulWidget {
   final String title;

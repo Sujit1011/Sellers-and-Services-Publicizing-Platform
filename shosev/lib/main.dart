@@ -1,20 +1,21 @@
-import 'dart:math';
+import 'dart:math' show Random;
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' show DocumentSnapshot, QuerySnapshot;
+import 'package:firebase_core/firebase_core.dart' show Firebase;
+import 'package:flutter/material.dart' show Border, BorderRadius, BorderSide, BoxConstraints, BoxDecoration, BoxShadow, BuildContext, CircularProgressIndicator, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FocusManager, FontStyle, FontWeight, GestureDetector, GlobalKey, Icon, IconButton, Icons, InputBorder, InputDecoration, Key, ListView, MainAxisAlignment, MaterialApp, Offset, Padding, Positioned, Radius, Row, Scaffold, ScaffoldState, SizedBox, Spacer, Stack, State, StatefulWidget, StatelessWidget, StreamBuilder, Text, TextBaseline, TextEditingController, TextField, TextInputAction, TextInputType, TextStyle, Visibility, Widget, WidgetsFlutterBinding, runApp;
+import 'package:geocoding/geocoding.dart' show Placemark, placemarkFromCoordinates;
+import 'package:geolocator/geolocator.dart' show Geolocator, LocationPermission, Position;
+import 'package:google_maps_flutter/google_maps_flutter.dart' show CameraPosition, CameraUpdate, GoogleMap, GoogleMapController, LatLng, MapType, Marker;
+import 'package:provider/provider.dart' show Provider, StreamProvider;
 
 import 'package:shosev/appbar.dart' as appbar;
 import 'package:shosev/assets/design.dart' as design;
-import 'package:shosev/firebase_options.dart';
+import 'package:shosev/firebase_options.dart' show DefaultFirebaseOptions;
 import 'package:shosev/licenses.dart' as lic;
-import 'package:shosev/list_page.dart' as listpage;
-import 'package:shosev/maps.dart' as maps;
-import 'package:shosev/models/SS_User.dart';
+import 'package:shosev/models/SS_User.dart' show SS_User;
 import 'package:shosev/nav_drawer.dart' as nav;
-import 'package:shosev/services/auth.dart';
-import 'package:shosev/services/data_repository.dart';
+import 'package:shosev/services/auth.dart' show AuthService;
+import 'package:shosev/services/data_repository.dart' show DataRepository;
 import 'package:shosev/splash.dart' as splash;
 
 Future<void> main() async {
@@ -24,7 +25,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
-  appbar.fadeSystemUI();
+  // appbar.fadeSystemUI();
 }
 
 class MyApp extends StatelessWidget {
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         title: 'ShoSev',
         theme: design.myThemeData,
         home: const splash.Splash(),
+        // debugShowCheckedModeBanner: false,
         // home: const MyHomePage(title: 'Flutter Demo Home Page'),
         // home: shopProfile.ShopProfilePage(shopName: "My Shop Name", rating: 3.5, joined: "Feb 22", reviews: 350, contacted: 1000, aboutUs: generateRandomString(1000),),
         // home: serviceProfile.ServiceProfilePage(shopName: "My Service Name", rating: 3.5, joined: "Feb 22", reviews: 350, contacted: 1000, aboutUs: generateRandomString(1000),),
@@ -69,7 +71,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool fab = true;
   String result = "";
+  String address = 'Welcome to ShoSev';
   bool showResult = false;
+  double latitude = 23.176890894138687;
+  double longitude = 80.0233220952035;
+  late GoogleMapController googleMapController;
+  static const CameraPosition initialCameraPosition = CameraPosition(
+      target: LatLng(23.176890894138687, 80.0233220952035), zoom: 14);
+
+  Set<Marker> markers = {};
   AuthService _authService = AuthService();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -80,16 +90,77 @@ class _MyHomePageState extends State<MyHomePage> {
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
-  void _myChats() {
+  // void _myChats() {
+  //   setState(() {
+  //     _clear();
+  //   });
+  // }
+
+  Future<void> _myLocation() async {
+    Position position = await _determinePosition();
+    print(position.latitude);
+    print(position.longitude);
+
+    googleMapController.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(
+            target: LatLng(position.latitude, position.longitude), zoom: 21)));
+
+    GetAddressFromLatLong(position);
+
+    setState(() {
+      // latitude = position.latitude;
+      // longitude = position.longitude;
+    });
     setState(() {
       _clear();
     });
   }
 
-  void _myLocation() {
-    setState(() {
-      _clear();
-    });
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    return await Geolocator.getCurrentPosition();
+  }
+
+  Future<void> GetAddressFromLatLong(Position position) async {
+    List<Placemark> placemark =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    // print(placemark);
+    Placemark place = placemark[0];
+
+    address = '${place.locality}';
+    setState(() {});
+  }
+
+  Future<void> GetAddressFromLatLong1(double latitude, double longitude) async {
+    List<Placemark> placemark =
+        await placemarkFromCoordinates(latitude,longitude);
+    // print(placemark);
+    Placemark place = placemark[0];
+
+    address = '${place.locality}';
+    setState(() {});
   }
 
   @override
@@ -148,7 +219,21 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                     child: Container(
                       constraints: const BoxConstraints.expand(),
-                      child: const maps.MyMap()
+                      child: GoogleMap(
+                        mapType: MapType.normal,
+                        initialCameraPosition: initialCameraPosition,
+                        onTap: (LatLng latLng) {
+                          print(latLng.latitude);
+                          print(latLng.longitude);
+                          GetAddressFromLatLong1(latLng.latitude, latLng.longitude);
+                        },
+                        onMapCreated: (GoogleMapController controller) {
+                          googleMapController = controller;
+                        },
+                        myLocationButtonEnabled: true,
+                        compassEnabled: true,
+                        zoomControlsEnabled: false,
+                      )
                     ),
                   )
                 ),
@@ -159,7 +244,7 @@ class _MyHomePageState extends State<MyHomePage> {
               height: 146.0,
               color: const Color(0xFFFFC804),
               child: appbar.AppBarContents(
-                title: widget.title,
+                title: address,
                 scaffoldKey: _scaffoldKey,
               ),
             ),
@@ -220,36 +305,36 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                FloatingActionButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                          listpage.ListPage(
-                            title: "My Chats",
-                            username: "User Name",
-                            phoneNo: "+91 xxxxx xxxxx",
-                            isLeftFloattingButton: true,
-                            isRightFloattingButton: false,
-                            leftClick: () => {
-                              Navigator.pop(context)
-                            },
-                            rightClick: () => {},
-                            leftIcon: const Icon(Icons.chevron_left_rounded),
-                            rightIcon: const Icon(Icons.chevron_right_rounded),
-                            heroLeft: "chat_left",
-                            heroRight: "chat_right",
-                          )
-                        ),
-                    );
-                  },
-                  tooltip: 'My Chats',
-                  heroTag: 'My Chats',
-                  child: const Icon(Icons.chat_bubble_rounded),
-                ),
+                // FloatingActionButton(
+                //   onPressed: () {
+                //     // Navigator.push(
+                //     //   context,
+                //     //   MaterialPageRoute(
+                //     //     builder: (context) =>
+                //     //       listpage.ListPage(
+                //     //         title: "My Chats",
+                //     //         username: "User Name",
+                //     //         phoneNo: "+91 xxxxx xxxxx",
+                //     //         isLeftFloattingButton: true,
+                //     //         isRightFloattingButton: false,
+                //     //         leftClick: () => {
+                //     //           Navigator.pop(context)
+                //     //         },
+                //     //         rightClick: () => {},
+                //     //         leftIcon: const Icon(Icons.chevron_left_rounded),
+                //     //         rightIcon: const Icon(Icons.chevron_right_rounded),
+                //     //         heroLeft: "chat_left",
+                //     //         heroRight: "chat_right",
+                //     //       )
+                //     //     ),
+                //     // );
+                //   },
+                //   tooltip: 'My Chats',
+                //   heroTag: 'My Chats',
+                //   child: const Icon(Icons.chat_bubble_rounded),
+                // ),
                 FloatingActionButton(
                   onPressed: _myLocation,
                   tooltip: 'My Location',
@@ -275,6 +360,10 @@ class _MyHomePageState extends State<MyHomePage> {
       isPhoto: true,
       isText1: true,
       isText2: true,
+      updateShow: false,
+      deleteShow: false,
+      deleteOnClick: (){},
+      updateOnClick: (){},
       heading: "Shop Name",
       text1: "phoneNo",
       text2: "address",

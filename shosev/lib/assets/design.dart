@@ -132,10 +132,16 @@ class LogoSimple extends StatelessWidget {
           color: _textColor,
         ),
       ),
-      child: const Center(
+      child: const FittedBox(
+        fit: BoxFit.scaleDown,
           child: Text(
         'ShoSev',
-        style: _heading1,
+        style: TextStyle(
+          fontSize: 34.0,
+          fontWeight: FontWeight.bold,
+          color: _textColor,
+          letterSpacing: -0.5
+        ),
       )),
     );
   }
@@ -155,10 +161,16 @@ class LogoOnWhite extends StatelessWidget {
         shape: BoxShape.circle,
         color: _primiaryColor,
       ),
-      child: const Center(
+      child: const FittedBox(
+        fit: BoxFit.scaleDown,
           child: Text(
         'ShoSev',
-        style: _heading1,
+        style: TextStyle(
+          fontSize: 34.0,
+          fontWeight: FontWeight.bold,
+          color: _textColor,
+          letterSpacing: -0.5
+        ),
       )),
     );
   }
@@ -178,10 +190,16 @@ class LogoOnColored extends StatelessWidget {
         shape: BoxShape.circle,
         color: _white,
       ),
-      child: const Center(
+      child: const FittedBox(
+        fit: BoxFit.scaleDown,
           child: Text(
         'ShoSev',
-        style: _heading1,
+        style: TextStyle(
+          fontSize: 34.0,
+          fontWeight: FontWeight.bold,
+          color: _textColor,
+          letterSpacing: -0.5
+        ),
       )),
     );
   }
@@ -193,15 +211,18 @@ class CardDesign1 extends StatelessWidget {
   final bool isText1;
   final bool isText2;
   final bool isPhoto;
+  final bool deleteShow;
+  final bool updateShow;
 
   final String heading;
   final String text1;
   final String text2;
 
-  final Function onClick;
+  final void Function() onClick;
+  final void Function() deleteOnClick;
+  final void Function() updateOnClick;
 
-
-  const CardDesign1({Key? key, required this.isHeading, required this.isText1, required this.isText2, required this.heading, required this.text1, required this.text2, required this.onClick, required this.isPhoto}) : super(key: key);
+  const CardDesign1({Key? key, required this.isHeading, required this.isText1, required this.isText2, required this.heading, required this.text1, required this.text2, required this.onClick, required this.isPhoto, required this.deleteShow, required this.updateShow, required this.deleteOnClick, required this.updateOnClick}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -215,126 +236,65 @@ class CardDesign1 extends StatelessWidget {
           width: 1,
         ),
       ),
-      child: InkWell(
-        child: Row(
-          children: [
-            if (isPhoto)
-              Padding(
-                padding: const EdgeInsets.only(left:9, bottom:9, top:9, right:12),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                  child: Image.asset(
-                    'lib/assets/img/shop.png',
-                    width: 60,
-                    height: 60,
-                    fit: BoxFit.fitWidth,
-                  ),
-                ),
-              ),
-            Flexible(
-              fit: FlexFit.tight,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (isHeading)
-                    Text(heading, style: Theme.of(context).textTheme.headline4, overflow: TextOverflow.ellipsis,)  ,
-                  if (isText1)
-                    Text(text1, style: Theme.of(context).textTheme.headline5, overflow: TextOverflow.ellipsis,),
-                  if (isText2)
-                    Text(text2, style: Theme.of(context).textTheme.headline5, overflow: TextOverflow.ellipsis,),
-                ],
-              )
+      child: Row(
+        children: [
+          Visibility(
+            visible: updateShow,
+            child: IconButton(
+              onPressed: updateOnClick,
+              color: Colors.blue.shade700,
+              icon: const Icon(Icons.update_rounded)
             ),
-          ],
-        ),
-        onTap: () => onClick,
-      )
+          ),
+          Expanded(
+            flex: 5,
+            child: InkWell(
+              onTap: onClick,
+              child: Row(
+                children: [
+                if (isPhoto)
+                  Padding(
+                    padding: const EdgeInsets.only(left:9, bottom:9, top:9, right:12),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                      child: Image.asset(
+                        'lib/assets/img/shop.png',
+                        width: 60,
+                        height: 60,
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ),
+                  ),
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (isHeading)
+                        Text(heading, style: Theme.of(context).textTheme.headline4, overflow: TextOverflow.ellipsis,),
+                      if (isText1)
+                        Text(text1, style: Theme.of(context).textTheme.headline5, overflow: TextOverflow.ellipsis,),
+                      if (isText2)
+                        Text(text2, style: Theme.of(context).textTheme.headline5, overflow: TextOverflow.ellipsis,),
+                    ],
+                  )
+                ),
+              ],),
+            ),
+          ),
+          Visibility(
+            visible: deleteShow,
+            child: IconButton(
+              onPressed: deleteOnClick,
+              color: Colors.red.shade900,
+              icon: const Icon(Icons.delete_rounded)
+            ),
+          ),
+          
+          
+          
+        ],
+      ),
     );
   }
 }
-
-// class AllShopsServices extends StatefulWidget {
-//   const AllShopsServices({Key? key, required this.title}) : super(key: key);
-
-//   final String title;
-
-//   @override
-//   State<AllShopsServices> createState() => _AllShopsServicesState();
-// }
-
-// class _AllShopsServicesState extends State<AllShopsServices> {
-//   void _choice() {
-//     setState(() {
-//       (widget.title == "My Shops")
-//           ? Navigator.push(
-//               context,
-//               MaterialPageRoute(
-//                   builder: (context) => const shopProfile.ShopProfilePage(
-//                       rating: 4,
-//                       shopName: "My Shops",
-//                       joined: '2022',
-//                       reviews: 22,
-//                       contacted: 22,
-//                       aboutUs: 'Hello World')),
-//             )
-//           : Navigator.push(
-//               context,
-//               MaterialPageRoute(
-//                   builder: (context) => const serviceProfile.ServiceProfilePage(
-//                       rating: 4,
-//                       shopName: "My Services",
-//                       joined: '2022',
-//                       reviews: 22,
-//                       contacted: 22,
-//                       aboutUs: 'Hello World')),
-//             );
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.only(bottom: 13.0),
-//       child: InkWell(
-//         child: Container(
-//           height: 78,
-//           decoration: BoxDecoration(
-//             border: Border.all(
-//               color: const Color(0xFFD1D1D1),
-//               width: 1,
-//             ),
-//             borderRadius: BorderRadius.circular(12),
-//           ),
-//           child: Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//             crossAxisAlignment: CrossAxisAlignment.center,
-//             children: [
-//               const CircleAvatar(
-//                 backgroundColor: Colors.black,
-//                 minRadius: 20,
-//               ),
-//               Padding(
-//                 padding: const EdgeInsets.only(left: 0.0),
-//                 child: Column(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     Text("Sujit Soren",
-//                         style: Theme.of(context).textTheme.headline2),
-//                     const Text("+91 987 654 3210"),
-//                   ],
-//                 ),
-//               ),
-//               const Icon(
-//                 Icons.double_arrow,
-//                 color: const Color(0xFFD1D1D1),
-//                 size: 44.0,
-//               )
-//             ],
-//           ),
-//         ),
-//         onTap: _choice,
-//       ),
-//     );
-//   }
-// }

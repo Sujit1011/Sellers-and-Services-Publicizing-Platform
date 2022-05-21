@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shosev/main.dart';
-import 'package:shosev/services/auth.dart';
+import 'package:flutter/material.dart' show BuildContext, Center, Color, Column, CrossAxisAlignment, Expanded, Key, MainAxisAlignment, MaterialPageRoute, Navigator, Scaffold, SizedBox, Stack, State, StatefulWidget, Text, Theme, Widget;
+
 import 'package:shosev/assets/design.dart' as design;
-import 'package:shosev/models/SS_User.dart';
+import 'package:shosev/main.dart' show MyHomePage;
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
