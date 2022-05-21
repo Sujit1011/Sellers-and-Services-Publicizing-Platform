@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart' show DocumentSnapshot;
 import 'package:dotted_border/dotted_border.dart' show BorderType, DottedBorder;
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth, FirebaseAuthException, PhoneAuthCredential, PhoneAuthProvider, User, UserCredential;
 import 'package:flutter/material.dart' show AlertDialog, Alignment, Border, BorderRadius, BorderSide, BoxDecoration, BuildContext, ButtonStyle, Center, ChoiceChip, CircularProgressIndicator, Color, Colors, Column, Container, CrossAxisAlignment, Drawer, EdgeInsets, Expanded, FittedBox, FontWeight, Form, FormState, GlobalKey, Icon, Icons, InkWell, InputDecoration, Key, LinearProgressIndicator, MainAxisAlignment, MaterialPageRoute, MaterialStateProperty, Navigator, OutlineInputBorder, OutlinedButton, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Size, SizedBox, Spacer, Stack, State, StatefulWidget, StrokeCap, Text, TextAlign, TextButton, TextEditingController, TextFormField, TextInputAction, TextInputType, TextStyle, Theme, VisualDensity, Widget, showDialog;
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart' show LengthLimitingTextInputFormatter, TextInputAction, TextInputType;
 import 'package:provider/provider.dart' show Provider;
 
 import 'package:shosev/about.dart' as about;

@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart' show QuerySnapshot;
 import 'package:flutter/material.dart' show AlertDialog, AsyncSnapshot, BuildContext, Center, CircleAvatar, CircularProgressIndicator, Color, Colors, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, Icon, Icons, Key, ListView, MainAxisAlignment, MaterialPageRoute, Navigator, Padding, Row, Scaffold, SizedBox, Spacer, Stack, State, StatefulWidget, StreamBuilder, Text, TextButton, Theme, Widget, showDialog;
-import 'package:provider/provider.dart' show Provider;
 
 import 'package:shosev/assets/design.dart' as design;
-import 'package:shosev/models/SS_User.dart' show SS_User;
 import 'package:shosev/service_profile.dart' show ServiceProfilePage;
 import 'package:shosev/shop_profile.dart' show ShopProfilePage;
 

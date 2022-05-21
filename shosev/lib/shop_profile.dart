@@ -7,6 +7,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart' show RatingBarIndica
 import 'package:marquee_widget/marquee_widget.dart' show Marquee;
 import 'package:url_launcher/url_launcher.dart' show launch;
 
+import 'package:shosev/services/data_repository.dart' show DataRepository;
+
 class ShopProfilePage extends StatefulWidget {
   final double rating;
   final String shopName;
@@ -97,6 +99,8 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
             TextButton(
               child: const Text("Yes"),
               onPressed: () async {
+                DataRepository repository = DataRepository();
+                repository.ss_shops_collection.doc(widget.data['id']).update(widget.data['contacted']+1);
                 FlutterPhoneDirectCaller.callNumber(url);
               },
             ),
