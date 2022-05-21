@@ -983,6 +983,12 @@ class _AddShopState extends State<AddShop> {
                                             "cost": productCostList.toList()[i],
                                           });
                                         }
+                                        List searchKeywords = [];
+                                        String temp = "";
+                                        for (int i = 0; i < _shop_name_t.text.length; i++) {
+                                          temp = temp + _shop_name_t.text[i];
+                                          searchKeywords.add(temp);
+                                        }
                                         repository.ss_shops_collection.add(
                                           {
                                             "businessId": userId,
@@ -1012,7 +1018,8 @@ class _AddShopState extends State<AddShop> {
                                             "contacted": 0,
                                             "joined": Timestamp.now(),
                                             "reviews": 0,
-                                            "products" : productsList
+                                            "products" : productsList,
+                                            "searchKeywords" : searchKeywords,
                                           }
                                         ).then((value){ 
                                           print(value);

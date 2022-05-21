@@ -43,6 +43,7 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
   bool _helpSelected = false;
   bool _aboutUsSelected = false;
   bool _isLoading = false;
+  bool _gotOTP = false;
 
   String? verificationId;
   @override
@@ -132,7 +133,7 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
                             ),
                             cursorColor: const Color(0xFF333333),
                             keyboardType: TextInputType.name,
-                            textInputAction: TextInputAction.next,
+                            textInputAction: TextInputAction.done,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30.0)
@@ -182,6 +183,7 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
                                 // FirebaseService service = new FirebaseService();
                                 if (_formKey1.currentState!.validate()) {
                                   setState(() {
+                                    _gotOTP = false;
                                     _isLoading = true;
                                   });
                                   await widget.authService.phoneSignIn(
@@ -299,20 +301,13 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
                                   ),
                                 ),
                               ),
-                              onTap: () async {
+                              onTap: () {
                                 // FirebaseService service = new FirebaseService();
                                 if (_formKey2.currentState!.validate()) {
                                   setState(() {
                                     _isLoading = true;
+                                    _gotOTP = true;
                                   });
-                                  await widget.authService.phoneSignIn(
-                                    phoneNumber: _phoneNoController.text,
-                                    onVerificationCompleted: _onVerificationCompleted,
-                                    onVerificationFailed: _onVerificationFailed,
-                                    onCodeSent: _onCodeSent,
-                                    onCodeTimeout: _onCodeTimeout
-                                    
-                                  );
                                   }
                                 }
                             ):const CircularProgressIndicator(
@@ -569,6 +564,7 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
   }
 
   _onVerificationFailed(FirebaseAuthException exception) {
+    print("verification failed");
     _otpController.clear();
     _phoneNoController.clear();
     _usernameController.clear();
@@ -582,10 +578,15 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
   }
 
   _onCodeSent(String verificationId, int? forceResendingToken) async {
+    print("CODE SENT");
     widget.state = AuthState.otp;
     setState(() {
       _isLoading = false;
     });
+    while(!_gotOTP) {
+      await Future.delayed(const Duration(seconds: 2), (){});
+      print("waiting...");
+    }
     this.verificationId = verificationId;
     print(forceResendingToken);
     print("code sent");
@@ -615,6 +616,7 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
   }
 
   _onCodeTimeout(String timeout) {
+    print("CODE TIME OUT");
     widget.state = AuthState.otp;
     return null;
   }

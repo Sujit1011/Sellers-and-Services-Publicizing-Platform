@@ -64,7 +64,7 @@ class AuthService {
       verificationFailed: _onVerificationFailed,
       codeSent: _onCodeSent,
       codeAutoRetrievalTimeout: _onCodeTimeout,
-      timeout: const Duration(seconds: 15)
+      timeout: const Duration(seconds: 30)
     );
   }
 

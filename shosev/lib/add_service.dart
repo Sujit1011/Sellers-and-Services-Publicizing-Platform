@@ -967,8 +967,13 @@ class _AddServiceState extends State<AddService> {
                                           servicesList.add({
                                             "productName": serviceNameList.toList()[i],
                                             "cost": serviceCostList.toList()[i],
-                                            // "quantity": quantity.toList()[i]
                                           });
+                                        }
+                                        List searchKeywords = [];
+                                        String temp = "";
+                                        for (int i = 0; i < _service_name_t.text.length; i++) {
+                                          temp = temp + _service_name_t.text[i];
+                                          searchKeywords.add(temp);
                                         }
                                         repository.ss_services_collection.add(
                                           {
@@ -999,7 +1004,8 @@ class _AddServiceState extends State<AddService> {
                                             "contacted": 0,
                                             "joined": Timestamp.now(),
                                             "reviews": 0,
-                                            "services" : servicesList
+                                            "services" : servicesList,
+                                            "searchKeywords" : searchKeywords,
                                           }
                                         ).then((value){ 
                                           print(value);
