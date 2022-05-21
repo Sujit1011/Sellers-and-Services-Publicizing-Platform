@@ -2,9 +2,9 @@ import 'package:flutter/material.dart' show Alignment, Axis, BoxDecoration, BoxS
 import 'package:flutter/services.dart' show SystemChrome, SystemUiMode;
 import 'package:marquee_widget/marquee_widget.dart' show Marquee;
 
-void fadeSystemUI() {
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
-}
+// void fadeSystemUI() {
+//   SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+// }
 
 class AppBarContents extends StatelessWidget {
   const AppBarContents({Key? key, required this.title, required this.scaffoldKey}) : super(key: key);

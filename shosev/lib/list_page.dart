@@ -109,8 +109,8 @@ class _ListPageState extends State<ListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final _myUser = Provider.of<SS_User?>(context);
-    print(_myUser);
+    // final _myUser = Provider.of<SS_User?>(context);
+    // print(_myUser);
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -309,7 +309,7 @@ class _ListPageState extends State<ListPage> {
                   _showUpdate = !_showUpdate;
                   setState(() {});
                 },
-                child: const Icon(Icons.edit_rounded),
+                child: const Icon(Icons.edit_rounded, size: 30),
               ),
             if(widget.isRightFloattingButton)
               FloatingActionButton(

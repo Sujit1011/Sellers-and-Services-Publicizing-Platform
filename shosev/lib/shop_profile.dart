@@ -1,7 +1,7 @@
 import "package:whatsapp_unilink/whatsapp_unilink.dart" show WhatsAppUnilink;
 import 'package:card_swiper/card_swiper.dart' show Swiper, SwiperLayout;
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
-import 'package:flutter/material.dart' show AlertDialog, Alignment, AlwaysStoppedAnimation, Axis, AxisDirection, Border, BorderRadius, BoxDecoration, BoxFit, BoxShadow, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, Navigator, NeverScrollableScrollPhysics, Offset, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
+import 'package:flutter/material.dart' show AlertDialog, Alignment, AlwaysStoppedAnimation, Axis, AxisDirection, Border, BorderRadius, BoxDecoration, BoxFit, BoxShadow, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FittedBox, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, Navigator, NeverScrollableScrollPhysics, Offset, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart' show FlutterPhoneDirectCaller;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart' show RatingBarIndicator;
 import 'package:marquee_widget/marquee_widget.dart' show Marquee;
@@ -108,8 +108,6 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
             )
           ],
         );
-      }).then((val) {
-        Navigator.of(context).pop();
       });
     
     // await launch(url);
@@ -451,11 +449,10 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                         padding: const EdgeInsets.all(8.0),
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(15.0)),
+                                          borderRadius: const BorderRadius.all(Radius.circular(15.0)),
                                           border: Border.all(
-                                              color: const Color(0xFFFFC804),
-                                              width: 2.0),
+                                            color: const Color(0xFFFFC804),
+                                            width: 2.0),
                                           boxShadow: const [
                                             BoxShadow(
                                               color: Color(0xFFAAAAAA),
@@ -466,41 +463,31 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                         ),
                                         child: Column(
                                           children: [
-                                            // Expanded(
-                                            //     child: Padding(
-                                            //   padding: const EdgeInsets.all(2),
-                                            //   child: Image.asset(
-                                            //     'lib/assets/img/bread.jpg',
-                                            //     fit: BoxFit.fitWidth,
-                                            //   ),
-                                            // )),
                                             Row(
                                               children: [
                                                 Expanded(
-                                                    child: Text(
-                                                  widget.products[index]["productName"],
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline5,
-                                                )),
+                                                  child: Text(
+                                                    widget.products[index]["productName"],
+                                                    style: Theme.of(context).textTheme.headline5,
+                                                  )
+                                                ),
                                                 Container(
                                                   height: 23,
-                                                  width: 41,
+                                                  width: 60,
                                                   alignment: Alignment.center,
                                                   decoration: BoxDecoration(
-                                                    color:
-                                                        const Color(0xFFFFC804),
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                            Radius.circular(
-                                                                20.0)),
+                                                    color: const Color(0xFFFFC804),
+                                                    borderRadius: const BorderRadius.all(Radius.circular(20.0)),
                                                     border: Border.all(
-                                                        color: const Color(
-                                                            0xFFFFC804),
-                                                        width: 2.0),
+                                                      color: const Color(0xFFFFC804),
+                                                      width: 2.0
+                                                    ),
                                                   ),
-                                                  child: Text(
-                                                    "₹"+widget.products[index]["cost"].toString(),
+                                                  child: FittedBox(
+                                                    fit: BoxFit.fill,
+                                                    child: Text(
+                                                      "₹"+widget.products[index]["cost"].toString(),
+                                                    )
                                                   ),
                                                 )
                                               ],

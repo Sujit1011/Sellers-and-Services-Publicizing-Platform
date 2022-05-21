@@ -108,8 +108,6 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
             )
           ],
         );
-      }).then((val) {
-        Navigator.of(context).pop();
       });
     
     // await launch(url);

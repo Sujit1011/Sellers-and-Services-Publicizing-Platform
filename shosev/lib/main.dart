@@ -80,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
       target: LatLng(23.176890894138687, 80.0233220952035), zoom: 14);
 
   Set<Marker> markers = {};
-  AuthService _authService = AuthService();
+  final AuthService _authService = AuthService();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool isSwitched = false;
@@ -98,8 +98,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _myLocation() async {
     Position position = await _determinePosition();
-    print(position.latitude);
-    print(position.longitude);
+    // print(position.latitude);
+    // print(position.longitude);
 
     googleMapController.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(
@@ -198,6 +198,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // |____Floating buttons
     return Scaffold(
         key: _scaffoldKey,
+        resizeToAvoidBottomInset: false,
         endDrawer: (user == null)?(nav.RegisterDrawer(authService: _authService,)):(nav.SignedInDrawer(authService: _authService)),
         body: Stack(
           children: <Widget>[
@@ -221,8 +222,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         mapType: MapType.normal,
                         initialCameraPosition: initialCameraPosition,
                         onTap: (LatLng latLng) {
-                          print(latLng.latitude);
-                          print(latLng.longitude);
+                          // print(latLng.latitude);
+                          // print(latLng.longitude);
                           GetAddressFromLatLong1(latLng.latitude, latLng.longitude);
                         },
                         onMapCreated: (GoogleMapController controller) {

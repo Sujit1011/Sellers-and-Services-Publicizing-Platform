@@ -1008,7 +1008,7 @@ class _AddServiceState extends State<AddService> {
                                             "searchKeywords" : searchKeywords,
                                           }
                                         ).then((value){ 
-                                          print(value);
+                                          // print(value);
                                           showDialog(
                                             context: context,
                                             builder: (BuildContext builderContext) {
@@ -1031,7 +1031,7 @@ class _AddServiceState extends State<AddService> {
                                         });
 
                                       } else {
-                                        print(_myUser);
+                                        // print(_myUser);
                                       }
                                     }
                                 )
@@ -1096,7 +1096,7 @@ class _AddServiceState extends State<AddService> {
                 flex: 2,
                 child: ProductCostTextField(i),
               ),
-              SizedBox(width: 5,),
+              const SizedBox(width: 5,),
               _addRemoveButton(i == serviceCostList.length-1, i)
             ],
           ),
@@ -1157,7 +1157,7 @@ class _ProductNameTextFieldState extends State<ProductNameTextField> {
   @override
   Widget build(BuildContext context) {
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _controller.text = _AddServiceState.serviceNameList[widget.index] ?? '';
     });
 
@@ -1216,7 +1216,7 @@ class _ProductCostTextFieldState extends State<ProductCostTextField> {
   @override
   Widget build(BuildContext context) {
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _controller.text = _AddServiceState.serviceCostList[widget.index] ?? '';
     });
 

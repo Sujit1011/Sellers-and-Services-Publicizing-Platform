@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart' show AlertDialog, Border, BorderRadius, BoxDecoration, BuildContext, Center, CircleAvatar, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, Flexible, FloatingActionButton, FloatingActionButtonLocation, FontWeight, Form, FormState, GlobalKey, Icon, InkWell, InputDecoration, Key, MainAxisAlignment, Navigator, OutlineInputBorder, Padding, Row, Scaffold, SingleChildScrollView, SizedBox, Spacer, Stack, State, StatefulWidget, Switch, Text, TextButton, TextEditingController, TextFormField, TextInputAction, TextInputType, TextStyle, Theme, Widget, Wrap, showDialog;
 import 'package:provider/provider.dart' show Provider;
 import 'package:shosev/models/SS_User.dart' show SS_User;
@@ -21,7 +22,7 @@ class EditProfile extends StatefulWidget {
   final AuthService authService;
   final dynamic data;
 
-  EditProfile(
+  const EditProfile(
     {
       Key? key, 
       required this.username, 
@@ -241,7 +242,7 @@ class _EditProfileState extends State<EditProfile> {
                                         setState(() {
                                           _isSwitched = value;
                                         });
-                                        print(_isSwitched);
+                                        // print(_isSwitched);
                                       },
                                       activeTrackColor: const Color(0xFFFCE48F),
                                       activeColor: const Color(0xFFFFC804),
@@ -357,7 +358,7 @@ class _EditProfileState extends State<EditProfile> {
                                         });
 
                                       } else {
-                                        print(_myUser);
+                                        // print(_myUser);
                                       }
                                     }
                                 )
@@ -404,6 +405,16 @@ class _EditProfileState extends State<EditProfile> {
                                                       Navigator.of(builderContext).pop();
                                                       widget.authService.auth.currentUser?.delete();
                                                       await widget.authService.auth.signOut();
+                                                      repository.ss_shops_collection.where('businessId', isEqualTo: userId).get().then((snapshot) {
+                                                        for (DocumentSnapshot ds in snapshot.docs){
+                                                          ds.reference.delete();
+                                                        };
+                                                      });
+                                                      repository.ss_services_collection.where('businessId', isEqualTo: userId).get().then((snapshot) {
+                                                        for (DocumentSnapshot ds in snapshot.docs){
+                                                          ds.reference.delete();
+                                                        };
+                                                      });
                                                       repository.ss_users_collection.doc(userId).delete().then((value){ 
                                                         
                                                         showDialog(
@@ -441,7 +452,7 @@ class _EditProfileState extends State<EditProfile> {
                                             Navigator.of(context).pop();
                                           });
                                       } else {
-                                        print(_myUser);
+                                        // print(_myUser);
                                       }
                                     }
                                 )

@@ -36,7 +36,7 @@ class AddShop extends StatefulWidget {
   ): super(key: key);
 
   void _left() {
-    appbar.fadeSystemUI();
+    // appbar.fadeSystemUI();
     // setState(() {
     //   // (_controller.index == 0) ? null : --_controller.index;
     // });
@@ -44,7 +44,7 @@ class AddShop extends StatefulWidget {
   }
 
   void _right() {
-    appbar.fadeSystemUI();
+    // appbar.fadeSystemUI();
     // setState(() {});
     rightClick();
   }
@@ -1022,7 +1022,7 @@ class _AddShopState extends State<AddShop> {
                                             "searchKeywords" : searchKeywords,
                                           }
                                         ).then((value){ 
-                                          print(value);
+                                          // print(value);
                                           showDialog(
                                             context: context,
                                             builder: (BuildContext builderContext) {
@@ -1045,7 +1045,7 @@ class _AddShopState extends State<AddShop> {
                                         });
 
                                       } else {
-                                        print(_myUser);
+                                        // print(_myUser);
                                       }
                                     }
                                 )
@@ -1110,7 +1110,7 @@ class _AddShopState extends State<AddShop> {
                 flex: 2,
                 child: ProductCostTextField(i),
               ),
-              SizedBox(width: 5,),
+              const SizedBox(width: 5,),
               _addRemoveButton(i == productCostList.length-1, i)
             ],
           ),
@@ -1171,7 +1171,7 @@ class _ProductNameTextFieldState extends State<ProductNameTextField> {
   @override
   Widget build(BuildContext context) {
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _controller.text = _AddShopState.productNameList[widget.index] ?? '';
     });
 
@@ -1230,7 +1230,7 @@ class _ProductCostTextFieldState extends State<ProductCostTextField> {
   @override
   Widget build(BuildContext context) {
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _controller.text = _AddShopState.productCostList[widget.index] ?? '';
     });
 

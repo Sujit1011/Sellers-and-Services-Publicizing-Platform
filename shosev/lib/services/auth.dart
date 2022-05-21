@@ -37,7 +37,7 @@ class AuthService {
       User? user = result.user;
       return _userFromFirebaseUser(user);
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
       return null;
     }
   }
@@ -64,7 +64,7 @@ class AuthService {
       verificationFailed: _onVerificationFailed,
       codeSent: _onCodeSent,
       codeAutoRetrievalTimeout: _onCodeTimeout,
-      timeout: const Duration(seconds: 30)
+      timeout: const Duration(seconds: 45)
     );
   }
 
@@ -88,7 +88,7 @@ class AuthService {
     try {
       
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
       return null;
     }
   }
@@ -98,7 +98,7 @@ class AuthService {
     try {
       return await auth.signOut();
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
       return null;
     }
   }
