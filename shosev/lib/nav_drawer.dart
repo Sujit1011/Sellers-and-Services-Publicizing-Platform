@@ -12,6 +12,7 @@ import 'package:shosev/add_service.dart' show AddService;
 import 'package:shosev/add_shop.dart' show AddShop;
 import 'package:shosev/assets/design.dart' as design;
 import 'package:shosev/edit_profile.dart' show EditProfile;
+import 'package:shosev/history_list_page.dart';
 import 'package:shosev/list_page.dart' show ListPage, listPageType;
 import 'package:shosev/models/SS_User.dart' show SS_User;
 import 'package:shosev/services/auth.dart' show AuthService;
@@ -785,6 +786,8 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                                   rightClick: () => {}, 
                                                   leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
                                                   rightIcon: const Icon(Icons.add_rounded, size: 30),
+                                                  update: false,
+                                                  updateData: null,
                                                 )
                                               )
                                             )
@@ -800,7 +803,28 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                             repository.ss_shops_collection.doc(id).delete();
                                             // print(data["id"].toString() + "deleted");
                                           },
-                                          updateItemFn: (id){},
+                                          updateItemFn: (id, document){
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => AddShop(
+                                                  username: (data != null)?data['username']:"", 
+                                                  phoneNo: (data != null)?data['phoneNo']:"", 
+                                                  title: "Update Shop", 
+                                                  isLeftFloattingButton: true, 
+                                                  isRightFloattingButton: false, 
+                                                  leftClick: () => {
+                                                    Navigator.pop(context)
+                                                  },
+                                                  rightClick: () => {}, 
+                                                  leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
+                                                  rightIcon: const Icon(Icons.add_rounded, size: 30),
+                                                  update: true,
+                                                  updateData: document,
+                                                )
+                                              )
+                                            );
+                                          },
                                         )
                                     ),
                                   );
@@ -860,6 +884,8 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                                   rightClick: () => {}, 
                                                   leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
                                                   rightIcon: const Icon(Icons.add_rounded, size: 30),
+                                                  update: false,
+                                                  updateData: null
                                                 )
                                               )
                                             )
@@ -875,7 +901,28 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                             repository.ss_services_collection.doc(id).delete();
                                             // print(data["id"].toString() + "deleted");
                                           },
-                                          updateItemFn: (id){},
+                                          updateItemFn: (id, document){
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => AddService(
+                                                  username: (data != null)?data['username']:"", 
+                                                  phoneNo: (data != null)?data['phoneNo']:"", 
+                                                  title: "Update Service", 
+                                                  isLeftFloattingButton: true, 
+                                                  isRightFloattingButton: false, 
+                                                  leftClick: () => {
+                                                    Navigator.pop(context)
+                                                  },
+                                                  rightClick: () => {}, 
+                                                  leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
+                                                  rightIcon: const Icon(Icons.add_rounded, size: 30),
+                                                  update: true,
+                                                  updateData: document,
+                                                )
+                                              )
+                                            );
+                                          },
                                         )
                                     ),
                                   );
@@ -921,11 +968,20 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                   // ),
                                 ),
                                 onPressed: () {
+                                  // List<String> historys = <String>[];
+                                  // () async {
+                                  //   repository.ss_users_collection.doc(userId).get().then((value) => {
+                                  //     if (value.exists) {
+                                  //       historys = value.get("searchHistory")
+                                  //     }
+                                  //   });
+                                  // };
+                                  // print(historys);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                        ListPage(
+                                        HistoryListPage(
                                           title: "My History",
                                           username: (data != null)?data['username']:"",
                                           phoneNo: (data != null)?data['phoneNo']:"",
@@ -940,11 +996,11 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           rightIcon: const Icon(Icons.chevron_right_rounded),
                                           heroLeft: "history_left",
                                           heroRight: "history_right",
-                                          documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: userId).snapshots(),
+                                          documentFieldStream: repository.ss_users_collection.doc(userId).snapshots(),
                                           onClickWidget: false,
-                                          type: listPageType.history,
                                           deleteItemFn: (id){},
                                           updateItemFn: (id){},
+                                          // history: historys
                                         )
                                     ),
                                   );
@@ -1013,7 +1069,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           onClickWidget: false,
                                           type: listPageType.favourites,
                                           deleteItemFn: (id){},
-                                          updateItemFn: (id){},
+                                          updateItemFn: (id, document){},
                                         )
                                     ),
                                   );
@@ -1084,7 +1140,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           onClickWidget: false,
                                           type: listPageType.reviews,
                                           deleteItemFn: (id){},
-                                          updateItemFn: (id){},
+                                          updateItemFn: (id, document){},
                                         )
                                     ),
                                   );

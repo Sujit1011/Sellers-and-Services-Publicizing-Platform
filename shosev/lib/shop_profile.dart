@@ -2,7 +2,7 @@ import "package:whatsapp_unilink/whatsapp_unilink.dart" show WhatsAppUnilink;
 import 'package:card_swiper/card_swiper.dart' show Swiper, SwiperLayout;
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:shosev/services/data_repository.dart' show DataRepository;
-import 'package:flutter/material.dart' show AlertDialog, Alignment, AlwaysStoppedAnimation, Axis, AxisDirection, Border, BorderRadius, BoxDecoration, BoxFit, BoxShadow, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, Navigator, NeverScrollableScrollPhysics, Offset, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
+import 'package:flutter/material.dart' show AlertDialog, Alignment, AlwaysStoppedAnimation, Axis, AxisDirection, Border, BorderRadius, BoxDecoration, BoxFit, BoxShadow, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FittedBox, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, Navigator, NeverScrollableScrollPhysics, Offset, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart' show FlutterPhoneDirectCaller;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart' show RatingBarIndicator;
 import 'package:marquee_widget/marquee_widget.dart' show Marquee;
@@ -12,10 +12,10 @@ import 'package:shosev/services/data_repository.dart' show DataRepository;
 
 class ShopProfilePage extends StatefulWidget {
   // final String shopname;
-  final double rating;
+  final List<dynamic> ratings;
   final String shopName;
   final String joined;
-  final int reviews;
+  final int reviewsCount;
   final int contacted;
   final String aboutUs;
   final List<dynamic> products;
@@ -24,10 +24,10 @@ class ShopProfilePage extends StatefulWidget {
   const ShopProfilePage(
       {Key? key,
       // required this.shopname,
-      required this.rating,
+      required this.ratings,
       required this.shopName,
       required this.joined,
-      required this.reviews,
+      required this.reviewsCount,
       required this.contacted,
       required this.aboutUs, 
       required this.products, 
@@ -124,6 +124,7 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
+    final double rating = widget.ratings.reduce((a, b) => a+b)/5;
     // Shop Profile Page
     // |____Cover
     // |____Profile Picture
@@ -221,7 +222,7 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                               bottom: 8.0, left: 0),
                                           child: Text(
                                             "Ratings (" +
-                                                widget.rating.toString() +
+                                                rating.toString() +
                                                 ")",
                                             style: Theme.of(context)
                                                 .textTheme
@@ -229,7 +230,8 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                           ),
                                         ),
                                         RatingBarIndicator(
-                                          rating: widget.rating,
+                                        // rating: widget.rating,
+                                        rating: 1,
                                           unratedColor: const Color(0xFFD1D1D1),
                                           itemBuilder: (context, index) =>
                                               const Icon(
@@ -298,7 +300,7 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                                       .textTheme
                                                       .overline),
                                             ),
-                                            Text(widget.reviews.toString(),
+                                            Text(widget.reviewsCount.toString(),
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .headline4),
@@ -791,7 +793,7 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                           padding: const EdgeInsets.only(
                                               bottom: 8.0, left: 0),
                                           child: Text(
-                                            widget.rating.toString(),
+                                            rating.toString(),
                                             style: const TextStyle(
                                                 fontSize: 40.0,
                                                 fontWeight: FontWeight.normal,
@@ -800,7 +802,8 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                           ),
                                         ),
                                         RatingBarIndicator(
-                                          rating: widget.rating,
+                                        // rating: widget.rating,
+                                        rating: 1,
                                           unratedColor: const Color(0xFFD1D1D1),
                                           itemBuilder: (context, index) =>
                                               const Icon(

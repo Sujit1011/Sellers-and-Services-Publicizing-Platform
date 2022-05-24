@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
+import 'package:cloud_firestore/cloud_firestore.dart' show QueryDocumentSnapshot, Timestamp;
 import 'package:flutter/foundation.dart' show Factory, Key;
 import 'package:flutter/gestures.dart' show PanGestureRecognizer;
 import 'package:flutter/material.dart' show AlertDialog, BorderRadius, BoxDecoration, BuildContext, Center, CircleAvatar, Color, Colors, Column, Container, CrossAxisAlignment, Divider, DropdownButtonFormField, DropdownMenuItem, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontWeight, Form, FormState, GlobalKey, Icon, Icons, InkWell, InputDecoration, Key, MainAxisAlignment, MediaQuery, Navigator, OutlineInputBorder, Padding, Positioned, Row, Scaffold, SingleChildScrollView, SizedBox, Spacer, Stack, State, StatefulWidget, Text, TextButton, TextEditingController, TextFormField, TextInputAction, TextInputType, TextStyle, Theme, TimeOfDay, Widget, WidgetsBinding, showDialog, showTimePicker;
@@ -18,6 +18,8 @@ class AddShop extends StatefulWidget {
   final bool isRightFloattingButton;
   final Icon leftIcon;
   final Icon rightIcon;
+  final bool update;
+  final dynamic updateData;
 
   final Function leftClick;
   final Function rightClick;
@@ -36,7 +38,9 @@ class AddShop extends StatefulWidget {
       required this.leftClick, 
       required this.rightClick, 
       required this.leftIcon, 
-      required this.rightIcon
+      required this.rightIcon, 
+      required this.update,
+      required this.updateData
     }
   ): super(key: key);
 
@@ -82,7 +86,46 @@ class _AddShopState extends State<AddShop> {
   final TextEditingController _timeinput_sat1 = TextEditingController();
   final TextEditingController _timeinput_sat2 = TextEditingController();
   String _category = "";
+  List productsList = [];
+  List searchKeywords = [];
   late GoogleMapController googleMapController;
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.update && widget.updateData != null) {
+      _shop_name_t.text = widget.updateData['name'];
+      _address_t.text = widget.updateData['address'];
+      _category = widget.updateData['category'];
+      _timeinput_sun1.text = widget.updateData['workingHours'][0];
+      _timeinput_sun2.text = widget.updateData['workingHours'][1];
+      _timeinput_mon1.text = widget.updateData['workingHours'][2];
+      _timeinput_mon2.text = widget.updateData['workingHours'][3];
+      _timeinput_tue1.text = widget.updateData['workingHours'][4];
+      _timeinput_tue2.text = widget.updateData['workingHours'][5];
+      _timeinput_wed1.text = widget.updateData['workingHours'][6];
+      _timeinput_wed2.text = widget.updateData['workingHours'][7];
+      _timeinput_thu1.text = widget.updateData['workingHours'][8];
+      _timeinput_thu2.text = widget.updateData['workingHours'][9];
+      _timeinput_fri1.text = widget.updateData['workingHours'][10];
+      _timeinput_fri2.text = widget.updateData['workingHours'][11];
+      _timeinput_sat1.text = widget.updateData['workingHours'][12];
+      _timeinput_sat2.text = widget.updateData['workingHours'][13];
+      _description_t.text = widget.updateData['description'];
+      _phoneNo_t.text = widget.updateData['phoneNo'];
+      _email_t.text = widget.updateData['email'];
+      productsList = widget.updateData['products'];
+      productNameList = [];
+      productCostList = [];
+      for(int i = 0; i < productsList.length; i++) {
+        productNameList.add(productsList[i]['productName']);
+        productCostList.add(productsList[i]['cost']);
+      }
+      searchKeywords = widget.updateData['searchKeywords'];
+      widget.latitude =  widget.updateData['latitute'];
+      widget.longitude =  widget.updateData['longitude'];
+    }
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -1005,9 +1048,9 @@ class _AddShopState extends State<AddShop> {
                                       borderRadius: BorderRadius.circular(10),
                                       color: const Color(0xFF333333)
                                     ),
-                                    child: const Center(
+                                    child: Center(
                                       child: Text(
-                                        "ADD SHOP",
+                                        (widget.update)?"UPDATE":"ADD SHOP",
                                         style: TextStyle(fontSize: 20, color: Color(0xFFFFFFFF), fontWeight: FontWeight.bold),
                                       ),
                                     ),
@@ -1019,27 +1062,58 @@ class _AddShopState extends State<AddShop> {
                                         double screenHeight = MediaQuery.of(context).size.height * MediaQuery.of(context).devicePixelRatio;
 
                                         double middleX = screenWidth / 2;
-                                        double middleY = screenHeight / 2;
+                                        double middleY = 150;
 
                                         ScreenCoordinate screenCoordinate = ScreenCoordinate(x: middleX.round(), y: middleY.round());
 
                                         LatLng middlePoint = await googleMapController.getLatLng(screenCoordinate);
                                         String userId = _myUser.uid;
                                         DataRepository repository = DataRepository();
-                                        List productsList = [];
+                                        productsList = [];
                                         for (int i = 0; i < productNameList.length; i++) {
                                           productsList.add({
                                             "productName": productNameList.toList()[i],
                                             "cost": productCostList.toList()[i],
                                           });
                                         }
-                                        List searchKeywords = [];
+                                        searchKeywords = [];
                                         String temp = "";
                                         for (int i = 0; i < _shop_name_t.text.length; i++) {
                                           temp = temp + _shop_name_t.text[i];
+                                          temp = temp.toLowerCase();
                                           searchKeywords.add(temp);
                                         }
-                                        repository.ss_shops_collection.add(
+                                        if(widget.update) {
+                                          repository.ss_services_collection.doc(widget.updateData.id).update(
+                                            {
+                                              "name": _shop_name_t.text,
+                                              "address": _address_t.text,
+                                              "category": _category,
+                                              "workingHours": [ _timeinput_sun1.text, 
+                                                                _timeinput_sun2.text, 
+                                                                _timeinput_mon1.text, 
+                                                                _timeinput_mon2.text, 
+                                                                _timeinput_tue1.text, 
+                                                                _timeinput_tue2.text, 
+                                                                _timeinput_wed1.text, 
+                                                                _timeinput_wed2.text, 
+                                                                _timeinput_thu1.text, 
+                                                                _timeinput_thu2.text, 
+                                                                _timeinput_fri1.text, 
+                                                                _timeinput_fri2.text, 
+                                                                _timeinput_sat1.text, 
+                                                                _timeinput_sat2.text],
+                                              "description": _description_t.text,
+                                              "phoneNo": _phoneNo_t.text,
+                                              "email": _email_t.text,
+                                              "latitute": middlePoint.latitude,
+                                              "longitude": middlePoint.longitude,
+                                              "products" : productsList,
+                                              "searchKeywords" : searchKeywords,
+                                            }
+                                          );
+                                        } else {
+                                          repository.ss_shops_collection.add(
                                           {
                                             "businessId": userId,
                                             "name": _shop_name_t.text,
@@ -1063,11 +1137,11 @@ class _AddShopState extends State<AddShop> {
                                             "phoneNo": _phoneNo_t.text,
                                             "email": _email_t.text,
                                             "latitute": middlePoint.latitude,
-                                            "longtitide": middlePoint.longitude,
-                                            "rating": 1.0,
+                                            "longitude": middlePoint.longitude,
+                                            "rating": [1.0, 1.0, 1.0, 1.0, 1.0],
                                             "contacted": 0,
                                             "joined": Timestamp.now(),
-                                            "reviews": 0,
+                                            "reviewsCount": 0,
                                             "products" : productsList,
                                             "searchKeywords" : searchKeywords,
                                           }
@@ -1093,6 +1167,7 @@ class _AddShopState extends State<AddShop> {
                                           });
                                           
                                         });
+                                        }
 
                                       } else {
                                         // print(_myUser);
@@ -1173,14 +1248,15 @@ class _AddShopState extends State<AddShop> {
   Widget _addRemoveButton(bool add, int index) {
     return InkWell(
       onTap: () {
-        if (add) {
-          productNameList.insert(0, null);
-          productCostList.insert(0, null);
-        } else {
-          productNameList.removeAt(index);
-          productCostList.removeAt(index);
-        }
-        setState(() {});
+        setState(() {
+          if (add) {
+            productNameList.insert(0, null);
+            productCostList.insert(0, null);
+          } else {
+            productNameList.removeAt(index);
+            productCostList.removeAt(index);
+          }
+        });
       },
       child: Container(
         width: 30,

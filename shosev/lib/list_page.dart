@@ -1,5 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart' show QuerySnapshot;
-import 'package:flutter/material.dart' show AlertDialog, AsyncSnapshot, BuildContext, Center, CircleAvatar, CircularProgressIndicator, Color, Colors, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, Icon, Icons, Key, ListView, MainAxisAlignment, MaterialPageRoute, Navigator, Padding, Row, Scaffold, SizedBox, Spacer, Stack, State, StatefulWidget, StreamBuilder, Text, TextButton, Theme, Widget, showDialog;
+import 'package:cloud_firestore/cloud_firestore.dart' show QueryDocumentSnapshot, QuerySnapshot;
+import 'package:flutter/material.dart' show AlertDialog, AsyncSnapshot, BuildContext, Center, CircleAvatar, CircularProgressIndicator, Color, Colors, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, Icon, Icons, Key, ListView, MainAxisAlignment, MaterialPageRoute, Navigator, Padding, Row, Scaffold, SingleChildScrollView, SizedBox, Spacer, Stack, State, StatefulWidget, StreamBuilder, Text, TextButton, Theme, Widget, showDialog;
+import 'package:shosev/add_shop.dart';
 
 import 'package:shosev/assets/design.dart' as design;
 import 'package:shosev/service_profile.dart' show ServiceProfilePage;
@@ -46,7 +47,7 @@ class ListPage extends StatefulWidget {
   final Function leftClick;
   final Function rightClick;
   final void Function(String id) deleteItemFn;
-  final void Function(String id) updateItemFn;
+  final void Function(String id, dynamic document) updateItemFn;
 
   final listPageType type;
 
@@ -168,113 +169,105 @@ class _ListPageState extends State<ListPage> {
                   ),
                   Expanded(
                     child: 
-                    // SingleChildScrollView(
-                    //   padding: const EdgeInsets.only(bottom: 47, right: 15),
-                      // child: 
-                      // Column(
-                      //   children: [
-                          StreamBuilder(
-                            stream: widget.documentFieldStream,
-                            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                              if (!snapshot.hasData) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                              if(snapshot.data!.size < 1) {
-                                return const Center(child: Text("empty"),);
-                              }
-                              return ListView(
-                                children: snapshot.data!.docs.map((document) {
-                                  Widget clickWidget = const SizedBox();
-                                  // print(document["products"]);
-                                  if (widget.onClickWidget) {
-                                      if (widget.type == listPageType.shop) {
-                                      clickWidget = ShopProfilePage(
-                                        shopName: document["name"], 
-                                        rating: document["rating"], 
-                                        joined: monthsToString[document["joined"].toDate().month]! + " " + document["joined"].toDate().year.toString().substring(2,4), 
-                                        reviews: document["reviews"], 
-                                        contacted: document["contacted"], 
-                                        aboutUs: document["description"],
-                                        products: document["products"],
-                                        data: document,
-                                      );
-                                    } else if (widget.type == listPageType.service) {
-                                      clickWidget = ServiceProfilePage(
-                                        shopName: document["name"], 
-                                        rating: document["rating"], 
-                                        joined: monthsToString[document["joined"].toDate().month]! + " " + document["joined"].toDate().year.toString().substring(2,4), 
-                                        reviews: document["reviews"], 
-                                        contacted: document["contacted"], 
-                                        aboutUs: document["description"],
-                                        services: document["services"],
-                                        data: document,
-                                      );
-                                    } else if (widget.type == listPageType.history) {
-                                      
-                                    } else if (widget.type == listPageType.favourites) {
-                                      
-                                    } else if (widget.type == listPageType.chat) {
-                                      
-                                    } else if (widget.type == listPageType.reviews) {
-                                      
-                                    }
-                                  }
-                                  return design.CardDesign1(
-                                    isHeading: true,
-                                    isPhoto: true,
-                                    isText1: true,
-                                    isText2: true,
-                                    deleteShow: _showDelete,
-                                    updateShow: _showUpdate,
-                                    heading: document["name"],
-                                    text1: document["phoneNo"],
-                                    text2: document["address"],
-                                    onClick: () => {
-                                      if (widget.onClickWidget) {
-                                        Navigator.push(context,
-                                        MaterialPageRoute(builder: (context) => clickWidget)
-                                        ) 
-                                      }
-                                    },
-                                    deleteOnClick: (){
-                                      // print(document.id);
-                                      // print(document == null? "no id": document["id"].toString());
-                                      showDialog(
-                                        context: context, 
-                                        builder: (BuildContext builderContext) {
-                                          return AlertDialog(
-                                            title: const Text("Are you sure you want to delete?"),
-                                            content: Text(document["name"]),
-                                            actions: [
-                                              TextButton(
-                                                child: const Text("Yes"),
-                                                onPressed: () async {
-                                                  widget.deleteItemFn(document == null? "": document.id.toString());
-                                                  Navigator.of(builderContext).pop();
-                                                },
-                                              ),
-                                              TextButton(
-                                                child: const Text("Cancel"),
-                                                onPressed: () async {
-                                                  Navigator.of(builderContext).pop();
-                                                },
-                                              )
-                                            ],
-                                          );
-                                        }).then((val) {
-                                          Navigator.of(context).pop();
-                                        });
-                                    },
-                                    updateOnClick: (){
-                                      widget.updateItemFn(document == null? "": document.id.toString());
-                                    },
+                      StreamBuilder(
+                        stream: widget.documentFieldStream,
+                        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+                          if (!snapshot.hasData) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          if(snapshot.data!.size < 1) {
+                            return const Center(child: Text("empty"),);
+                          }
+                          return ListView(
+                            children: snapshot.data!.docs.map((document) {
+                              Widget clickWidget = const SizedBox();
+                              if (widget.onClickWidget) {
+                                  if (widget.type == listPageType.shop) {
+                                  clickWidget = ShopProfilePage(
+                                    shopName: document["name"], 
+                                    ratings: document["rating"], 
+                                    joined: monthsToString[document["joined"].toDate().month]! + " " + document["joined"].toDate().year.toString().substring(2,4), 
+                                    reviewsCount: document["reviewsCount"], 
+                                    contacted: document["contacted"], 
+                                    aboutUs: document["description"],
+                                    products: document["products"],
+                                    data: document,
                                   );
-                                }).toList(),
+                                } else if (widget.type == listPageType.service) {
+                                  clickWidget = ServiceProfilePage(
+                                    shopName: document["name"], 
+                                    ratings: document["rating"], 
+                                    joined: monthsToString[document["joined"].toDate().month]! + " " + document["joined"].toDate().year.toString().substring(2,4), 
+                                    reviewsCount: document["reviewsCount"], 
+                                    contacted: document["contacted"], 
+                                    aboutUs: document["description"],
+                                    services: document["services"],
+                                    data: document,
+                                  );
+                                } else if (widget.type == listPageType.history) {
+                                  
+                                } else if (widget.type == listPageType.favourites) {
+                                  
+                                } else if (widget.type == listPageType.chat) {
+                                  
+                                } else if (widget.type == listPageType.reviews) {
+                                  
+                                }
+                              }
+                              return design.CardDesign1(
+                                isHeading: true,
+                                isPhoto: true,
+                                isText1: true,
+                                isText2: true,
+                                deleteShow: _showDelete,
+                                updateShow: _showUpdate,
+                                heading: document["name"],
+                                text1: document["phoneNo"],
+                                text2: document["address"],
+                                onClick: () => {
+                                  if (widget.onClickWidget) {
+                                    Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) => clickWidget)
+                                    ) 
+                                  }
+                                },
+                                deleteOnClick: (){
+                                  // print(document.id);
+                                  // print(document == null? "no id": document["id"].toString());
+                                  showDialog(
+                                    context: context, 
+                                    builder: (BuildContext builderContext) {
+                                      return AlertDialog(
+                                        title: const Text("Are you sure you want to delete?"),
+                                        content: Text(document["name"]),
+                                        actions: [
+                                          TextButton(
+                                            child: const Text("Yes"),
+                                            onPressed: () async {
+                                              widget.deleteItemFn(document == null? "": document.id.toString());
+                                              Navigator.of(builderContext).pop();
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: const Text("Cancel"),
+                                            onPressed: () async {
+                                              Navigator.of(builderContext).pop();
+                                            },
+                                          )
+                                        ],
+                                      );
+                                    });
+                                },
+                                updateOnClick: (){
+                                  widget.updateItemFn(document == null? "": document.id.toString(), document);
+                                },
                               );
-                            }
-                          ),
+                            }).toList(),
+                          );
+                        }
+                      ),
                   ),
                   const SizedBox(
                     height: 47,
