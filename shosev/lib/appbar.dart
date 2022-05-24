@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart' show Alignment, Axis, BoxDecoration, BoxShadow, BuildContext, ChoiceChip, Color, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, FontWeight, GlobalKey, Icon, IconButton, Icons, Key, MainAxisAlignment, Offset, Padding, Row, ScaffoldState, SingleChildScrollView, State, StatefulWidget, StatelessWidget, Text, TextBaseline, TextStyle, Theme, VisualDensity, Widget, Wrap, WrapCrossAlignment;
-import 'package:flutter/services.dart' show SystemChrome, SystemUiMode;
 import 'package:marquee_widget/marquee_widget.dart' show Marquee;
 
-void fadeSystemUI() {
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
-}
+// void fadeSystemUI() {
+//   SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+// }
 
 class AppBarContents extends StatelessWidget {
   const AppBarContents({Key? key, required this.title, required this.scaffoldKey}) : super(key: key);

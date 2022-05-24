@@ -22,7 +22,7 @@ class _SplashState extends State<Splash> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => const MyHomePage(title: 'Flutter Demo Home Page')
+        builder: (context) => MyHomePage(title: 'Flutter Demo Home Page')
       )
     );
   }
@@ -31,6 +31,7 @@ class _SplashState extends State<Splash> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFC804),
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Column(

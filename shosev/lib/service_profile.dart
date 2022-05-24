@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
-import 'package:flutter/material.dart' show AlertDialog, AlwaysStoppedAnimation, Axis, BorderRadius, BoxDecoration, BoxFit, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, Navigator, NeverScrollableScrollPhysics, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, SingleChildScrollView, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
+import 'package:flutter/material.dart' show AlertDialog, AlwaysStoppedAnimation, Axis, BorderRadius, BoxDecoration, BoxFit, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, Flexible, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, Navigator, NeverScrollableScrollPhysics, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, SingleChildScrollView, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart' show FlutterPhoneDirectCaller;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart' show RatingBarIndicator;
 import 'package:marquee_widget/marquee_widget.dart' show Marquee;
@@ -8,10 +8,10 @@ import 'package:whatsapp_unilink/whatsapp_unilink.dart' show WhatsAppUnilink;
 
 
 class ServiceProfilePage extends StatefulWidget {
-  final double rating;
+  final List<dynamic> ratings;
   final String shopName;
   final String joined;
-  final int reviews;
+  final int reviewsCount;
   final int contacted;
   final String aboutUs;
   final List<dynamic> services;
@@ -19,10 +19,10 @@ class ServiceProfilePage extends StatefulWidget {
 
   const ServiceProfilePage(
       {Key? key,
-      required this.rating,
+      required this.ratings,
       required this.shopName,
       required this.joined,
-      required this.reviews,
+      required this.reviewsCount,
       required this.contacted,
       required this.aboutUs, 
       required this.services, 
@@ -108,8 +108,6 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
             )
           ],
         );
-      }).then((val) {
-        Navigator.of(context).pop();
       });
     
     // await launch(url);
@@ -119,6 +117,7 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
 
   @override
   Widget build(BuildContext context) {
+    final double rating = widget.ratings.reduce((a, b) => a+b)/5;
     // Shop Profile Page
     // |____Cover
     // |____Profile Picture
@@ -216,12 +215,13 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                                       Padding(
                                         padding: const EdgeInsets.only(bottom: 8.0, left: 0),
                                         child: Text(
-                                          "Ratings (" +widget.rating.toString() +")",
+                                          "Ratings (" +rating.toString() +")",
                                           style: Theme.of(context).textTheme.headline5,
                                         ),
                                       ),
                                       RatingBarIndicator(
-                                        rating: widget.rating,
+                                        // rating: widget.rating,
+                                        rating: 1,
                                         unratedColor: const Color(0xFFD1D1D1),
                                         itemBuilder: (context, index) => const Icon(
                                           Icons.star,
@@ -287,7 +287,7 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                                                     .textTheme
                                                     .overline),
                                           ),
-                                          Text(widget.reviews.toString(),
+                                          Text(widget.reviewsCount.toString(),
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline4),
@@ -434,7 +434,7 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                               style: Theme.of(context).textTheme.headline4,
                             ),
                           ),
-                          Expanded(
+                          Flexible(
                             flex: 1,
                             child: Padding(
                                 padding: const EdgeInsets.only(
@@ -460,54 +460,46 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                           //     ),
                           //   ),
                           // ),
-                          Expanded(
-                            child: ListView(
-                                padding: const EdgeInsets.only(
-                                    bottom: 12, right: 15, top: 8),
-                                // child: SizedBox(
-                                //   height: 200,
-                                children: [
-                                  ListView.builder(
-                                  itemCount: widget.services.length,
-                                  padding: const EdgeInsets.only(bottom: 12, right: 15, top: 8),
-                                  itemBuilder: (context, index) {
-                                    return Column(
+                          Flexible(
+                            child: ListView.builder(
+                              itemCount: widget.services.length,
+                              padding: const EdgeInsets.only(bottom: 12, right: 15, top: 8),
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    Row(
                                       children: [
-                                        Row(
-                                          children: [
-                                            const Spacer(),
-                                            Expanded(
-                                                flex: 3,
-                                                child: Text(widget.services[index]["productName"],
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .headline5)),
-                                            const Spacer(),
-                                            Expanded(
-                                                flex: 1,
-                                                child: Text(
-                                                  "₹"+widget.services[index]["cost"].toString(),
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline5,
-                                                  textAlign: TextAlign.end,
-                                                )),
-                                            const Spacer(),
-                                          ],
-                                        ),
-                                        const Divider(
-                                          height: 10,
-                                          thickness: 1,
-                                          indent: 50,
-                                          endIndent: 50,
-                                          color: Color(0xFFE5E5E5),
-                                        ),
+                                        const Spacer(),
+                                        Expanded(
+                                            flex: 3,
+                                            child: Text(widget.services[index]["productName"],
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline5)),
+                                        const Spacer(),
+                                        Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              "₹"+widget.services[index]["cost"].toString(),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline5,
+                                              textAlign: TextAlign.end,
+                                            )),
+                                        const Spacer(),
                                       ],
-                                    );
-                                  }
-                                )
-                                ]
-                              ),
+                                    ),
+                                    const Divider(
+                                      height: 10,
+                                      thickness: 1,
+                                      indent: 50,
+                                      endIndent: 50,
+                                      color: Color(0xFFE5E5E5),
+                                    ),
+                                  ],
+                                );
+                              }
+                            )
                           ),
                           // Expanded(
                           //   child: Padding(
@@ -699,7 +691,7 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                                         padding: const EdgeInsets.only(
                                             bottom: 8.0, left: 0),
                                         child: Text(
-                                          widget.rating.toString(),
+                                          rating.toString(),
                                           style: const TextStyle(
                                               fontSize: 40.0,
                                               fontWeight: FontWeight.normal,
@@ -708,7 +700,8 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                                         ),
                                       ),
                                       RatingBarIndicator(
-                                        rating: widget.rating,
+                                        // rating: widget.rating,
+                                        rating: 1,
                                         unratedColor: const Color(0xFFD1D1D1),
                                         itemBuilder: (context, index) =>
                                             const Icon(
