@@ -2,18 +2,21 @@ import "package:whatsapp_unilink/whatsapp_unilink.dart" show WhatsAppUnilink;
 import 'package:card_swiper/card_swiper.dart' show Swiper, SwiperLayout;
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:shosev/services/data_repository.dart' show DataRepository;
-import 'package:flutter/material.dart' show AlertDialog, Alignment, AlwaysStoppedAnimation, Axis, AxisDirection, Border, BorderRadius, BoxDecoration, BoxFit, BoxShadow, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, Navigator, NeverScrollableScrollPhysics, Offset, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
+import 'package:shosev/ratings_and_reviews.dart' show RatingandReview;
+import 'package:flutter/material.dart' show AlertDialog,Alignment,AlwaysStoppedAnimation,Axis,AxisDirection,Border,BorderRadius,BoxDecoration,BoxFit,BoxShadow,BuildContext,Center,ChoiceChip,ClipOval,ClipRRect,Color,Colors,Column,Container,CrossAxisAlignment,Divider,EdgeInsets,Expanded,FloatingActionButton,FloatingActionButtonLocation,FontStyle,FontWeight,Icon,Icons,IgnorePointer,Image,Key,LinearProgressIndicator,ListView,MainAxisAlignment,MaterialPageRoute,Navigator,NeverScrollableScrollPhysics,Offset,Padding,Positioned,Radius,RoundedRectangleBorder,Row,Scaffold,SingleTickerProviderStateMixin,Size,SizedBox,Spacer,Stack,State,StatefulWidget,Tab,TabBar,TabBarView,TabController,Text,TextAlign,TextButton,TextStyle,Theme,VerticalDivider,Visibility,VisualDensity,Widget,
+showDialog;
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart' show FlutterPhoneDirectCaller;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart' show RatingBarIndicator;
 import 'package:marquee_widget/marquee_widget.dart' show Marquee;
 import 'package:url_launcher/url_launcher.dart' show launch;
 
 class ShopProfilePage extends StatefulWidget {
-  // final String shopname;
-  final double rating;
+  final String username;
+  final String phoneno;
+  final List<dynamic> rating;
   final String shopName;
   final String joined;
-  final int reviews;
+  final List<dynamic> reviews;
   final int contacted;
   final String aboutUs;
   final List<dynamic> products;
@@ -21,14 +24,15 @@ class ShopProfilePage extends StatefulWidget {
 
   const ShopProfilePage(
       {Key? key,
-      // required this.shopname,
+      required this.username,
+      required this.phoneno,
       required this.rating,
       required this.shopName,
       required this.joined,
       required this.reviews,
       required this.contacted,
-      required this.aboutUs, 
-      required this.products, 
+      required this.aboutUs,
+      required this.products,
       required this.data})
       : super(key: key);
 
@@ -36,7 +40,8 @@ class ShopProfilePage extends StatefulWidget {
   State<ShopProfilePage> createState() => _ShopProfilePageState();
 }
 
-class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProviderStateMixin {
+class _ShopProfilePageState extends State<ShopProfilePage>
+    with SingleTickerProviderStateMixin {
   bool _shareValue = false;
   final int pages = 3;
   late final TabController _controller;
@@ -77,7 +82,7 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
   }
 
   void _chat(String? name) async {
-    if(name == null) {
+    if (name == null) {
       return;
     }
     String text = "Hi, this  is $name";
@@ -91,36 +96,53 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
   void _call() async {
     String url = 'tel:' + widget.data['phoneNo'].toString();
     showDialog(
-      context: context, 
-      builder: (BuildContext builderContext) {
-        return AlertDialog(
-          title: Text("Call " + widget.shopName),
-          content: Text(widget.data['phoneNo']),
-          actions: [
-            TextButton(
-              child: const Text("Yes"),
-              onPressed: () async {
-                DataRepository repository = DataRepository();
-                repository.ss_shops_collection.doc(widget.data['id']).update(widget.data['contacted']+1);
-                FlutterPhoneDirectCaller.callNumber(url);
-              },
-            ),
-            TextButton(
-              child: const Text("Cancel"),
-              onPressed: () async {
-                Navigator.of(builderContext).pop();
-              },
-            )
-          ],
-        );
-      }).then((val) {
-        Navigator.of(context).pop();
-      });
-    
+        context: context,
+        builder: (BuildContext builderContext) {
+          return AlertDialog(
+            title: Text("Call " + widget.shopName),
+            content: Text(widget.data['phoneNo']),
+            actions: [
+              TextButton(
+                child: const Text("Yes"),
+                onPressed: () async {
+                  DataRepository repository = DataRepository();
+                  repository.ss_shops_collection
+                      .doc(widget.data['id'])
+                      .update(widget.data['contacted'] + 1);
+                  FlutterPhoneDirectCaller.callNumber(url);
+                },
+              ),
+              TextButton(
+                child: const Text("Cancel"),
+                onPressed: () async {
+                  Navigator.of(builderContext).pop();
+                },
+              )
+            ],
+          );
+        }).then((val) {
+      Navigator.of(context).pop();
+    });
+
     // await launch(url);
   }
 
-  void _writeReview() {}
+  void _writeReview() {
+    print(widget.data);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => RatingandReview(
+                // Id: widget.data['id'],
+                username: widget.username,
+                phoneNo: widget.phoneno,
+                type:"shop",
+                isLeftFloattingButton: true,
+                isRightFloattingButton: false,
+                leftIcon: const Icon(Icons.chevron_left_rounded),
+                rightIcon: const Icon(Icons.add_rounded),
+                data1: widget.data)));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +193,8 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         // Chat Button
                                         TextButton.icon(
@@ -180,7 +203,8 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                               Icons.chat_bubble_rounded,
                                               size: 18),
                                           onPressed: () {
-                                            _chat(FirebaseAuth.instance.currentUser?.phoneNumber);
+                                            _chat(FirebaseAuth.instance
+                                                .currentUser?.phoneNumber);
                                           },
                                           label: const Text("CHAT",
                                               style: TextStyle(
@@ -214,14 +238,22 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               bottom: 8.0, left: 0),
                                           child: Text(
                                             "Ratings (" +
-                                                widget.rating.toString() +
+                                                ((widget.rating[0] +
+                                                            widget.rating[1] +
+                                                            widget.rating[2] +
+                                                            widget.rating[3] +
+                                                            widget.rating[4] + 
+                                                            widget.rating[5]) /
+                                                        6)
+                                                    .toStringAsFixed(1) +
                                                 ")",
                                             style: Theme.of(context)
                                                 .textTheme
@@ -229,7 +261,14 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                           ),
                                         ),
                                         RatingBarIndicator(
-                                          rating: widget.rating,
+                                          rating: ((widget.rating[0] +
+                                                      widget.rating[1] +
+                                                      widget.rating[2] +
+                                                      widget.rating[3] +
+                                                      widget.rating[4] +
+                                                      widget.rating[5]) /
+                                                  5)
+                                              .toDouble(),
                                           unratedColor: const Color(0xFFD1D1D1),
                                           itemBuilder: (context, index) =>
                                               const Icon(
@@ -260,7 +299,8 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                     child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         const Spacer(),
                                         Column(
@@ -298,7 +338,9 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                                       .textTheme
                                                       .overline),
                                             ),
-                                            Text(widget.reviews.toString(),
+                                            Text(
+                                                widget.reviews.length
+                                                    .toString(),
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .headline4),
@@ -339,7 +381,8 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                       const EdgeInsets.only(bottom: 12, top: 2),
                                   child: Text(
                                     "Gallery",
-                                    style: Theme.of(context).textTheme.headline4,
+                                    style:
+                                        Theme.of(context).textTheme.headline4,
                                   ),
                                 ),
                                 // Gallery
@@ -348,14 +391,16 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                   child: ListView(
                                       scrollDirection: Axis.horizontal,
                                       shrinkWrap: true,
-                                      padding: const EdgeInsets.only(bottom: 12),
+                                      padding:
+                                          const EdgeInsets.only(bottom: 12),
                                       children: [
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(right: 12),
                                           child: ClipRRect(
-                                            borderRadius: const BorderRadius.all(
-                                                Radius.circular(10.0)),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(10.0)),
                                             child: Image.asset(
                                               'lib/assets/img/shop.png',
                                               width: 106,
@@ -368,8 +413,9 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                           padding:
                                               const EdgeInsets.only(right: 12),
                                           child: ClipRRect(
-                                            borderRadius: const BorderRadius.all(
-                                                Radius.circular(10.0)),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(10.0)),
                                             child: Image.asset(
                                               'lib/assets/img/shop.png',
                                               width: 106,
@@ -382,8 +428,9 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                           padding:
                                               const EdgeInsets.only(right: 12),
                                           child: ClipRRect(
-                                            borderRadius: const BorderRadius.all(
-                                                Radius.circular(10.0)),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(10.0)),
                                             child: Image.asset(
                                               'lib/assets/img/shop.png',
                                               width: 106,
@@ -396,8 +443,9 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                           padding:
                                               const EdgeInsets.only(right: 12),
                                           child: ClipRRect(
-                                            borderRadius: const BorderRadius.all(
-                                                Radius.circular(10.0)),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(10.0)),
                                             child: Image.asset(
                                               'lib/assets/img/shop.png',
                                               width: 106,
@@ -409,11 +457,12 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                       ]),
                                 ),
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.only(bottom: 12, top: 20),
+                                  padding: const EdgeInsets.only(
+                                      bottom: 12, top: 20),
                                   child: Text(
                                     "About Us",
-                                    style: Theme.of(context).textTheme.headline4,
+                                    style:
+                                        Theme.of(context).textTheme.headline4,
                                   ),
                                 ),
                                 Expanded(
@@ -445,13 +494,15 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                 style: Theme.of(context).textTheme.headline4,
                               ),
                             ),
+                            
                             SizedBox(
                                 height: 180,
                                 child: Swiper(
                                   itemCount: 3,
                                   // containerHeight: 158,
                                   // containerWidth: 281,
-                                  itemBuilder: (BuildContext context, int index) {
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
                                     return Container(
                                         padding: const EdgeInsets.all(8.0),
                                         decoration: BoxDecoration(
@@ -483,7 +534,8 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                               children: [
                                                 Expanded(
                                                     child: Text(
-                                                  widget.products[index]["productName"],
+                                                  widget.products[index]
+                                                      ["productName"],
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .headline5,
@@ -505,7 +557,10 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                                         width: 2.0),
                                                   ),
                                                   child: Text(
-                                                    "₹"+widget.products[index]["cost"].toString(),
+                                                    "₹" +
+                                                        widget.products[index]
+                                                                ["cost"]
+                                                            .toString(),
                                                   ),
                                                 )
                                               ],
@@ -534,84 +589,88 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                             //   ),
                             // ),
                             Expanded(
-                              child: 
-                              ListView.builder(
-                                itemCount: widget.products.length,
-                                padding: const EdgeInsets.only(bottom: 12, right: 15, top: 8),
-                                itemBuilder: (context, index) {
-                                  return Column(
-                                    children: [
-                                      Row(
+                                child: ListView.builder(
+                                    itemCount: widget.products.length,
+                                    padding: const EdgeInsets.only(
+                                        bottom: 12, right: 15, top: 8),
+                                    itemBuilder: (context, index) {
+                                      return Column(
                                         children: [
-                                          const Spacer(),
-                                          Expanded(
-                                              flex: 3,
-                                              child: Text(widget.products[index]["productName"],
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline5)),
-                                          const Spacer(),
-                                          Expanded(
-                                              flex: 1,
-                                              child: Text(
-                                                "₹"+widget.products[index]["cost"].toString(),
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline5,
-                                                textAlign: TextAlign.end,
-                                              )),
-                                          const Spacer(),
+                                          Row(
+                                            children: [
+                                              const Spacer(),
+                                              Expanded(
+                                                  flex: 3,
+                                                  child: Text(
+                                                      widget.products[index]
+                                                          ["productName"],
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .headline5)),
+                                              const Spacer(),
+                                              Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    "₹" +
+                                                        widget.products[index]
+                                                                ["cost"]
+                                                            .toString(),
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline5,
+                                                    textAlign: TextAlign.end,
+                                                  )),
+                                              const Spacer(),
+                                            ],
+                                          ),
+                                          const Divider(
+                                            height: 10,
+                                            thickness: 1,
+                                            indent: 50,
+                                            endIndent: 50,
+                                            color: Color(0xFFE5E5E5),
+                                          ),
                                         ],
-                                      ),
-                                      const Divider(
-                                        height: 10,
-                                        thickness: 1,
-                                        indent: 50,
-                                        endIndent: 50,
-                                        color: Color(0xFFE5E5E5),
-                                      ),
-                                    ],
-                                  );
-                                }
-                              )
-                              // ListView(
-                              //     padding: const EdgeInsets.only(
-                              //         bottom: 12, right: 15, top: 8),
-                              //     // child: SizedBox(
-                              //     //   height: 200,
-                              //     children: [
-                              //       Row(
-                              //         children: [
-                              //           const Spacer(),
-                              //           Expanded(
-                              //               flex: 3,
-                              //               child: Text("Product 1",
-                              //                   style: Theme.of(context)
-                              //                       .textTheme
-                              //                       .headline5)),
-                              //           const Spacer(),
-                              //           Expanded(
-                              //               flex: 1,
-                              //               child: Text(
-                              //                 "₹50",
-                              //                 style: Theme.of(context)
-                              //                     .textTheme
-                              //                     .headline5,
-                              //                 textAlign: TextAlign.end,
-                              //               )),
-                              //           const Spacer(),
-                              //         ],
-                              //       ),
-                              //       const Divider(
-                              //         height: 10,
-                              //         thickness: 1,
-                              //         indent: 50,
-                              //         endIndent: 50,
-                              //         color: Color(0xFFE5E5E5),
-                              //       ),
-                              //     ]
-                              //   ),
-                            ),
+                                      );
+                                    })
+                                // ListView(
+                                //     padding: const EdgeInsets.only(
+                                //         bottom: 12, right: 15, top: 8),
+                                //     // child: SizedBox(
+                                //     //   height: 200,
+                                //     children: [
+                                //       Row(
+                                //         children: [
+                                //           const Spacer(),
+                                //           Expanded(
+                                //               flex: 3,
+                                //               child: Text("Product 1",
+                                //                   style: Theme.of(context)
+                                //                       .textTheme
+                                //                       .headline5)),
+                                //           const Spacer(),
+                                //           Expanded(
+                                //               flex: 1,
+                                //               child: Text(
+                                //                 "₹50",
+                                //                 style: Theme.of(context)
+                                //                     .textTheme
+                                //                     .headline5,
+                                //                 textAlign: TextAlign.end,
+                                //               )),
+                                //           const Spacer(),
+                                //         ],
+                                //       ),
+                                //       const Divider(
+                                //         height: 10,
+                                //         thickness: 1,
+                                //         indent: 50,
+                                //         endIndent: 50,
+                                //         color: Color(0xFFE5E5E5),
+                                //       ),
+                                //     ]
+                                //   ),
+                                ),
                             // Expanded(
                             //   child: Padding(
                             //     padding: const EdgeInsets.only(bottom: 12),
@@ -663,110 +722,150 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                       children: [
                                         // Rating Progress Indicators
                                         Row(
-                                          children: const [
-                                            Text("5  "),
+                                          children: [
+                                            const Text("5  "),
                                             SizedBox(
                                                 width: 115,
                                                 height: 5,
                                                 child: ClipRRect(
-                                                  borderRadius: BorderRadius.all(
-                                                      Radius.circular(5)),
-                                                  child: LinearProgressIndicator(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(5)),
+                                                  child:
+                                                      LinearProgressIndicator(
                                                     backgroundColor:
-                                                        Color(0xFFE5E5E5),
+                                                        const Color(0xFFE5E5E5),
                                                     valueColor:
-                                                        AlwaysStoppedAnimation<
+                                                        const AlwaysStoppedAnimation<
                                                                 Color>(
                                                             Color(0xFFFFC804)),
-                                                    value: 0.5,
+                                                    value: widget.rating[5] /
+                                                        (widget.rating[0] +
+                                                            widget.rating[1] +
+                                                            widget.rating[2] +
+                                                            widget.rating[3] +
+                                                            widget.rating[4] +
+                                                            widget.rating[5]),
                                                   ),
                                                 )),
                                           ],
                                         ),
                                         const Spacer(),
                                         Row(
-                                          children: const [
-                                            Text("4  "),
+                                          children: [
+                                            const Text("4  "),
                                             SizedBox(
                                                 width: 115,
                                                 height: 5,
                                                 child: ClipRRect(
-                                                  borderRadius: BorderRadius.all(
-                                                      Radius.circular(5)),
-                                                  child: LinearProgressIndicator(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(5)),
+                                                  child:
+                                                      LinearProgressIndicator(
                                                     backgroundColor:
-                                                        Color(0xFFE5E5E5),
+                                                        const Color(0xFFE5E5E5),
                                                     valueColor:
-                                                        AlwaysStoppedAnimation<
+                                                        const AlwaysStoppedAnimation<
                                                                 Color>(
                                                             Color(0xFFFFC804)),
-                                                    value: 0.5,
+                                                    value: widget.rating[4] /
+                                                        (widget.rating[0] +
+                                                            widget.rating[1] +
+                                                            widget.rating[2] +
+                                                            widget.rating[3] +
+                                                            widget.rating[4] +
+                                                            widget.rating[5]),
                                                   ),
                                                 )),
                                           ],
                                         ),
                                         const Spacer(),
                                         Row(
-                                          children: const [
-                                            Text("3  "),
+                                          children: [
+                                            const Text("3  "),
                                             SizedBox(
                                                 width: 115,
                                                 height: 5,
                                                 child: ClipRRect(
-                                                  borderRadius: BorderRadius.all(
-                                                      Radius.circular(5)),
-                                                  child: LinearProgressIndicator(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(5)),
+                                                  child:
+                                                      LinearProgressIndicator(
                                                     backgroundColor:
-                                                        Color(0xFFE5E5E5),
+                                                        const Color(0xFFE5E5E5),
                                                     valueColor:
-                                                        AlwaysStoppedAnimation<
+                                                        const AlwaysStoppedAnimation<
                                                                 Color>(
                                                             Color(0xFFFFC804)),
-                                                    value: 0.5,
+                                                    value: widget.rating[3] /
+                                                        (widget.rating[0] +
+                                                            widget.rating[1] +
+                                                            widget.rating[2] +
+                                                            widget.rating[3] +
+                                                            widget.rating[4] + 
+                                                            widget.rating[5]),
                                                   ),
                                                 )),
                                           ],
                                         ),
                                         const Spacer(),
                                         Row(
-                                          children: const [
-                                            Text("2  "),
+                                          children: [
+                                            const Text("2  "),
                                             SizedBox(
                                                 width: 115,
                                                 height: 5,
                                                 child: ClipRRect(
-                                                  borderRadius: BorderRadius.all(
-                                                      Radius.circular(5)),
-                                                  child: LinearProgressIndicator(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(5)),
+                                                  child:
+                                                      LinearProgressIndicator(
                                                     backgroundColor:
-                                                        Color(0xFFE5E5E5),
+                                                        const Color(0xFFE5E5E5),
                                                     valueColor:
-                                                        AlwaysStoppedAnimation<
+                                                        const AlwaysStoppedAnimation<
                                                                 Color>(
                                                             Color(0xFFFFC804)),
-                                                    value: 0.5,
+                                                    value: widget.rating[2] /
+                                                        (widget.rating[0] +
+                                                            widget.rating[1] +
+                                                            widget.rating[2] +
+                                                            widget.rating[3] +
+                                                            widget.rating[4] +
+                                                            widget.rating[5]),
                                                   ),
                                                 )),
                                           ],
                                         ),
                                         const Spacer(),
                                         Row(
-                                          children: const [
-                                            Text("1  "),
+                                          children: [
+                                            const Text("1  "),
                                             SizedBox(
                                                 width: 115,
                                                 height: 5,
                                                 child: ClipRRect(
-                                                  borderRadius: BorderRadius.all(
-                                                      Radius.circular(5)),
-                                                  child: LinearProgressIndicator(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(5)),
+                                                  child:
+                                                      LinearProgressIndicator(
                                                     backgroundColor:
-                                                        Color(0xFFE5E5E5),
+                                                        const Color(0xFFE5E5E5),
                                                     valueColor:
-                                                        AlwaysStoppedAnimation<
+                                                        const AlwaysStoppedAnimation<
                                                                 Color>(
                                                             Color(0xFFFFC804)),
-                                                    value: 0.5,
+                                                    value: widget.rating[1] /
+                                                        (widget.rating[0] +
+                                                            widget.rating[1] +
+                                                            widget.rating[2] +
+                                                            widget.rating[3] +
+                                                            widget.rating[4] +
+                                                            widget.rating[5]),
                                                   ),
                                                 )),
                                           ],
@@ -796,13 +895,21 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               bottom: 8.0, left: 0),
                                           child: Text(
-                                            widget.rating.toString(),
+                                            ((widget.rating[0] +
+                                                        widget.rating[1] +
+                                                        widget.rating[2] +
+                                                        widget.rating[3] +
+                                                        widget.rating[4] +
+                                                        widget.rating[5]) /
+                                                    5)
+                                                .toString(),
                                             style: const TextStyle(
                                                 fontSize: 40.0,
                                                 fontWeight: FontWeight.normal,
@@ -811,7 +918,14 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                           ),
                                         ),
                                         RatingBarIndicator(
-                                          rating: widget.rating,
+                                          rating: ((widget.rating[0] +
+                                                      widget.rating[1] +
+                                                      widget.rating[2] +
+                                                      widget.rating[3] +
+                                                      widget.rating[4] +
+                                                      widget.rating[5]) /
+                                                  5)
+                                              .toDouble(),
                                           unratedColor: const Color(0xFFD1D1D1),
                                           itemBuilder: (context, index) =>
                                               const Icon(
@@ -829,234 +943,49 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 18, bottom: 12),
+                              padding:
+                                  const EdgeInsets.only(top: 18, bottom: 12),
                               child: Text(
                                 "Reviews",
                                 style: Theme.of(context).textTheme.headline4,
                               ),
                             ),
                             Expanded(
-                                child: ListView(
+                                child: ListView.builder(
+                              itemCount: widget.reviews.length,
                               padding:
                                   const EdgeInsets.only(bottom: 12, right: 15),
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(2),
-                                  child: Row(
-                                    children: [
-                                      ClipOval(
-                                        child: Image.asset(
-                                          'lib/assets/img/user.png',
-                                          height: 35,
-                                          width: 35,
-                                          fit: BoxFit.fitWidth,
-                                        ),
-                                      ),
-                                      const Padding(
-                                          padding: EdgeInsets.only(left: 5.0),
-                                          child: Text(
-                                            "review 1",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontStyle: FontStyle.italic,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(2),
+                                      child: Row(
+                                        children: [
+                                          ClipOval(
+                                            child: Image.asset(
+                                              'lib/assets/img/user.png',
+                                              height: 35,
+                                              width: 35,
+                                              fit: BoxFit.fitWidth,
                                             ),
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(2),
-                                  child: Row(
-                                    children: [
-                                      ClipOval(
-                                        child: Image.asset(
-                                          'lib/assets/img/user.png',
-                                          height: 35,
-                                          width: 35,
-                                          fit: BoxFit.fitWidth,
-                                        ),
+                                          ),
+                                          Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 5.0),
+                                              child: Text(
+                                                widget.reviews[index]["review"],
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  fontStyle: FontStyle.italic,
+                                                ),
+                                              ))
+                                        ],
                                       ),
-                                      const Padding(
-                                          padding: EdgeInsets.only(left: 5.0),
-                                          child: Text(
-                                            "review 1",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontStyle: FontStyle.italic,
-                                            ),
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(2),
-                                  child: Row(
-                                    children: [
-                                      ClipOval(
-                                        child: Image.asset(
-                                          'lib/assets/img/user.png',
-                                          height: 35,
-                                          width: 35,
-                                          fit: BoxFit.fitWidth,
-                                        ),
-                                      ),
-                                      const Padding(
-                                          padding: EdgeInsets.only(left: 5.0),
-                                          child: Text(
-                                            "review 1",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontStyle: FontStyle.italic,
-                                            ),
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(2),
-                                  child: Row(
-                                    children: [
-                                      ClipOval(
-                                        child: Image.asset(
-                                          'lib/assets/img/user.png',
-                                          height: 35,
-                                          width: 35,
-                                          fit: BoxFit.fitWidth,
-                                        ),
-                                      ),
-                                      const Padding(
-                                          padding: EdgeInsets.only(left: 5.0),
-                                          child: Text(
-                                            "review 1",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontStyle: FontStyle.italic,
-                                            ),
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(2),
-                                  child: Row(
-                                    children: [
-                                      ClipOval(
-                                        child: Image.asset(
-                                          'lib/assets/img/user.png',
-                                          height: 35,
-                                          width: 35,
-                                          fit: BoxFit.fitWidth,
-                                        ),
-                                      ),
-                                      const Padding(
-                                          padding: EdgeInsets.only(left: 5.0),
-                                          child: Text(
-                                            "review 1",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontStyle: FontStyle.italic,
-                                            ),
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(2),
-                                  child: Row(
-                                    children: [
-                                      ClipOval(
-                                        child: Image.asset(
-                                          'lib/assets/img/user.png',
-                                          height: 35,
-                                          width: 35,
-                                          fit: BoxFit.fitWidth,
-                                        ),
-                                      ),
-                                      const Padding(
-                                          padding: EdgeInsets.only(left: 5.0),
-                                          child: Text(
-                                            "review 1",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontStyle: FontStyle.italic,
-                                            ),
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(2),
-                                  child: Row(
-                                    children: [
-                                      ClipOval(
-                                        child: Image.asset(
-                                          'lib/assets/img/user.png',
-                                          height: 35,
-                                          width: 35,
-                                          fit: BoxFit.fitWidth,
-                                        ),
-                                      ),
-                                      const Padding(
-                                          padding: EdgeInsets.only(left: 5.0),
-                                          child: Text(
-                                            "review 1",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontStyle: FontStyle.italic,
-                                            ),
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(2),
-                                  child: Row(
-                                    children: [
-                                      ClipOval(
-                                        child: Image.asset(
-                                          'lib/assets/img/user.png',
-                                          height: 35,
-                                          width: 35,
-                                          fit: BoxFit.fitWidth,
-                                        ),
-                                      ),
-                                      const Padding(
-                                          padding: EdgeInsets.only(left: 5.0),
-                                          child: Text(
-                                            "review 1",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontStyle: FontStyle.italic,
-                                            ),
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(2),
-                                  child: Row(
-                                    children: [
-                                      ClipOval(
-                                        child: Image.asset(
-                                          'lib/assets/img/user.png',
-                                          height: 35,
-                                          width: 35,
-                                          fit: BoxFit.fitWidth,
-                                        ),
-                                      ),
-                                      const Padding(
-                                          padding: EdgeInsets.only(left: 5.0),
-                                          child: Text(
-                                            "review 1",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontStyle: FontStyle.italic,
-                                            ),
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                              ],
+                                    ),
+                                  ],
+                                );
+                              },
                             )),
                             Padding(
                               padding: const EdgeInsets.only(top: 5.0),
@@ -1069,8 +998,8 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 2.0, vertical: 14),
                                     shape: const RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(30.0)),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(30.0)),
                                     ),
                                   ),
                                   onPressed: _writeReview,
@@ -1139,12 +1068,14 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                     indicator: null,
                                     indicatorColor: Colors.transparent,
                                     controller: _controller,
-                                    physics: const NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     tabs: [
                                       Tab(
                                           child: Container(
-                                              height:
-                                                  _controller.index == 0 ? 5 : 2,
+                                              height: _controller.index == 0
+                                                  ? 5
+                                                  : 2,
                                               decoration: BoxDecoration(
                                                 color: _controller.index == 0
                                                     ? const Color(0xFFFFC804)
@@ -1155,8 +1086,9 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                               ))),
                                       Tab(
                                           child: Container(
-                                              height:
-                                                  _controller.index == 1 ? 5 : 2,
+                                              height: _controller.index == 1
+                                                  ? 5
+                                                  : 2,
                                               decoration: BoxDecoration(
                                                 color: _controller.index == 1
                                                     ? const Color(0xFFFFC804)
@@ -1167,8 +1099,9 @@ class _ShopProfilePageState extends State<ShopProfilePage> with SingleTickerProv
                                               ))),
                                       Tab(
                                           child: Container(
-                                              height:
-                                                  _controller.index == 2 ? 5 : 2,
+                                              height: _controller.index == 2
+                                                  ? 5
+                                                  : 2,
                                               decoration: BoxDecoration(
                                                 color: _controller.index == 2
                                                     ? const Color(0xFFFFC804)

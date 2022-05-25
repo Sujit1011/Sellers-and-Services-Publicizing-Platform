@@ -1002,6 +1002,8 @@ class _AddServiceState extends State<AddService> {
                                         String userId = _myUser.uid;
                                         DataRepository repository = DataRepository();
                                         List servicesList = [];
+                                        List rating = [0,0,0,0,0];
+                                        List reviews = [];
                                         for (int i = 0; i < serviceNameList.length; i++) {
                                           servicesList.add({
                                             "productName": serviceNameList.toList()[i],
@@ -1039,10 +1041,10 @@ class _AddServiceState extends State<AddService> {
                                             "email": _email_t.text,
                                             "latitute": middlePoint.latitude,
                                             "longtitide": middlePoint.longitude,
-                                            "rating": 1.0,
+                                            "rating": rating,
                                             "contacted": 0,
                                             "joined": Timestamp.now(),
-                                            "reviews": 0,
+                                            "reviews": reviews,
                                             "services" : servicesList,
                                             "searchKeywords" : searchKeywords,
                                           }
@@ -1196,7 +1198,7 @@ class _ProductNameTextFieldState extends State<ProductNameTextField> {
   @override
   Widget build(BuildContext context) {
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _controller.text = _AddServiceState.serviceNameList[widget.index] ?? '';
     });
 
@@ -1255,7 +1257,7 @@ class _ProductCostTextFieldState extends State<ProductCostTextField> {
   @override
   Widget build(BuildContext context) {
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _controller.text = _AddServiceState.serviceCostList[widget.index] ?? '';
     });
 

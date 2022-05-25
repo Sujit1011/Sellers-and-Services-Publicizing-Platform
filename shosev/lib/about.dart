@@ -1,11 +1,19 @@
-import 'package:flutter/material.dart' show Align, Alignment, BuildContext, Center, ChoiceChip, Color, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontWeight, Icon, Icons, Key, MainAxisAlignment, Navigator, Padding, Positioned, Row, Scaffold, SingleChildScrollView, SizedBox, Stack, State, StatefulWidget, Text, TextAlign, TextStyle, Theme, VerticalDivider, VisualDensity, Widget;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shosev/services/data_repository.dart' show DataRepository;
+import 'package:flutter/material.dart' show Align, Alignment, AsyncSnapshot, BuildContext, Center, ChoiceChip, Color, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontWeight, Icon, Icons, Key, MainAxisAlignment, Navigator, Padding, Positioned, Row, Scaffold, SingleChildScrollView, SizedBox, Stack, State, StatefulWidget, StreamBuilder, Text, TextAlign, TextStyle, Theme, VerticalDivider, VisualDensity, Widget;
 import 'package:shosev/assets/design.dart' as design;
 
 class MyAboutUs extends StatefulWidget {
   final String title;
   final String aboutUs;
+  final Stream<QuerySnapshot> documentFieldStream;
+  final Stream<QuerySnapshot> documentFieldStream1;
 
-  const MyAboutUs({Key? key, required this.title, required this.aboutUs})
+  const MyAboutUs({Key? key, 
+      required this.title, 
+      required this.aboutUs,
+      required this.documentFieldStream,
+      required this.documentFieldStream1,})
       : super(key: key);
 
   @override
@@ -14,10 +22,30 @@ class MyAboutUs extends StatefulWidget {
 
 class _MyAboutUsState extends State<MyAboutUs>{
   bool _shareValue = false;
+  String data = '';
+
+  final DataRepository repository = DataRepository();
+  String shops = "";
+
+  fetchFileData() async{
+    // String responceText;
+    // responceText = await rootBundle.loadString('textFiles/about.txt');
+    // setState(() {
+    //   data = responceText;
+    // });
+    print(widget.documentFieldStream.length);
+  }
 
   @override
   void initState() {
     super.initState();
+    getshopno();
+  }
+
+  getshopno() async{
+    setState(() async{
+      shops = await repository.ss_shops_collection.snapshots().length.toString();
+    });
   }
 
   @override
@@ -70,21 +98,27 @@ class _MyAboutUsState extends State<MyAboutUs>{
                                 endIndent: 20,
                                 color: Color(0xFFE5E5E5),
                               ),
-                              Column(
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(bottom: 10.0),
-                                    child: Text("Shops",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .overline),
-                                  ),
-                                  Text("101",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4),
-                                ],
+                              StreamBuilder(
+                                stream: repository.ss_shops_collection.snapshots(),
+                                builder: (context,AsyncSnapshot<QuerySnapshot> snapshot){
+                                  String count = snapshot.data!.size.toString();
+                                  return Column(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 10.0),
+                                        child: Text("Shops",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .overline),
+                                      ),
+                                      Text(count,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline4),
+                                    ],
+                                  );
+                                }, 
                               ),
                               const VerticalDivider(
                                 width: 42,
@@ -93,21 +127,27 @@ class _MyAboutUsState extends State<MyAboutUs>{
                                 endIndent: 20,
                                 color: Color(0xFFE5E5E5),
                               ),
-                              Column(
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(bottom: 10.0),
-                                    child: Text("Services",
+                              StreamBuilder(
+                                stream: repository.ss_services_collection.snapshots(),
+                                builder: (context,AsyncSnapshot<QuerySnapshot> snapshot){
+                                  String count = snapshot.data!.size.toString();
+                                  return Column(
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 10.0),
+                                      child: Text("Service",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .overline),
+                                    ),
+                                    Text(count,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .overline),
-                                  ),
-                                  Text("200",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4),
-                                ],
+                                            .headline4),
+                                    ],
+                                  );
+                                }, 
                               ),
                             ],
                           ),

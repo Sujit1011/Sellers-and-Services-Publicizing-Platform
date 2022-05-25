@@ -46,6 +46,7 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
   bool _gotOTP = false;
 
   String? verificationId;
+  
   @override
   Widget build(BuildContext context) {
     // final user = Provider.of<SS_User?>(context);
@@ -541,7 +542,7 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
       DataRepository repository = DataRepository();
       repository.ss_users_collection.doc(user?.uid).set({
         "phoneNo": _phoneNoController.text,
-        "username": _usernameController.text,
+        "userName": _usernameController.text,
         "email" : "",
         "searchHistory" : [""],
         "favouriteShops" : [""],
@@ -599,14 +600,14 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
     DataRepository repository = DataRepository();
     repository.ss_users_collection.doc(user?.uid).set({
       "phoneNo": _phoneNoController.text,
-      "username": _usernameController.text,
+      "userName": _usernameController.text,
       "email" : "",
       "searchHistory" : [""],
       "favouriteShops" : [""],
       "favouriteServices" : [""],
       "shopReviews" : [""],
       "serviceReviews" : [""],
-      "businessUser" : false,
+      "businessUser" : true,
       "businessName" : "",
       "licensesAndCertificates" : [""],
       "myShops" : [""],
@@ -778,7 +779,9 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                     MaterialPageRoute(
                                       builder: (context) => about.MyAboutUs(
                                         title: "About Us",
-                                        aboutUs: widget.generateRandomString(2000)
+                                        aboutUs: widget.generateRandomString(2000),
+                                        documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: user_id).snapshots(),
+                                        documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
                                       )
                                     ),
                                   );
@@ -803,7 +806,9 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                     MaterialPageRoute(
                                       builder: (context) => about.MyAboutUs(
                                         title: "About Us",
-                                        aboutUs: widget.generateRandomString(2000)
+                                        aboutUs: widget.generateRandomString(2000),
+                                        documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: user_id).snapshots(),
+                                        documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
                                       )
                                     ),
                                   );
@@ -834,7 +839,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    (data != null)?data['username']:"",
+                                    (data != null)?data['userName']:"",
                                     style: Theme.of(context).textTheme.headline2,
                                     textAlign: TextAlign.center,
                                   ),
@@ -869,7 +874,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                       builder: (context) =>
                                         ListPage(
                                           title: "My Shops",
-                                          username: (data != null)?data['username']:"",
+                                          username: (data != null)?data['userName']:"",
                                           phoneNo: (data != null)?data['phoneNo']:"",
                                           isLeftFloattingButton: true,
                                           isEditFloattingButton: true,
@@ -882,7 +887,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) => AddShop(
-                                                  username: (data != null)?data['username']:"", 
+                                                  username: (data != null)?data['userName']:"", 
                                                   phoneNo: (data != null)?data['phoneNo']:"", 
                                                   title: "Add Shop", 
                                                   isLeftFloattingButton: true, 
@@ -902,6 +907,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           heroLeft: "shop_left",
                                           heroRight: "shop_right",
                                           documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: user_id).snapshots(),
+                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
                                           onClickWidget: true,
                                           type: listPageType.shop,
                                           deleteItemFn: (id) {
@@ -944,7 +950,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                       builder: (context) =>
                                         ListPage(
                                           title: "My Services",
-                                          username: (data != null)?data['username']:"",
+                                          username: (data != null)?data['userName']:"",
                                           phoneNo: (data != null)?data['phoneNo']:"",
                                           isLeftFloattingButton: true,
                                           isEditFloattingButton: true,
@@ -957,7 +963,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) => AddService(
-                                                  username: (data != null)?data['username']:"", 
+                                                  username: (data != null)?data['userName']:"", 
                                                   phoneNo: (data != null)?data['phoneNo']:"", 
                                                   title: "Add Services", 
                                                   isLeftFloattingButton: true, 
@@ -977,6 +983,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           heroLeft: "service_left",
                                           heroRight: "service_right",
                                           documentFieldStream: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
+                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
                                           onClickWidget: true,
                                           type: listPageType.service,
                                           deleteItemFn: (id) {
@@ -1035,7 +1042,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                       builder: (context) =>
                                         ListPage(
                                           title: "My History",
-                                          username: (data != null)?data['username']:"",
+                                          username: (data != null)?data['userName']:"",
                                           phoneNo: (data != null)?data['phoneNo']:"",
                                           isLeftFloattingButton: true,
                                           isEditFloattingButton: false,
@@ -1049,6 +1056,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           heroLeft: "history_left",
                                           heroRight: "history_right",
                                           documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: user_id).snapshots(),
+                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
                                           onClickWidget: false,
                                           type: listPageType.history,
                                           deleteItemFn: (id){},
@@ -1104,7 +1112,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                       builder: (context) =>
                                         ListPage(
                                           title: "My Favourites",
-                                          username: (data != null)?data['username']:"",
+                                          username: (data != null)?data['userName']:"",
                                           phoneNo: (data != null)?data['phoneNo']:"",
                                           isLeftFloattingButton: true,
                                           isEditFloattingButton: false,
@@ -1118,6 +1126,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           heroLeft: "favourites_left",
                                           heroRight: "favourites_right",
                                           documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: user_id).snapshots(),
+                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
                                           onClickWidget: false,
                                           type: listPageType.favourites,
                                           deleteItemFn: (id){},
@@ -1175,7 +1184,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                       builder: (context) =>
                                         ListPage(
                                           title: "My Reviews",
-                                          username: (data != null)?data['username']:"",
+                                          username: (data != null)?data['userName']:"",
                                           phoneNo: (data != null)?data['phoneNo']:"",
                                           isLeftFloattingButton: true,
                                           isEditFloattingButton: false,
@@ -1188,7 +1197,8 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           rightIcon: const Icon(Icons.chevron_right_rounded),
                                           heroLeft: "reviews_left",
                                           heroRight: "reviews_right",
-                                          documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: user_id).snapshots(),
+                                          documentFieldStream: repository.ss_shops_collection.snapshots(),
+                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
                                           onClickWidget: false,
                                           type: listPageType.reviews,
                                           deleteItemFn: (id){},
@@ -1229,7 +1239,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                     builder: (context) =>
                                       EditProfile(
                                         title: "EDIT PROFILE",
-                                        username: (data != null)?data['username']:"",
+                                        username: (data != null)?data['userName']:"",
                                         phoneNo: (data != null)?data['phoneNo']:"",
                                         isLeftFloattingButton: true,
                                         isRightFloattingButton: false,
@@ -1303,7 +1313,9 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                       MaterialPageRoute(
                                         builder: (context) => about.MyAboutUs(
                                           title: "About Us",
-                                          aboutUs: widget.generateRandomString(2000)
+                                          aboutUs: widget.generateRandomString(2000),
+                                          documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: user_id).snapshots(),
+                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
                                         )
                                       ),
                                     );
@@ -1328,7 +1340,9 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                       MaterialPageRoute(
                                         builder: (context) => about.MyAboutUs(
                                           title: "About Us",
-                                          aboutUs: widget.generateRandomString(2000)
+                                          aboutUs: widget.generateRandomString(2000),
+                                          documentFieldStream: repository.ss_shops_collection.snapshots(),
+                                          documentFieldStream1: repository.ss_services_collection.snapshots(),
                                         )
                                       ),
                                     );

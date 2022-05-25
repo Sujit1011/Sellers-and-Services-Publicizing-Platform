@@ -17,6 +17,7 @@ import 'package:shosev/nav_drawer.dart' as nav;
 import 'package:shosev/services/auth.dart' show AuthService;
 import 'package:shosev/services/data_repository.dart' show DataRepository;
 import 'package:shosev/splash.dart' as splash;
+import 'package:shosev/ratings_and_reviews.dart' as ratings_and_reviews; 
 
 Future<void> main() async {
   lic.lisences();
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         title: 'ShoSev',
         theme: design.myThemeData,
         home: const splash.Splash(),
+        // home: const ratings_and_reviews.RatingandReview(username: "username", phoneNo: "123456789"),
         // debugShowCheckedModeBanner: false,
         // home: const MyHomePage(title: 'Flutter Demo Home Page'),
         // home: shopProfile.ShopProfilePage(shopName: "My Shop Name", rating: 3.5, joined: "Feb 22", reviews: 350, contacted: 1000, aboutUs: generateRandomString(1000),),

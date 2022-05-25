@@ -51,6 +51,7 @@ dependencies:
   url_launcher: ^6.1.2
   whatsapp_unilink: ^2.0.1+1
   flutter_phone_direct_caller: ^2.1.1
+  font_awesome_flutter: ^10.1.0
 
 dev_dependencies:
   flutter_test:

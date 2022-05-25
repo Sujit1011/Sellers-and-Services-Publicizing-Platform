@@ -1,17 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
-import 'package:flutter/material.dart' show AlertDialog, AlwaysStoppedAnimation, Axis, BorderRadius, BoxDecoration, BoxFit, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, Navigator, NeverScrollableScrollPhysics, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, SingleChildScrollView, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
+import 'package:flutter/material.dart' show AlertDialog, AlwaysStoppedAnimation, Axis, BorderRadius, BoxDecoration, BoxFit, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, MaterialPageRoute, Navigator, NeverScrollableScrollPhysics, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, SingleChildScrollView, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart' show FlutterPhoneDirectCaller;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart' show RatingBarIndicator;
 import 'package:marquee_widget/marquee_widget.dart' show Marquee;
+import 'package:shosev/ratings_and_reviews.dart';
+import 'package:shosev/services/data_repository.dart';
 import 'package:url_launcher/url_launcher.dart' show launch;
 import 'package:whatsapp_unilink/whatsapp_unilink.dart' show WhatsAppUnilink;
 
 
 class ServiceProfilePage extends StatefulWidget {
-  final double rating;
+  final String username;
+  final String phoneno;
+  final List<dynamic> rating;
   final String shopName;
   final String joined;
-  final int reviews;
+  final List<dynamic> reviews;
   final int contacted;
   final String aboutUs;
   final List<dynamic> services;
@@ -19,6 +23,8 @@ class ServiceProfilePage extends StatefulWidget {
 
   const ServiceProfilePage(
       {Key? key,
+      required this.username,
+      required this.phoneno,
       required this.rating,
       required this.shopName,
       required this.joined,
@@ -97,6 +103,8 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
             TextButton(
               child: const Text("Yes"),
               onPressed: () async {
+                DataRepository repository = DataRepository();
+                repository.ss_shops_collection.doc(widget.data['id']).update(widget.data['contacted'] + 1);
                 FlutterPhoneDirectCaller.callNumber(url);
               },
             ),
@@ -115,7 +123,22 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
     // await launch(url);
   }
 
-  void _writeReview() {}
+  void _writeReview() {
+    print(widget.data);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => RatingandReview(
+                // Id: widget.data['id'],
+                username: widget.username,
+                phoneNo: widget.phoneno,
+                type:"service",
+                isLeftFloattingButton: true,
+                isRightFloattingButton: false,
+                leftIcon: const Icon(Icons.chevron_left_rounded),
+                rightIcon: const Icon(Icons.add_rounded),
+                data1: widget.data)));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -216,12 +239,24 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                                       Padding(
                                         padding: const EdgeInsets.only(bottom: 8.0, left: 0),
                                         child: Text(
-                                          "Ratings (" +widget.rating.toString() +")",
+                                          "Ratings (" +((widget.rating[0] +
+                                                        widget.rating[1] +
+                                                        widget.rating[2] +
+                                                        widget.rating[3] +
+                                                        widget.rating[4] + 
+                                                        widget.rating[5]) /
+                                                    6).toString() +")",
                                           style: Theme.of(context).textTheme.headline5,
                                         ),
                                       ),
                                       RatingBarIndicator(
-                                        rating: widget.rating,
+                                        rating: ((widget.rating[0] +
+                                                  widget.rating[1] +
+                                                  widget.rating[2] +
+                                                  widget.rating[3] +
+                                                  widget.rating[4] + 
+                                                  widget.rating[5]) /
+                                              6),
                                         unratedColor: const Color(0xFFD1D1D1),
                                         itemBuilder: (context, index) => const Icon(
                                           Icons.star,
@@ -287,7 +322,7 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                                                     .textTheme
                                                     .overline),
                                           ),
-                                          Text(widget.reviews.toString(),
+                                          Text(widget.reviews.length.toString(),
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline4),
@@ -435,19 +470,49 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                             ),
                           ),
                           Expanded(
-                            flex: 1,
-                            child: Padding(
-                                padding: const EdgeInsets.only(
-                                    bottom: 12, right: 15),
-                                child: SingleChildScrollView(
-                                  child: Text(
-                                    widget.aboutUs,
-                                    softWrap: true,
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1,
-                                    textAlign: TextAlign.left,
-                                  ),
-                                )),
+                            child: ListView.builder(
+                              itemCount: widget.services.length,
+                              padding: const EdgeInsets.only(bottom: 12, right: 15, top: 8),
+                              itemBuilder: (context,index){
+                                return Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Spacer(),
+                                        Expanded(
+                                            flex: 3,
+                                            child: Text(
+                                                widget.services[index]
+                                                    ["productName"],
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline5)),
+                                        const Spacer(),
+                                        Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              "₹" +
+                                                  widget.services[index]
+                                                          ["cost"]
+                                                      .toString(),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline5,
+                                              textAlign: TextAlign.end,
+                                            )),
+                                        const Spacer(),
+                                      ],
+                                    ),
+                                    const Divider(
+                                      height: 10,
+                                      thickness: 1,
+                                      indent: 50,
+                                      endIndent: 50,
+                                      color: Color(0xFFE5E5E5),
+                                    ),
+                                  ],
+                                );
+                              }),
                           ),
                           // Expanded(
                           //   child: Padding(
@@ -699,7 +764,13 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                                         padding: const EdgeInsets.only(
                                             bottom: 8.0, left: 0),
                                         child: Text(
-                                          widget.rating.toString(),
+                                          ((widget.rating[0] +
+                                              widget.rating[1] +
+                                              widget.rating[2] +
+                                              widget.rating[3] +
+                                              widget.rating[4] + 
+                                              widget.rating[5]) /
+                                          6).toString(),
                                           style: const TextStyle(
                                               fontSize: 40.0,
                                               fontWeight: FontWeight.normal,
@@ -708,7 +779,13 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                                         ),
                                       ),
                                       RatingBarIndicator(
-                                        rating: widget.rating,
+                                      rating: ((widget.rating[0] +
+                                                widget.rating[1] +
+                                                widget.rating[2] +
+                                                widget.rating[3] +
+                                                widget.rating[4] + 
+                                                widget.rating[5]) /
+                                            6),
                                         unratedColor: const Color(0xFFD1D1D1),
                                         itemBuilder: (context, index) =>
                                             const Icon(
@@ -733,257 +810,71 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                             ),
                           ),
                           Expanded(
-                              child: ListView(
-                            padding:
-                                const EdgeInsets.only(bottom: 12, right: 15),
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(2),
-                                child: Row(
+                                child: ListView.builder(
+                              itemCount: widget.reviews.length,
+                              padding:
+                                  const EdgeInsets.only(bottom: 12, right: 15),
+                              itemBuilder: (context, index) {
+                                return Column(
                                   children: [
-                                    ClipOval(
-                                      child: Image.asset(
-                                        'lib/assets/img/user.png',
-                                        height: 35,
-                                        width: 35,
-                                        fit: BoxFit.fitWidth,
+                                    Padding(
+                                      padding: const EdgeInsets.all(2),
+                                      child: Row(
+                                        children: [
+                                          ClipOval(
+                                            child: Image.asset(
+                                              'lib/assets/img/user.png',
+                                              height: 35,
+                                              width: 35,
+                                              fit: BoxFit.fitWidth,
+                                            ),
+                                          ),
+                                          Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 5.0),
+                                              child: Text(
+                                                widget.reviews[index]["review"],
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  fontStyle: FontStyle.italic,
+                                                ),
+                                              ))
+                                        ],
                                       ),
                                     ),
-                                    const Padding(
-                                        padding: EdgeInsets.only(left: 5.0),
-                                        child: Text(
-                                          "review 1",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontStyle: FontStyle.italic,
-                                          ),
-                                        ))
                                   ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(2),
-                                child: Row(
-                                  children: [
-                                    ClipOval(
-                                      child: Image.asset(
-                                        'lib/assets/img/user.png',
-                                        height: 35,
-                                        width: 35,
-                                        fit: BoxFit.fitWidth,
-                                      ),
+                                );
+                              },
+                            )),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Center(
+                                child: TextButton.icon(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: const Color(0xFFFFC804),
+                                    primary: const Color(0xFF333333),
+                                    minimumSize: const Size(204, 40),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 2.0, vertical: 14),
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(30.0)),
                                     ),
-                                    const Padding(
-                                        padding: EdgeInsets.only(left: 5.0),
-                                        child: Text(
-                                          "review 1",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontStyle: FontStyle.italic,
-                                          ),
-                                        ))
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(2),
-                                child: Row(
-                                  children: [
-                                    ClipOval(
-                                      child: Image.asset(
-                                        'lib/assets/img/user.png',
-                                        height: 35,
-                                        width: 35,
-                                        fit: BoxFit.fitWidth,
-                                      ),
-                                    ),
-                                    const Padding(
-                                        padding: EdgeInsets.only(left: 5.0),
-                                        child: Text(
-                                          "review 1",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontStyle: FontStyle.italic,
-                                          ),
-                                        ))
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(2),
-                                child: Row(
-                                  children: [
-                                    ClipOval(
-                                      child: Image.asset(
-                                        'lib/assets/img/user.png',
-                                        height: 35,
-                                        width: 35,
-                                        fit: BoxFit.fitWidth,
-                                      ),
-                                    ),
-                                    const Padding(
-                                        padding: EdgeInsets.only(left: 5.0),
-                                        child: Text(
-                                          "review 1",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontStyle: FontStyle.italic,
-                                          ),
-                                        ))
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(2),
-                                child: Row(
-                                  children: [
-                                    ClipOval(
-                                      child: Image.asset(
-                                        'lib/assets/img/user.png',
-                                        height: 35,
-                                        width: 35,
-                                        fit: BoxFit.fitWidth,
-                                      ),
-                                    ),
-                                    const Padding(
-                                        padding: EdgeInsets.only(left: 5.0),
-                                        child: Text(
-                                          "review 1",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontStyle: FontStyle.italic,
-                                          ),
-                                        ))
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(2),
-                                child: Row(
-                                  children: [
-                                    ClipOval(
-                                      child: Image.asset(
-                                        'lib/assets/img/user.png',
-                                        height: 35,
-                                        width: 35,
-                                        fit: BoxFit.fitWidth,
-                                      ),
-                                    ),
-                                    const Padding(
-                                        padding: EdgeInsets.only(left: 5.0),
-                                        child: Text(
-                                          "review 1",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontStyle: FontStyle.italic,
-                                          ),
-                                        ))
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(2),
-                                child: Row(
-                                  children: [
-                                    ClipOval(
-                                      child: Image.asset(
-                                        'lib/assets/img/user.png',
-                                        height: 35,
-                                        width: 35,
-                                        fit: BoxFit.fitWidth,
-                                      ),
-                                    ),
-                                    const Padding(
-                                        padding: EdgeInsets.only(left: 5.0),
-                                        child: Text(
-                                          "review 1",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontStyle: FontStyle.italic,
-                                          ),
-                                        ))
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(2),
-                                child: Row(
-                                  children: [
-                                    ClipOval(
-                                      child: Image.asset(
-                                        'lib/assets/img/user.png',
-                                        height: 35,
-                                        width: 35,
-                                        fit: BoxFit.fitWidth,
-                                      ),
-                                    ),
-                                    const Padding(
-                                        padding: EdgeInsets.only(left: 5.0),
-                                        child: Text(
-                                          "review 1",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontStyle: FontStyle.italic,
-                                          ),
-                                        ))
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(2),
-                                child: Row(
-                                  children: [
-                                    ClipOval(
-                                      child: Image.asset(
-                                        'lib/assets/img/user.png',
-                                        height: 35,
-                                        width: 35,
-                                        fit: BoxFit.fitWidth,
-                                      ),
-                                    ),
-                                    const Padding(
-                                        padding: EdgeInsets.only(left: 5.0),
-                                        child: Text(
-                                          "review 1",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontStyle: FontStyle.italic,
-                                          ),
-                                        ))
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5.0),
-                            child: Center(
-                              child: TextButton.icon(
-                                style: TextButton.styleFrom(
-                                  backgroundColor: const Color(0xFFFFC804),
-                                  primary: const Color(0xFF333333),
-                                  minimumSize: const Size(204, 40),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 2.0, vertical: 14),
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(30.0)),
+                                  ),
+                                  onPressed: _writeReview,
+                                  icon: const Icon(Icons.rate_review_rounded),
+                                  label: const Text(
+                                    "Write my review",
+                                    style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.normal,
+                                        color: Color(0xFF333333),
+                                        letterSpacing: -0.5),
                                   ),
                                 ),
-                                onPressed: _writeReview,
-                                icon: const Icon(Icons.rate_review_rounded),
-                                label: const Text(
-                                  "Write my review",
-                                  style: TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.normal,
-                                      color: Color(0xFF333333),
-                                      letterSpacing: -0.5),
-                                ),
                               ),
-                            ),
-                          )
-                        ],
+                            )
+                            ],
                       )
                     ],
                   ),

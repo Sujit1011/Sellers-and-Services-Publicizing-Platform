@@ -1016,6 +1016,8 @@ class _AddShopState extends State<AddShop> {
                                         String userId = _myUser.uid;
                                         DataRepository repository = DataRepository();
                                         List productsList = [];
+                                        List rating = [0,0,0,0,0];
+                                        List reviews = [];
                                         for (int i = 0; i < productNameList.length; i++) {
                                           productsList.add({
                                             "productName": productNameList.toList()[i],
@@ -1053,10 +1055,10 @@ class _AddShopState extends State<AddShop> {
                                             "email": _email_t.text,
                                             "latitute": middlePoint.latitude,
                                             "longtitide": middlePoint.longitude,
-                                            "rating": 1.0,
+                                            "rating": rating,
                                             "contacted": 0,
                                             "joined": Timestamp.now(),
-                                            "reviews": 0,
+                                            "reviews": reviews,
                                             "products" : productsList,
                                             "searchKeywords" : searchKeywords,
                                           }
@@ -1210,7 +1212,7 @@ class _ProductNameTextFieldState extends State<ProductNameTextField> {
   @override
   Widget build(BuildContext context) {
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _controller.text = _AddShopState.productNameList[widget.index] ?? '';
     });
 
@@ -1269,7 +1271,7 @@ class _ProductCostTextFieldState extends State<ProductCostTextField> {
   @override
   Widget build(BuildContext context) {
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _controller.text = _AddShopState.productCostList[widget.index] ?? '';
     });
 

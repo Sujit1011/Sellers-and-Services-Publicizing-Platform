@@ -53,6 +53,7 @@ class ListPage extends StatefulWidget {
   final listPageType type;
 
   final Stream<QuerySnapshot> documentFieldStream;
+  final Stream<QuerySnapshot> documentFieldStream1;
 
   const ListPage(
     {
@@ -68,7 +69,8 @@ class ListPage extends StatefulWidget {
       required this.rightIcon,
       required this.heroLeft,
       required this.heroRight, 
-      required this.documentFieldStream, 
+      required this.documentFieldStream,
+      required this.documentFieldStream1,
       required this.onClickWidget, 
       required this.type, 
       required this.isEditFloattingButton, 
@@ -193,6 +195,9 @@ class _ListPageState extends State<ListPage> {
                                   if (widget.onClickWidget) {
                                       if (widget.type == listPageType.shop) {
                                       clickWidget = ShopProfilePage(
+                                        // shopname: document["businessId"],
+                                        username: widget.username,
+                                        phoneno: widget.phoneNo,
                                         shopName: document["name"], 
                                         rating: document["rating"], 
                                         joined: monthsToString[document["joined"].toDate().month]! + " " + document["joined"].toDate().year.toString().substring(2,4), 
@@ -204,6 +209,8 @@ class _ListPageState extends State<ListPage> {
                                       );
                                     } else if (widget.type == listPageType.service) {
                                       clickWidget = ServiceProfilePage(
+                                        username: widget.username,
+                                        phoneno: widget.phoneNo,
                                         shopName: document["name"], 
                                         rating: document["rating"], 
                                         joined: monthsToString[document["joined"].toDate().month]! + " " + document["joined"].toDate().year.toString().substring(2,4), 
@@ -232,7 +239,7 @@ class _ListPageState extends State<ListPage> {
                                     updateShow: _showUpdate,
                                     heading: document["name"],
                                     text1: document["phoneNo"],
-                                    text2: document["address"],
+                                    text2: (widget.type == listPageType.shop || widget.type == listPageType.service)?document["address"]:document["reviews"][0]["review"],
                                     onClick: () => {
                                       if (widget.onClickWidget) {
                                         Navigator.push(context,

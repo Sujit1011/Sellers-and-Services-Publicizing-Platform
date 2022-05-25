@@ -66,7 +66,7 @@ class _EditProfileState extends State<EditProfile> {
     // TODO: implement initState
     super.initState();
     if (widget.data != null) {
-      _username_t.text = widget.data['username'];
+      _username_t.text = widget.data['userName'];
       if(widget.data['businessUser']) {
         _isSwitched = true;
       }
