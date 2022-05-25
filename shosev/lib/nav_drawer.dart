@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart' show DocumentSnapshot;
 import 'package:dotted_border/dotted_border.dart' show BorderType, DottedBorder;
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth, FirebaseAuthException, PhoneAuthCredential, PhoneAuthProvider, User, UserCredential;
 import 'package:flutter/material.dart' show AlertDialog, Alignment, Border, BorderRadius, BorderSide, BoxDecoration, BuildContext, ButtonStyle, Center, ChoiceChip, CircularProgressIndicator, Color, Colors, Column, Container, CrossAxisAlignment, Drawer, EdgeInsets, Expanded, FittedBox, FontWeight, Form, FormState, GlobalKey, Icon, Icons, InkWell, InputDecoration, Key, LinearProgressIndicator, MainAxisAlignment, MaterialPageRoute, MaterialStateProperty, Navigator, OutlineInputBorder, OutlinedButton, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Size, SizedBox, Spacer, Stack, State, StatefulWidget, StrokeCap, Text, TextAlign, TextButton, TextEditingController, TextFormField, TextInputAction, TextInputType, TextStyle, Theme, VisualDensity, Widget, showDialog;
+import 'package:flutter/services.dart' show LengthLimitingTextInputFormatter, TextInputAction, TextInputType;
 import 'package:provider/provider.dart' show Provider;
 
 import 'package:shosev/about.dart' as about;
@@ -11,6 +12,7 @@ import 'package:shosev/add_service.dart' show AddService;
 import 'package:shosev/add_shop.dart' show AddShop;
 import 'package:shosev/assets/design.dart' as design;
 import 'package:shosev/edit_profile.dart' show EditProfile;
+import 'package:shosev/history_list_page.dart';
 import 'package:shosev/list_page.dart' show ListPage, listPageType;
 import 'package:shosev/models/SS_User.dart' show SS_User;
 import 'package:shosev/services/auth.dart' show AuthService;
@@ -221,12 +223,17 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
                           child: TextFormField(
                             controller: _otpController,
                             obscureText: true,
+                            // maxLength: 6,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(6),
+                            ],
+                            textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
                               color: Color(0xFF333333),
                               // letterSpacing: -0.5
-                              letterSpacing: 8.0,
+                              letterSpacing: 15.0,
                             ),
                             cursorColor: const Color(0xFF333333),
                             keyboardType: TextInputType.number,
@@ -234,7 +241,7 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
                             decoration: InputDecoration(
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(30.0)),
                               contentPadding: const EdgeInsets.fromLTRB(20, 0, 5, 5),
-                              hintText: "OTP",
+                              hintText: "6 Digit OTP",
                               hintStyle: const TextStyle(
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
@@ -321,120 +328,6 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
                     ],
                   ),
                 ),
-
-              // Form(
-              //   key: _formKey1,
-              //   child: Column(
-              //     children: [
-              //       Padding(
-              //         padding: const EdgeInsets.fromLTRB(34, 0, 34, 11),
-              //         child: Container(
-              //           decoration: BoxDecoration(
-              //             borderRadius: BorderRadius.circular(30),
-              //             color: Colors.white,
-              //           ),
-              //           child: TextFormField(
-              //             controller: _phoneNoController,
-              //             style: const TextStyle(
-              //               fontSize: 20.0,
-              //               fontWeight: FontWeight.bold,
-              //               color: Color(0xFF333333),
-              //               letterSpacing: -0.5
-              //             ),
-              //             cursorColor: const Color(0xFF333333),
-              //             keyboardType: TextInputType.phone,
-              //             textInputAction: TextInputAction.next,
-              //             decoration: InputDecoration(
-              //               border: OutlineInputBorder(
-              //                 borderRadius: BorderRadius.circular(30.0)
-              //               ),
-              //               contentPadding: const EdgeInsets.fromLTRB(20, 0, 5, 5),
-              //               hintText: "Phone Number",
-              //               hintStyle: const TextStyle(
-              //                 fontSize: 20.0,
-              //                 fontWeight: FontWeight.bold,
-              //                 color: Color(0xFFD1D1D1),
-              //                 letterSpacing: -0.5
-              //               ),
-              //             ),
-              //             validator: (val) => val!.isEmpty ? 'Enter Phone Number' : null,
-              //           ),
-              //         ),
-              //       ),
-              //       Padding(
-              //         padding: const EdgeInsets.fromLTRB(34, 0, 34, 11),
-              //         child: Container(
-              //           decoration: BoxDecoration(
-              //             borderRadius: BorderRadius.circular(30),
-              //             color: Colors.white,
-              //           ),
-              //           child: TextFormField(
-              //             controller: _otpController,
-              //             obscureText: true,
-              //             style: const TextStyle(
-              //               fontSize: 20.0,
-              //               fontWeight: FontWeight.bold,
-              //               color: Color(0xFF333333),
-              //               // letterSpacing: -0.5
-              //               letterSpacing: 8.0,
-              //             ),
-              //             cursorColor: const Color(0xFF333333),
-              //             keyboardType: TextInputType.number,
-              //             textInputAction: TextInputAction.done,
-              //             decoration: InputDecoration(
-              //               border: OutlineInputBorder(borderRadius: BorderRadius.circular(30.0)),
-              //               contentPadding: const EdgeInsets.fromLTRB(20, 0, 5, 5),
-              //               hintText: "OTP",
-              //               hintStyle: const TextStyle(
-              //                 fontSize: 20.0,
-              //                 fontWeight: FontWeight.bold,
-              //                 color: Color(0xFFD1D1D1),
-              //                 letterSpacing: -0.5
-              //               ),
-              //             ),
-              //             validator: (val) => val!.length < 6 ? 'Enter valid OTP > 5' : null,
-              //           ),
-              //         ),
-              //       ),
-              //       Padding(
-              //         padding: const EdgeInsets.fromLTRB(34, 0, 34, 11),
-              //         child: Row(
-              //           mainAxisAlignment: MainAxisAlignment.center,
-              //           children: [
-              //             !_isLoading?InkWell(
-              //               child: Container(
-              //                 width: 195,
-              //                 height: 30.0,
-              //                 decoration: BoxDecoration(
-              //                   borderRadius: BorderRadius.circular(30),
-              //                   color: const Color(0xFF333333)
-              //                 ),
-              //                 child: const Center(
-              //                   child: Text(
-              //                     "SIGN-IN",
-              //                     style: TextStyle(color: Color(0xFFFFFFFF)),
-              //                   ),
-              //                 ),
-              //               ),
-              //               onTap: () async {
-              //                 // FirebaseService service = new FirebaseService();
-              //                 if (_formKey1.currentState!.validate()) {
-              //                   setState(() {
-              //                     _isLoading = true;
-              //                   });
-              //                   await phoneSignIn(phoneNumber: _phoneNoController.text);
-              //                   }
-              //                 }
-              //             ):const CircularProgressIndicator(
-              //               color: Color(0xFF333333),
-              //               strokeWidth: 3,
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //     ],
-              //   )
-              // ),
               const Spacer(flex: 16,),
               Padding(
                 padding: const EdgeInsets.fromLTRB(34, 0, 34, 0),
@@ -523,7 +416,7 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
   // phoneSignIn()
   
   _onVerificationCompleted(PhoneAuthCredential authCredential) async {
-    print("verification completed ${authCredential.smsCode}");
+    // print("verification completed ${authCredential.smsCode}");
     User? user = FirebaseAuth.instance.currentUser;
     setState(() {
       _otpController.text = authCredential.smsCode!;
@@ -536,7 +429,7 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
           UserCredential result = await widget.authService.auth.signInWithCredential(authCredential);
           result.user?.updateDisplayName(_usernameController.text);
           user = result.user;
-          print(user);
+          // print(user);
         }
       }
       DataRepository repository = DataRepository();
@@ -565,7 +458,7 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
   }
 
   _onVerificationFailed(FirebaseAuthException exception) {
-    print("verification failed");
+    // print("verification failed");
     _otpController.clear();
     _phoneNoController.clear();
     _usernameController.clear();
@@ -579,24 +472,24 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
   }
 
   _onCodeSent(String verificationId, int? forceResendingToken) async {
-    print("CODE SENT");
+    // print("CODE SENT");
     widget.state = AuthState.otp;
     setState(() {
       _isLoading = false;
     });
     while(!_gotOTP) {
       await Future.delayed(const Duration(seconds: 2), (){});
-      print("waiting...");
+      // print("waiting...");
     }
     this.verificationId = verificationId;
-    print(forceResendingToken);
-    print("code sent");
+    // print(forceResendingToken);
+    // print("code sent");
 
     PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: _otpController.text);
     UserCredential result = await widget.authService.auth.signInWithCredential(credential);
     result.user?.updateDisplayName(_usernameController.text);
     User? user = result.user;
-    print(user);
+    // print(user);
     DataRepository repository = DataRepository();
     repository.ss_users_collection.doc(user?.uid).set({
       "phoneNo": _phoneNoController.text,
@@ -617,7 +510,7 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
   }
 
   _onCodeTimeout(String timeout) {
-    print("CODE TIME OUT");
+    // print("CODE TIME OUT");
     widget.state = AuthState.otp;
     return null;
   }
@@ -677,14 +570,14 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
   Widget build(BuildContext context) {
     final user = Provider.of<SS_User?>(context);
     // print(user);
-    String user_id = user?.uid as String;
+    String userId = user?.uid as String;
     if (data == null) {
       DataRepository repository = DataRepository();
-      repository.ss_users_collection.doc(user_id).get().then((DocumentSnapshot doc) {
+      repository.ss_users_collection.doc(userId).get().then((DocumentSnapshot doc) {
         setState(() {
           data = doc.data();
         });
-        print(data);
+        // print(data);
       });
     }
     
@@ -780,8 +673,6 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                       builder: (context) => about.MyAboutUs(
                                         title: "About Us",
                                         aboutUs: widget.generateRandomString(2000),
-                                        documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: user_id).snapshots(),
-                                        documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
                                       )
                                     ),
                                   );
@@ -807,8 +698,6 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                       builder: (context) => about.MyAboutUs(
                                         title: "About Us",
                                         aboutUs: widget.generateRandomString(2000),
-                                        documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: user_id).snapshots(),
-                                        documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
                                       )
                                     ),
                                   );
@@ -896,25 +785,48 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                                     Navigator.pop(context)
                                                   },
                                                   rightClick: () => {}, 
-                                                  leftIcon: const Icon(Icons.chevron_left_rounded),
-                                                  rightIcon: const Icon(Icons.add_rounded),
+                                                  leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
+                                                  rightIcon: const Icon(Icons.add_rounded, size: 30),
+                                                  update: false,
+                                                  updateData: null,
                                                 )
                                               )
                                             )
                                           },
-                                          leftIcon: const Icon(Icons.chevron_left_rounded),
-                                          rightIcon: const Icon(Icons.add_rounded),
+                                          leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
+                                          rightIcon: const Icon(Icons.add_rounded, size: 30),
                                           heroLeft: "shop_left",
                                           heroRight: "shop_right",
-                                          documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: user_id).snapshots(),
-                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
+                                          documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: userId).snapshots(),
+                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: userId).snapshots(),
                                           onClickWidget: true,
                                           type: listPageType.shop,
                                           deleteItemFn: (id) {
                                             repository.ss_shops_collection.doc(id).delete();
-                                            print(data["id"].toString() + "deleted");
+                                            // print(data["id"].toString() + "deleted");
                                           },
-                                          updateItemFn: (id){},
+                                          updateItemFn: (id, document){
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => AddShop(
+                                                  username: (data != null)?data['username']:"", 
+                                                  phoneNo: (data != null)?data['phoneNo']:"", 
+                                                  title: "Update Shop", 
+                                                  isLeftFloattingButton: true, 
+                                                  isRightFloattingButton: false, 
+                                                  leftClick: () => {
+                                                    Navigator.pop(context)
+                                                  },
+                                                  rightClick: () => {}, 
+                                                  leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
+                                                  rightIcon: const Icon(Icons.add_rounded, size: 30),
+                                                  update: true,
+                                                  updateData: document,
+                                                )
+                                              )
+                                            );
+                                          },
                                         )
                                     ),
                                   );
@@ -972,25 +884,49 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                                     Navigator.pop(context)
                                                   },
                                                   rightClick: () => {}, 
-                                                  leftIcon: const Icon(Icons.chevron_left_rounded),
-                                                  rightIcon: const Icon(Icons.add_rounded),
+                                                  leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
+                                                  rightIcon: const Icon(Icons.add_rounded, size: 30),
+                                                  update: false,
+                                                  updateData: null
                                                 )
                                               )
                                             )
                                           },
-                                          leftIcon: const Icon(Icons.chevron_left_rounded),
-                                          rightIcon: const Icon(Icons.add_rounded),
+                                          leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
+                                          rightIcon: const Icon(Icons.add_rounded, size: 30),
                                           heroLeft: "service_left",
                                           heroRight: "service_right",
-                                          documentFieldStream: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
-                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
+                                          documentFieldStream: repository.ss_services_collection.where("businessId", isEqualTo: userId).snapshots(),
+                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: userId).snapshots(),
+
                                           onClickWidget: true,
                                           type: listPageType.service,
                                           deleteItemFn: (id) {
                                             repository.ss_services_collection.doc(id).delete();
-                                            print(data["id"].toString() + "deleted");
+                                            // print(data["id"].toString() + "deleted");
                                           },
-                                          updateItemFn: (id){},
+                                          updateItemFn: (id, document){
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => AddService(
+                                                  username: (data != null)?data['username']:"", 
+                                                  phoneNo: (data != null)?data['phoneNo']:"", 
+                                                  title: "Update Service", 
+                                                  isLeftFloattingButton: true, 
+                                                  isRightFloattingButton: false, 
+                                                  leftClick: () => {
+                                                    Navigator.pop(context)
+                                                  },
+                                                  rightClick: () => {}, 
+                                                  leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
+                                                  rightIcon: const Icon(Icons.add_rounded, size: 30),
+                                                  update: true,
+                                                  updateData: document,
+                                                )
+                                              )
+                                            );
+                                          },
                                         )
                                     ),
                                   );
@@ -1036,11 +972,20 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                   // ),
                                 ),
                                 onPressed: () {
+                                  // List<String> historys = <String>[];
+                                  // () async {
+                                  //   repository.ss_users_collection.doc(userId).get().then((value) => {
+                                  //     if (value.exists) {
+                                  //       historys = value.get("searchHistory")
+                                  //     }
+                                  //   });
+                                  // };
+                                  // print(historys);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                        ListPage(
+                                        HistoryListPage(
                                           title: "My History",
                                           username: (data != null)?data['userName']:"",
                                           phoneNo: (data != null)?data['phoneNo']:"",
@@ -1051,16 +996,15 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                             Navigator.pop(context)
                                           },
                                           rightClick: () => {},
-                                          leftIcon: const Icon(Icons.chevron_left_rounded),
+                                          leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
                                           rightIcon: const Icon(Icons.chevron_right_rounded),
                                           heroLeft: "history_left",
                                           heroRight: "history_right",
-                                          documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: user_id).snapshots(),
-                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
+                                          documentFieldStream: repository.ss_users_collection.doc(userId).snapshots(),
                                           onClickWidget: false,
-                                          type: listPageType.history,
                                           deleteItemFn: (id){},
                                           updateItemFn: (id){},
+                                          // history: historys
                                         )
                                     ),
                                   );
@@ -1121,16 +1065,16 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                             Navigator.pop(context)
                                           },
                                           rightClick: () => {},
-                                          leftIcon: const Icon(Icons.chevron_left_rounded),
+                                          leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
                                           rightIcon: const Icon(Icons.chevron_right_rounded),
                                           heroLeft: "favourites_left",
                                           heroRight: "favourites_right",
-                                          documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: user_id).snapshots(),
-                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
+                                          documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: userId).snapshots(),
+                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: userId).snapshots(),
                                           onClickWidget: false,
                                           type: listPageType.favourites,
                                           deleteItemFn: (id){},
-                                          updateItemFn: (id){},
+                                          updateItemFn: (id, document){},
                                         )
                                     ),
                                   );
@@ -1193,16 +1137,16 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                             Navigator.pop(context)
                                           },
                                           rightClick: () => {},
-                                          leftIcon: const Icon(Icons.chevron_left_rounded),
+                                          leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
                                           rightIcon: const Icon(Icons.chevron_right_rounded),
                                           heroLeft: "reviews_left",
                                           heroRight: "reviews_right",
                                           documentFieldStream: repository.ss_shops_collection.snapshots(),
-                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
+                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: userId).snapshots(),
                                           onClickWidget: false,
                                           type: listPageType.reviews,
                                           deleteItemFn: (id){},
-                                          updateItemFn: (id){},
+                                          updateItemFn: (id, document){},
                                         )
                                     ),
                                   );
@@ -1247,7 +1191,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           Navigator.pop(context)
                                         },
                                         rightClick: () => {},
-                                        leftIcon: const Icon(Icons.chevron_left_rounded),
+                                        leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
                                         rightIcon: const Icon(Icons.chevron_right_rounded),
                                         authService: widget.authService,
                                         data: data,
@@ -1314,8 +1258,6 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                         builder: (context) => about.MyAboutUs(
                                           title: "About Us",
                                           aboutUs: widget.generateRandomString(2000),
-                                          documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: user_id).snapshots(),
-                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
                                         )
                                       ),
                                     );
@@ -1341,8 +1283,6 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                         builder: (context) => about.MyAboutUs(
                                           title: "About Us",
                                           aboutUs: widget.generateRandomString(2000),
-                                          documentFieldStream: repository.ss_shops_collection.snapshots(),
-                                          documentFieldStream1: repository.ss_services_collection.snapshots(),
                                         )
                                       ),
                                     );
@@ -1504,7 +1444,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
 //                                             Navigator.pop(context)
 //                                           },
 //                                           rightClick: () => {},
-//                                           leftIcon: const Icon(Icons.chevron_left_rounded),
+//                                           leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
 //                                           rightIcon: const Icon(Icons.chevron_right_rounded),
 //                                         )
 //                                     ),
@@ -1549,7 +1489,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
 //                                             Navigator.pop(context)
 //                                           },
 //                                           rightClick: () => {},
-//                                           leftIcon: const Icon(Icons.chevron_left_rounded),
+//                                           leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
 //                                           rightIcon: const Icon(Icons.chevron_right_rounded),
 //                                         )
 //                                     ),
@@ -1602,7 +1542,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
 //                                           Navigator.pop(context)
 //                                         },
 //                                         rightClick: () => {},
-//                                         leftIcon: const Icon(Icons.chevron_left_rounded),
+//                                         leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
 //                                         rightIcon: const Icon(Icons.chevron_right_rounded),
 //                                       )
 //                                   ),
@@ -1654,7 +1594,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
 //                                           Navigator.pop(context)
 //                                         },
 //                                         rightClick: () => {},
-//                                         leftIcon: const Icon(Icons.chevron_left_rounded),
+//                                         leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
 //                                         rightIcon: const Icon(Icons.chevron_right_rounded),
 //                                       )
 //                                   ),
@@ -1706,7 +1646,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
 //                                           Navigator.pop(context)
 //                                         },
 //                                         rightClick: () => {},
-//                                         leftIcon: const Icon(Icons.chevron_left_rounded),
+//                                         leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
 //                                         rightIcon: const Icon(Icons.chevron_right_rounded),
 //                                       )
 //                                   ),
@@ -1751,7 +1691,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
 //                                           Navigator.pop(context)
 //                                         },
 //                                         rightClick: () => {},
-//                                         leftIcon: const Icon(Icons.chevron_left_rounded),
+//                                         leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
 //                                         rightIcon: const Icon(Icons.chevron_right_rounded),
 //                                       )
 //                                   ),

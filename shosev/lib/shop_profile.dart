@@ -3,12 +3,13 @@ import 'package:card_swiper/card_swiper.dart' show Swiper, SwiperLayout;
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:shosev/services/data_repository.dart' show DataRepository;
 import 'package:shosev/ratings_and_reviews.dart' show RatingandReview;
-import 'package:flutter/material.dart' show AlertDialog,Alignment,AlwaysStoppedAnimation,Axis,AxisDirection,Border,BorderRadius,BoxDecoration,BoxFit,BoxShadow,BuildContext,Center,ChoiceChip,ClipOval,ClipRRect,Color,Colors,Column,Container,CrossAxisAlignment,Divider,EdgeInsets,Expanded,FloatingActionButton,FloatingActionButtonLocation,FontStyle,FontWeight,Icon,Icons,IgnorePointer,Image,Key,LinearProgressIndicator,ListView,MainAxisAlignment,MaterialPageRoute,Navigator,NeverScrollableScrollPhysics,Offset,Padding,Positioned,Radius,RoundedRectangleBorder,Row,Scaffold,SingleTickerProviderStateMixin,Size,SizedBox,Spacer,Stack,State,StatefulWidget,Tab,TabBar,TabBarView,TabController,Text,TextAlign,TextButton,TextStyle,Theme,VerticalDivider,Visibility,VisualDensity,Widget,
-showDialog;
+import 'package:flutter/material.dart' show AlertDialog, Alignment, AlwaysStoppedAnimation, Axis, AxisDirection, Border, BorderRadius, BoxDecoration, BoxFit, BoxShadow, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FittedBox, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, MaterialPageRoute, Navigator, NeverScrollableScrollPhysics, Offset, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart' show FlutterPhoneDirectCaller;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart' show RatingBarIndicator;
 import 'package:marquee_widget/marquee_widget.dart' show Marquee;
 import 'package:url_launcher/url_launcher.dart' show launch;
+
+import 'package:shosev/services/data_repository.dart' show DataRepository;
 
 class ShopProfilePage extends StatefulWidget {
   final String username;
@@ -17,6 +18,7 @@ class ShopProfilePage extends StatefulWidget {
   final String shopName;
   final String joined;
   final List<dynamic> reviews;
+  final int reviewsCount;
   final int contacted;
   final String aboutUs;
   final List<dynamic> products;
@@ -27,13 +29,16 @@ class ShopProfilePage extends StatefulWidget {
       required this.username,
       required this.phoneno,
       required this.rating,
+      // required this.shopname,
+      // required this.rating,
       required this.shopName,
       required this.joined,
-      required this.reviews,
+      required this.reviewsCount,
       required this.contacted,
       required this.aboutUs,
       required this.products,
-      required this.data})
+      required this.data, 
+      required this.reviews,})
       : super(key: key);
 
   @override
@@ -96,34 +101,29 @@ class _ShopProfilePageState extends State<ShopProfilePage>
   void _call() async {
     String url = 'tel:' + widget.data['phoneNo'].toString();
     showDialog(
-        context: context,
-        builder: (BuildContext builderContext) {
-          return AlertDialog(
-            title: Text("Call " + widget.shopName),
-            content: Text(widget.data['phoneNo']),
-            actions: [
-              TextButton(
-                child: const Text("Yes"),
-                onPressed: () async {
-                  DataRepository repository = DataRepository();
-                  repository.ss_shops_collection
-                      .doc(widget.data['id'])
-                      .update(widget.data['contacted'] + 1);
-                  FlutterPhoneDirectCaller.callNumber(url);
-                },
-              ),
-              TextButton(
-                child: const Text("Cancel"),
-                onPressed: () async {
-                  Navigator.of(builderContext).pop();
-                },
-              )
-            ],
-          );
-        }).then((val) {
-      Navigator.of(context).pop();
-    });
-
+      context: context, 
+      builder: (BuildContext builderContext) {
+        return AlertDialog(
+          title: Text("Call " + widget.shopName),
+          content: Text(widget.data['phoneNo']),
+          actions: [
+            TextButton(
+              child: const Text("Yes"),
+              onPressed: () async {
+                DataRepository repository = DataRepository();
+                repository.ss_shops_collection.doc(widget.data['id']).update(widget.data['contacted']+1);
+                FlutterPhoneDirectCaller.callNumber(url);
+              },
+            ),
+            TextButton(
+              child: const Text("Cancel"),
+              onPressed: () async {
+                Navigator.of(builderContext).pop();
+              },
+            )
+          ],
+        );
+      });
     // await launch(url);
   }
 
@@ -146,6 +146,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
 
   @override
   Widget build(BuildContext context) {
+    final double rating = widget.rating.reduce((a, b) => a+b)/5;
     // Shop Profile Page
     // |____Cover
     // |____Profile Picture
@@ -338,9 +339,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                                       .textTheme
                                                       .overline),
                                             ),
-                                            Text(
-                                                widget.reviews.length
-                                                    .toString(),
+                                            Text(widget.reviewsCount.toString(),
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .headline4),
@@ -507,11 +506,10 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                         padding: const EdgeInsets.all(8.0),
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(15.0)),
+                                          borderRadius: const BorderRadius.all(Radius.circular(15.0)),
                                           border: Border.all(
-                                              color: const Color(0xFFFFC804),
-                                              width: 2.0),
+                                            color: const Color(0xFFFFC804),
+                                            width: 2.0),
                                           boxShadow: const [
                                             BoxShadow(
                                               color: Color(0xFFAAAAAA),
@@ -522,45 +520,31 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                         ),
                                         child: Column(
                                           children: [
-                                            // Expanded(
-                                            //     child: Padding(
-                                            //   padding: const EdgeInsets.all(2),
-                                            //   child: Image.asset(
-                                            //     'lib/assets/img/bread.jpg',
-                                            //     fit: BoxFit.fitWidth,
-                                            //   ),
-                                            // )),
                                             Row(
                                               children: [
                                                 Expanded(
-                                                    child: Text(
-                                                  widget.products[index]
-                                                      ["productName"],
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline5,
-                                                )),
+                                                  child: Text(
+                                                    widget.products[index]["productName"],
+                                                    style: Theme.of(context).textTheme.headline5,
+                                                  )
+                                                ),
                                                 Container(
                                                   height: 23,
-                                                  width: 41,
+                                                  width: 60,
                                                   alignment: Alignment.center,
                                                   decoration: BoxDecoration(
-                                                    color:
-                                                        const Color(0xFFFFC804),
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                            Radius.circular(
-                                                                20.0)),
+                                                    color: const Color(0xFFFFC804),
+                                                    borderRadius: const BorderRadius.all(Radius.circular(20.0)),
                                                     border: Border.all(
-                                                        color: const Color(
-                                                            0xFFFFC804),
-                                                        width: 2.0),
+                                                      color: const Color(0xFFFFC804),
+                                                      width: 2.0
+                                                    ),
                                                   ),
-                                                  child: Text(
-                                                    "₹" +
-                                                        widget.products[index]
-                                                                ["cost"]
-                                                            .toString(),
+                                                  child: FittedBox(
+                                                    fit: BoxFit.fill,
+                                                    child: Text(
+                                                      "₹"+widget.products[index]["cost"].toString(),
+                                                    )
                                                   ),
                                                 )
                                               ],

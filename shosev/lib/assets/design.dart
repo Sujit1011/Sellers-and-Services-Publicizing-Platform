@@ -53,17 +53,7 @@ const TextStyle _bodyText = TextStyle(
     letterSpacing: -0.5);
 
 // My Buttton Styles
-final _boldButtonStyle = TextButton.styleFrom(
-  backgroundColor: const Color(0xFFFFC804),
-  primary: const Color(0xFF333333),
-  minimumSize: const Size(108, 32),
-  padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 14),
-  shape: const RoundedRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(30.0)),
-  ),
-);
-
-final _simpleButtonStyle = TextButton.styleFrom(
+final simpleButtonStyle = TextButton.styleFrom(
   backgroundColor: const Color(0xFFFFC804),
   primary: const Color(0xFF333333),
   minimumSize: const Size(108, 23),

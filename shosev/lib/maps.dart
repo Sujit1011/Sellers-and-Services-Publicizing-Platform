@@ -14,7 +14,7 @@ class MyMap extends StatefulWidget {
 
 class _MyMapState extends State<MyMap> {
   late GoogleMapController mapController;
-  Location location = new Location();
+  Location location = Location();
 
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;

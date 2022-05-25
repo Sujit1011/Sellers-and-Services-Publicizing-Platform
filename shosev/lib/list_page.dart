@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart' show QuerySnapshot;
-import 'package:flutter/material.dart' show AlertDialog, AsyncSnapshot, BuildContext, Center, CircleAvatar, CircularProgressIndicator, Color, Colors, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, Icon, Icons, Key, ListView, MainAxisAlignment, MaterialPageRoute, Navigator, Padding, Row, Scaffold, SizedBox, Spacer, Stack, State, StatefulWidget, StreamBuilder, Text, TextButton, Theme, Widget, showDialog;
-import 'package:provider/provider.dart' show Provider;
+import 'package:cloud_firestore/cloud_firestore.dart' show QueryDocumentSnapshot, QuerySnapshot;
+import 'package:flutter/material.dart' show AlertDialog, AsyncSnapshot, BuildContext, Center, CircleAvatar, CircularProgressIndicator, Color, Colors, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, Icon, Icons, Key, ListView, MainAxisAlignment, MaterialPageRoute, Navigator, Padding, Row, Scaffold, SingleChildScrollView, SizedBox, Spacer, Stack, State, StatefulWidget, StreamBuilder, Text, TextButton, Theme, Widget, showDialog;
+import 'package:shosev/add_shop.dart';
 
 import 'package:shosev/assets/design.dart' as design;
-import 'package:shosev/models/SS_User.dart' show SS_User;
 import 'package:shosev/service_profile.dart' show ServiceProfilePage;
 import 'package:shosev/shop_profile.dart' show ShopProfilePage;
 
@@ -48,7 +47,7 @@ class ListPage extends StatefulWidget {
   final Function leftClick;
   final Function rightClick;
   final void Function(String id) deleteItemFn;
-  final void Function(String id) updateItemFn;
+  final void Function(String id, dynamic document) updateItemFn;
 
   final listPageType type;
 
@@ -111,8 +110,8 @@ class _ListPageState extends State<ListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final _myUser = Provider.of<SS_User?>(context);
-    print(_myUser);
+    // final _myUser = Provider.of<SS_User?>(context);
+    // print(_myUser);
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -205,6 +204,7 @@ class _ListPageState extends State<ListPage> {
                                         contacted: document["contacted"], 
                                         aboutUs: document["description"],
                                         products: document["products"],
+                                        reviewsCount: document["reviewsCount"],
                                         data: document,
                                       );
                                     } else if (widget.type == listPageType.service) {
@@ -218,6 +218,7 @@ class _ListPageState extends State<ListPage> {
                                         contacted: document["contacted"], 
                                         aboutUs: document["description"],
                                         services: document["services"],
+                                        reviewsCount: document["reviewsCount"],
                                         data: document,
                                       );
                                     } else if (widget.type == listPageType.history) {
@@ -277,13 +278,13 @@ class _ListPageState extends State<ListPage> {
                                         });
                                     },
                                     updateOnClick: (){
-                                      widget.updateItemFn(document == null? "": document.id.toString());
+                                      widget.updateItemFn(document == null? "": document.id.toString(), document);
                                     },
-                                  );
-                                }).toList(),
                               );
-                            }
-                          ),
+                            }).toList(),
+                          );
+                        }
+                      ),
                   ),
                   const SizedBox(
                     height: 47,
@@ -316,7 +317,7 @@ class _ListPageState extends State<ListPage> {
                   _showUpdate = !_showUpdate;
                   setState(() {});
                 },
-                child: const Icon(Icons.edit_rounded),
+                child: const Icon(Icons.edit_rounded, size: 30),
               ),
             if(widget.isRightFloattingButton)
               FloatingActionButton(
