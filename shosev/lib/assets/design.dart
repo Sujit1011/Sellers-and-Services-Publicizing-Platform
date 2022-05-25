@@ -127,7 +127,7 @@ class LogoSimple extends StatelessWidget {
           child: Text(
         'ShoSev',
         style: TextStyle(
-          fontSize: 34.0,
+          fontSize: 38.0,
           fontWeight: FontWeight.bold,
           color: _textColor,
           letterSpacing: -0.5
@@ -156,7 +156,7 @@ class LogoOnWhite extends StatelessWidget {
           child: Text(
         'ShoSev',
         style: TextStyle(
-          fontSize: 34.0,
+          fontSize: 38.0,
           fontWeight: FontWeight.bold,
           color: _textColor,
           letterSpacing: -0.5
@@ -185,7 +185,7 @@ class LogoOnColored extends StatelessWidget {
           child: Text(
         'ShoSev',
         style: TextStyle(
-          fontSize: 34.0,
+          fontSize: 38.0,
           fontWeight: FontWeight.bold,
           color: _textColor,
           letterSpacing: -0.5
@@ -203,6 +203,7 @@ class CardDesign1 extends StatelessWidget {
   final bool isPhoto;
   final bool deleteShow;
   final bool updateShow;
+  final Image img;
 
   final String heading;
   final String text1;
@@ -212,7 +213,7 @@ class CardDesign1 extends StatelessWidget {
   final void Function() deleteOnClick;
   final void Function() updateOnClick;
 
-  const CardDesign1({Key? key, required this.isHeading, required this.isText1, required this.isText2, required this.heading, required this.text1, required this.text2, required this.onClick, required this.isPhoto, required this.deleteShow, required this.updateShow, required this.deleteOnClick, required this.updateOnClick}) : super(key: key);
+  const CardDesign1({Key? key, required this.isHeading, required this.isText1, required this.isText2, required this.heading, required this.text1, required this.text2, required this.onClick, required this.isPhoto, required this.deleteShow, required this.updateShow, required this.deleteOnClick, required this.updateOnClick, required this.img}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -247,12 +248,7 @@ class CardDesign1 extends StatelessWidget {
                     padding: const EdgeInsets.only(left:9, bottom:9, top:9, right:12),
                     child: ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                      child: Image.asset(
-                        'lib/assets/img/shop.png',
-                        width: 60,
-                        height: 60,
-                        fit: BoxFit.fitWidth,
-                      ),
+                      child: img,
                     ),
                   ),
                 Flexible(

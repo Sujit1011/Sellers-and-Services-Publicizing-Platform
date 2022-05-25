@@ -186,9 +186,9 @@ class _RatingandReviewState extends State<RatingandReview> {
                                       onTap: () async {
                                         DataRepository repository = DataRepository();
                                         List list = widget.data1['rating'];
-                                        print(list);
+                                        // print(list);
                                         list[_rating.toInt()] += 1;
-                                        print(widget.data1.id);
+                                        // print(widget.data1.id);
                                         if(widget.type == "shop"){
                                           repository.ss_shops_collection.doc(widget.data1.id).update(
                                           {
@@ -199,6 +199,12 @@ class _RatingandReviewState extends State<RatingandReview> {
                                             }]),
                                           }
                                           ).then((value){
+                                            repository.ss_users_collection.doc(_myUser?.uid).update({
+                                              "shopReviews" : FieldValue.arrayUnion([{
+                                                "shopId": widget.data1.id,
+                                                "review": _review.text
+                                              }])
+                                            });
                                             Navigator.of(context).pop();                                          
                                           });
                                         }
@@ -212,6 +218,12 @@ class _RatingandReviewState extends State<RatingandReview> {
                                             }]),
                                           }
                                           ).then((value){
+                                            repository.ss_users_collection.doc(_myUser?.uid).update({
+                                              "serviceReviews" : FieldValue.arrayUnion([{
+                                                "serviceId": widget.data1.id,
+                                                "review": _review.text
+                                              }])
+                                            });
                                             Navigator.of(context).pop();                                          
                                           });
                                         }
@@ -240,14 +252,14 @@ class _RatingandReviewState extends State<RatingandReview> {
               children: <Widget>[
                 if (widget.isLeftFloattingButton)
                   FloatingActionButton(
-                    heroTag: "add shop left",
+                    heroTag: "add review left",
                     mini: true,
                     onPressed: _left,
                     child: widget.leftIcon,
                   ),
                 if (widget.isRightFloattingButton)
                   FloatingActionButton(
-                    heroTag: "add shop right",
+                    heroTag: "add review right",
                     mini: true,
                     onPressed: _right,
                     child: widget.rightIcon,

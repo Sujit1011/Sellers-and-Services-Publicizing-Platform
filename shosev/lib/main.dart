@@ -70,6 +70,7 @@ class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
+  bool filterButtonIsSelected = true;
   String result = "";
 
   @override
@@ -80,7 +81,6 @@ class _MyHomePageState extends State<MyHomePage> {
   bool fab = true;
   String address = 'Welcome to ShoSev';
   bool showResult = false;
-  bool filterButtonIsSelected = true;
   double latitude = 23.176890894138687;
   double longitude = 80.0233220952035;
   final DraggableScrollableController _resultController = DraggableScrollableController();
@@ -195,30 +195,56 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Widget _buildSearchResultItem(BuildContext context, DocumentSnapshot<Object?> data) {
+  Widget _buildSearchResultItem(BuildContext context, DocumentSnapshot<Object?> data, String username, String phone) {
 
-    Widget clickWidget = (data.exists && filterButtonIsSelected)?
+    Widget clickWidget = (data.exists && widget.filterButtonIsSelected)?
       ShopProfilePage(
+        username: username,
+        phoneno: phone,
         shopName: data["name"], 
-        ratings: data["rating"], 
+        rating: data["rating"], 
         joined: monthsToString[data["joined"].toDate().month]! + " " + data["joined"].toDate().year.toString().substring(2,4), 
         reviewsCount: data["reviewsCount"], 
         contacted: data["contacted"], 
         aboutUs: data["description"],
         products: data["products"],
+        reviews: data["reviews"],
         data: data,
       ):
       ServiceProfilePage(
+        username: username,
+        phoneno: phone,
         shopName: data["name"], 
-        ratings: data["rating"], 
+        rating: data["rating"], 
         joined: monthsToString[data["joined"].toDate().month]! + " " + data["joined"].toDate().year.toString().substring(2,4), 
         reviewsCount: data["reviewsCount"], 
         contacted: data["contacted"], 
         aboutUs: data["description"],
         services: data["services"],
+        reviews: data["reviews"],
         data: data,
       );
-
+    Image img = Image.asset(
+      'lib/assets/img/img.png',
+      width: 60,
+      height: 60,
+      fit: BoxFit.fitWidth,
+    );
+    if(widget.filterButtonIsSelected) {
+      img = Image.asset(
+        'lib/assets/img/shop.png',
+        width: 60,
+        height: 60,
+        fit: BoxFit.fitWidth,
+      );
+    } else {
+      img = Image.asset(
+        'lib/assets/img/service.jpg',
+        width: 60,
+        height: 60,
+        fit: BoxFit.fitWidth,
+      );
+    }
     if (data.exists) {
       return design.CardDesign1(
         isHeading: true,
@@ -227,6 +253,7 @@ class _MyHomePageState extends State<MyHomePage> {
         isText2: true,
         updateShow: false,
         deleteShow: false,
+        img: img,
         deleteOnClick: (){},
         updateOnClick: (){},
         heading: data["name"],
@@ -248,10 +275,10 @@ class _MyHomePageState extends State<MyHomePage> {
     
   }
 
-  Widget _buildSearchResultList(BuildContext context, List<DocumentSnapshot<Object?>> list) {
+  Widget _buildSearchResultList(BuildContext context, List<DocumentSnapshot<Object?>> list, String username, String phone) {
     return ListView(
       padding: const EdgeInsets.all(18),
-      children: list.map<Widget>((data) => _buildSearchResultItem(context, data)).toList(),
+      children: list.map<Widget>((data) => _buildSearchResultItem(context, data, username, phone)).toList(),
     );
   }
 
@@ -382,7 +409,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           children: [
                             TextButton(
                               onPressed: () {
-                                setState(() {filterButtonIsSelected = !filterButtonIsSelected;});
+                                widget.filterButtonIsSelected = !widget.filterButtonIsSelected;
+                                setState(() {});
                               }, 
                               child: const Text(
                                 "SHOPS",
@@ -391,8 +419,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               style: TextButton.styleFrom(
-                                backgroundColor: (filterButtonIsSelected)?const Color(0xFF333333):const Color(0xFFFFC804),
-                                primary: (filterButtonIsSelected)?const Color(0xFFFFC804):const Color(0xFF333333),
+                                backgroundColor: (widget.filterButtonIsSelected)?const Color(0xFF333333):const Color(0xFFFFC804),
+                                primary: (widget.filterButtonIsSelected)?const Color(0xFFFFC804):const Color(0xFF333333),
                                 minimumSize: const Size(108, 23),
                                 padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 14),
                                 shape: const RoundedRectangleBorder(
@@ -411,7 +439,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             TextButton(
                               onPressed: () {
-                                setState(() {filterButtonIsSelected = !filterButtonIsSelected;});
+                                widget.filterButtonIsSelected = !widget.filterButtonIsSelected;
+                                setState(() {});
                               }, 
                               child: const Text(
                                 "SERVICES",
@@ -420,8 +449,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               style: TextButton.styleFrom(
-                                backgroundColor: (filterButtonIsSelected)?const Color(0xFFFFC804):const Color(0xFF333333),
-                                primary: (filterButtonIsSelected)?const Color(0xFF333333):const Color(0xFFFFC804),
+                                backgroundColor: (widget.filterButtonIsSelected)?const Color(0xFFFFC804):const Color(0xFF333333),
+                                primary: (widget.filterButtonIsSelected)?const Color(0xFF333333):const Color(0xFFFFC804),
                                 minimumSize: const Size(108, 23),
                                 padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 14),
                                 shape: const RoundedRectangleBorder(
@@ -434,7 +463,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Flexible(
                         child: StreamBuilder<QuerySnapshot>(
-                          stream: (filterButtonIsSelected)?repository.ss_shops_collection.where("searchKeywords", arrayContains: widget.result).snapshots():repository.ss_services_collection.where("searchKeywords", arrayContains: widget.result).snapshots(),
+                          stream: (widget.filterButtonIsSelected)?repository.ss_shops_collection.where("searchKeywords", arrayContains: widget.result).snapshots():repository.ss_services_collection.where("searchKeywords", arrayContains: widget.result).snapshots(),
                           builder: (context, snapshot) {
                             if (widget.result.length > 2) {
                               List<String> history = [];
@@ -443,11 +472,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                 List<dynamic> list = element["searchHistory"];
                                 history = list.cast<String>();
                               });
-                              if(history.length < 10 && widget.result.length > 3) {
+                              if(user != null && history.length < 10 && widget.result.length > 3) {
                                 repository.ss_users_collection.doc(user!.uid).update({
                                 "searchHistory" : FieldValue.arrayUnion([widget.result.toLowerCase()])
                               });
-                              } else if (widget.result.length > 3){
+                              } else if (user != null && widget.result.length > 3){
                                 repository.ss_users_collection.doc(user!.uid).update({
                                 "searchHistory" : FieldValue.delete()
                               });
@@ -459,10 +488,13 @@ class _MyHomePageState extends State<MyHomePage> {
                               return const Center(child: CircularProgressIndicator());
                             }
                             if (snapshot.data!.docs.isEmpty) {
-                              return Center(child: Text("No " + ((filterButtonIsSelected)?"Shop":"Service") + " Results", textScaleFactor: 2));
+                              return Center(child: Text("No " + ((widget.filterButtonIsSelected)?"Shop":"Service") + " Results", textScaleFactor: 2));
                             }
             
-                            return _buildSearchResultList(context, snapshot.data?.docs ?? []);
+                            if(user == null) {
+                              return _buildSearchResultList(context, snapshot.data?.docs ?? [],  "", "");
+                            }
+                            return _buildSearchResultList(context, snapshot.data?.docs ?? [], user!.userName ?? "", user.phoneNo ?? "");
                           }
                         ),
                       )

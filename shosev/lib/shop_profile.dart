@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+import 'package:shosev/assets/design.dart' as design;
+import 'package:shosev/models/SS_User.dart';
 import "package:whatsapp_unilink/whatsapp_unilink.dart" show WhatsAppUnilink;
 import 'package:card_swiper/card_swiper.dart' show Swiper, SwiperLayout;
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:shosev/services/data_repository.dart' show DataRepository;
 import 'package:shosev/ratings_and_reviews.dart' show RatingandReview;
-import 'package:flutter/material.dart' show AlertDialog, Alignment, AlwaysStoppedAnimation, Axis, AxisDirection, Border, BorderRadius, BoxDecoration, BoxFit, BoxShadow, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FittedBox, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, MaterialPageRoute, Navigator, NeverScrollableScrollPhysics, Offset, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
+import 'package:flutter/material.dart' show AlertDialog, Alignment, AlwaysStoppedAnimation, Axis, AxisDirection, Border, BorderRadius, BoxDecoration, BoxFit, BoxShadow, BuildContext, Center, ChoiceChip, CircleBorder, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, ElevatedButton, Expanded, FittedBox, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, IconButton, Icons, IgnorePointer, Image, Ink, Key, LinearProgressIndicator, ListView, MainAxisAlignment, MaterialPageRoute, Navigator, NeverScrollableScrollPhysics, Offset, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, ShapeDecoration, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart' show FlutterPhoneDirectCaller;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart' show RatingBarIndicator;
 import 'package:marquee_widget/marquee_widget.dart' show Marquee;
@@ -29,8 +33,6 @@ class ShopProfilePage extends StatefulWidget {
       required this.username,
       required this.phoneno,
       required this.rating,
-      // required this.shopname,
-      // required this.rating,
       required this.shopName,
       required this.joined,
       required this.reviewsCount,
@@ -45,9 +47,11 @@ class ShopProfilePage extends StatefulWidget {
   State<ShopProfilePage> createState() => _ShopProfilePageState();
 }
 
-class _ShopProfilePageState extends State<ShopProfilePage>
-    with SingleTickerProviderStateMixin {
+class _ShopProfilePageState extends State<ShopProfilePage>  with SingleTickerProviderStateMixin {
   bool _shareValue = false;
+  bool _displayFavourite = false;
+  bool _favouriteIsSelected = false;
+  List _favouriteShops = [];
   final int pages = 3;
   late final TabController _controller;
   final _boldButtonStyle = TextButton.styleFrom(
@@ -111,7 +115,9 @@ class _ShopProfilePageState extends State<ShopProfilePage>
               child: const Text("Yes"),
               onPressed: () async {
                 DataRepository repository = DataRepository();
-                repository.ss_shops_collection.doc(widget.data['id']).update(widget.data['contacted']+1);
+                repository.ss_shops_collection.doc(widget.data.id).update({
+                  "contacted" : FieldValue.increment(1)
+                });
                 FlutterPhoneDirectCaller.callNumber(url);
               },
             ),
@@ -128,25 +134,48 @@ class _ShopProfilePageState extends State<ShopProfilePage>
   }
 
   void _writeReview() {
-    print(widget.data);
+    // print(widget.data);
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => RatingandReview(
-                // Id: widget.data['id'],
-                username: widget.username,
-                phoneNo: widget.phoneno,
-                type:"shop",
-                isLeftFloattingButton: true,
-                isRightFloattingButton: false,
-                leftIcon: const Icon(Icons.chevron_left_rounded),
-                rightIcon: const Icon(Icons.add_rounded),
-                data1: widget.data)));
+      context,
+      MaterialPageRoute(
+        builder: (context) => RatingandReview(
+          // Id: widget.data['id'],
+          username: widget.username,
+          phoneNo: widget.phoneno,
+          type:"shop",
+          isLeftFloattingButton: true,
+          isRightFloattingButton: false,
+          leftIcon: const Icon(Icons.chevron_left_rounded),
+          rightIcon: const Icon(Icons.add_rounded),
+          data1: widget.data
+        )
+      )
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final double rating = widget.rating.reduce((a, b) => a+b)/5;
+    DataRepository repository = DataRepository();
+    final _myUser = Provider.of<SS_User?>(context);
+    final _userId = _myUser?.uid;
+    if(_userId != "") {
+      _displayFavourite = true;
+    }
+    if(_displayFavourite) {
+      repository.ss_users_collection.doc(_myUser?.uid).get().then((data) {
+        if(data.exists) {
+
+          _favouriteShops = data["favouriteShops"];
+        }
+      });
+      if(_favouriteShops.contains(widget.data.id.toString())) {
+        _favouriteIsSelected = true;
+      }
+    }
+    int ratingSum = widget.rating.reduce((a, b) => a+b);
+    if(ratingSum == 0) {
+      ratingSum = 1;
+    }
     // Shop Profile Page
     // |____Cover
     // |____Profile Picture
@@ -237,42 +266,20 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                       color: Color(0xFFE5E5E5),
                                     ),
                                     Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:CrossAxisAlignment.center,
+                                      mainAxisAlignment:MainAxisAlignment.center,
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 8.0, left: 0),
+                                          padding: const EdgeInsets.only(bottom: 8.0, left: 0),
                                           child: Text(
-                                            "Ratings (" +
-                                                ((widget.rating[0] +
-                                                            widget.rating[1] +
-                                                            widget.rating[2] +
-                                                            widget.rating[3] +
-                                                            widget.rating[4] + 
-                                                            widget.rating[5]) /
-                                                        6)
-                                                    .toStringAsFixed(1) +
-                                                ")",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5,
+                                            "Ratings (" + (ratingSum/6).toStringAsFixed(1) + ")",
+                                            style: Theme.of(context).textTheme.headline5,
                                           ),
                                         ),
                                         RatingBarIndicator(
-                                          rating: ((widget.rating[0] +
-                                                      widget.rating[1] +
-                                                      widget.rating[2] +
-                                                      widget.rating[3] +
-                                                      widget.rating[4] +
-                                                      widget.rating[5]) /
-                                                  5)
-                                              .toDouble(),
+                                          rating: (ratingSum/6).toDouble(),
                                           unratedColor: const Color(0xFFD1D1D1),
-                                          itemBuilder: (context, index) =>
-                                              const Icon(
+                                          itemBuilder: (context, index) => const Icon(
                                             Icons.star,
                                             color: Color(0xFFFFC804),
                                           ),
@@ -307,12 +314,8 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                         Column(
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 10.0),
-                                              child: Text("Joined",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .overline),
+                                              padding: const EdgeInsets.only(bottom: 10.0),
+                                              child: Text("Joined", style: Theme.of(context).textTheme.overline),
                                             ),
                                             Text(widget.joined.toString(),
                                                 style: Theme.of(context)
@@ -401,7 +404,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                                 const BorderRadius.all(
                                                     Radius.circular(10.0)),
                                             child: Image.asset(
-                                              'lib/assets/img/shop.png',
+                                            'lib/assets/img/img.png',
                                               width: 106,
                                               height: 124,
                                               fit: BoxFit.cover,
@@ -416,7 +419,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                                 const BorderRadius.all(
                                                     Radius.circular(10.0)),
                                             child: Image.asset(
-                                              'lib/assets/img/shop.png',
+                                            'lib/assets/img/img.png',
                                               width: 106,
                                               height: 124,
                                               fit: BoxFit.cover,
@@ -431,7 +434,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                                 const BorderRadius.all(
                                                     Radius.circular(10.0)),
                                             child: Image.asset(
-                                              'lib/assets/img/shop.png',
+                                            'lib/assets/img/img.png',
                                               width: 106,
                                               height: 124,
                                               fit: BoxFit.cover,
@@ -446,7 +449,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                                 const BorderRadius.all(
                                                     Radius.circular(10.0)),
                                             child: Image.asset(
-                                              'lib/assets/img/shop.png',
+                                            'lib/assets/img/img.png',
                                               width: 106,
                                               height: 124,
                                               fit: BoxFit.cover,
@@ -712,24 +715,11 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                                 width: 115,
                                                 height: 5,
                                                 child: ClipRRect(
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                          Radius.circular(5)),
-                                                  child:
-                                                      LinearProgressIndicator(
-                                                    backgroundColor:
-                                                        const Color(0xFFE5E5E5),
-                                                    valueColor:
-                                                        const AlwaysStoppedAnimation<
-                                                                Color>(
-                                                            Color(0xFFFFC804)),
-                                                    value: widget.rating[5] /
-                                                        (widget.rating[0] +
-                                                            widget.rating[1] +
-                                                            widget.rating[2] +
-                                                            widget.rating[3] +
-                                                            widget.rating[4] +
-                                                            widget.rating[5]),
+                                                  borderRadius:const BorderRadius.all(Radius.circular(5)),
+                                                  child: LinearProgressIndicator(
+                                                    backgroundColor:const Color(0xFFE5E5E5),
+                                                    valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFFFC804)),
+                                                    value: widget.rating[5] / (ratingSum),
                                                   ),
                                                 )),
                                           ],
@@ -753,13 +743,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                                         const AlwaysStoppedAnimation<
                                                                 Color>(
                                                             Color(0xFFFFC804)),
-                                                    value: widget.rating[4] /
-                                                        (widget.rating[0] +
-                                                            widget.rating[1] +
-                                                            widget.rating[2] +
-                                                            widget.rating[3] +
-                                                            widget.rating[4] +
-                                                            widget.rating[5]),
+                                                    value: widget.rating[4] / (ratingSum),
                                                   ),
                                                 )),
                                           ],
@@ -783,13 +767,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                                         const AlwaysStoppedAnimation<
                                                                 Color>(
                                                             Color(0xFFFFC804)),
-                                                    value: widget.rating[3] /
-                                                        (widget.rating[0] +
-                                                            widget.rating[1] +
-                                                            widget.rating[2] +
-                                                            widget.rating[3] +
-                                                            widget.rating[4] + 
-                                                            widget.rating[5]),
+                                                    value: widget.rating[3] / (ratingSum),
                                                   ),
                                                 )),
                                           ],
@@ -813,13 +791,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                                         const AlwaysStoppedAnimation<
                                                                 Color>(
                                                             Color(0xFFFFC804)),
-                                                    value: widget.rating[2] /
-                                                        (widget.rating[0] +
-                                                            widget.rating[1] +
-                                                            widget.rating[2] +
-                                                            widget.rating[3] +
-                                                            widget.rating[4] +
-                                                            widget.rating[5]),
+                                                    value: widget.rating[2] / (ratingSum),
                                                   ),
                                                 )),
                                           ],
@@ -843,13 +815,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                                         const AlwaysStoppedAnimation<
                                                                 Color>(
                                                             Color(0xFFFFC804)),
-                                                    value: widget.rating[1] /
-                                                        (widget.rating[0] +
-                                                            widget.rating[1] +
-                                                            widget.rating[2] +
-                                                            widget.rating[3] +
-                                                            widget.rating[4] +
-                                                            widget.rating[5]),
+                                                    value: widget.rating[1] / (ratingSum),
                                                   ),
                                                 )),
                                           ],
@@ -886,14 +852,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                           padding: const EdgeInsets.only(
                                               bottom: 8.0, left: 0),
                                           child: Text(
-                                            ((widget.rating[0] +
-                                                        widget.rating[1] +
-                                                        widget.rating[2] +
-                                                        widget.rating[3] +
-                                                        widget.rating[4] +
-                                                        widget.rating[5]) /
-                                                    5)
-                                                .toString(),
+                                            (ratingSum/6).toStringAsFixed(1),
                                             style: const TextStyle(
                                                 fontSize: 40.0,
                                                 fontWeight: FontWeight.normal,
@@ -902,14 +861,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                           ),
                                         ),
                                         RatingBarIndicator(
-                                          rating: ((widget.rating[0] +
-                                                      widget.rating[1] +
-                                                      widget.rating[2] +
-                                                      widget.rating[3] +
-                                                      widget.rating[4] +
-                                                      widget.rating[5]) /
-                                                  5)
-                                              .toDouble(),
+                                          rating: (ratingSum/6).toDouble(),
                                           unratedColor: const Color(0xFFD1D1D1),
                                           itemBuilder: (context, index) =>
                                               const Icon(
@@ -934,6 +886,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                 style: Theme.of(context).textTheme.headline4,
                               ),
                             ),
+                            (widget.reviews.isEmpty)?const Expanded(child: Center(child: Text("No Reviews"),)):
                             Expanded(
                                 child: ListView.builder(
                               itemCount: widget.reviews.length,
@@ -971,6 +924,7 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                                 );
                               },
                             )),
+                            if (_myUser != null)
                             Padding(
                               padding: const EdgeInsets.only(top: 5.0),
                               child: Center(
@@ -1102,6 +1056,48 @@ class _ShopProfilePageState extends State<ShopProfilePage>
                     ))
               ],
             ),
+          ),
+          if (_myUser != null &&_displayFavourite)
+          Positioned(
+            top: 120,
+            right: 20,
+            child: ElevatedButton(
+                // padding: EdgeInsets.zero,
+                onPressed: () {
+                  repository.ss_users_collection.doc(_myUser?.uid).get().then((data) {
+                    if(data.exists) {
+                      _favouriteShops = data["favouriteShops"];
+                    }
+                    if(_favouriteShops.contains(widget.data.id.toString())) {
+                      _favouriteShops.remove(widget.data.id.toString());
+                      repository.ss_users_collection.doc(_myUser?.uid).update({
+                        "favouriteShops" : _favouriteShops
+                      });
+                      setState(() {
+                        _favouriteIsSelected = false;
+                      });
+                    } else {
+                      repository.ss_users_collection.doc(_myUser?.uid).update({
+                        "favouriteShops" : FieldValue.arrayUnion([widget.data.id.toString()])
+                      });
+                      setState(() {
+                        _favouriteIsSelected = true;
+                      });
+                    }
+                  });
+                },
+                child: Icon(
+                  Icons.favorite_sharp,
+                  color: (_favouriteIsSelected)?const Color(0xFFEE4949):const Color(0xFF333333),
+                  size: 27,
+                ),
+                style: TextButton.styleFrom(
+                  backgroundColor: const Color(0xFFFFC804),
+                  primary: const Color(0xFF333333),
+                  minimumSize: const Size(60, 60),
+                  shape: const CircleBorder(),
+                ),
+              ),
           ),
           // Profile Image
           Positioned(

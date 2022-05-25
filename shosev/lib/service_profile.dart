@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
-import 'package:flutter/material.dart' show AlertDialog, AlwaysStoppedAnimation, Axis, BorderRadius, BoxDecoration, BoxFit, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, MaterialPageRoute, Navigator, NeverScrollableScrollPhysics, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, SingleChildScrollView, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart' show AlertDialog, AlwaysStoppedAnimation, Axis, BorderRadius, BoxDecoration, BoxFit, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, ElevatedButton, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, MaterialPageRoute, Navigator, NeverScrollableScrollPhysics, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, SingleChildScrollView, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
 import 'package:flutter/material.dart' show AlertDialog, AlwaysStoppedAnimation, Axis, BorderRadius, BoxDecoration, BoxFit, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, Flexible, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, Navigator, NeverScrollableScrollPhysics, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, SingleChildScrollView, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart' show FlutterPhoneDirectCaller;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart' show RatingBarIndicator;
 import 'package:marquee_widget/marquee_widget.dart' show Marquee;
+import 'package:provider/provider.dart';
+import 'package:shosev/models/SS_User.dart';
 import 'package:shosev/ratings_and_reviews.dart';
 import 'package:shosev/services/data_repository.dart';
 import 'package:url_launcher/url_launcher.dart' show launch;
@@ -44,6 +48,9 @@ class ServiceProfilePage extends StatefulWidget {
 
 class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerProviderStateMixin {
   bool _shareValue = false;
+  bool _displayFavourite = false;
+  bool _favouriteIsSelected = false;
+  List _favouriteServices = [];
   final int pages = 3;
   late final TabController _controller;
   final _boldButtonStyle = TextButton.styleFrom(
@@ -107,7 +114,9 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
               child: const Text("Yes"),
               onPressed: () async {
                 DataRepository repository = DataRepository();
-                repository.ss_shops_collection.doc(widget.data['id']).update(widget.data['contacted'] + 1);
+                repository.ss_shops_collection.doc(widget.data.id).update({
+                  "contacted" : FieldValue.increment(1)
+                });
                 FlutterPhoneDirectCaller.callNumber(url);
               },
             ),
@@ -143,7 +152,27 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
 
   @override
   Widget build(BuildContext context) {
-    final double rating = widget.rating.reduce((a, b) => a+b)/5;
+    DataRepository repository = DataRepository();
+    final _myUser = Provider.of<SS_User?>(context);
+    final _userId = _myUser?.uid;
+    if(_userId != "") {
+      _displayFavourite = true;
+    }
+    if(_displayFavourite) {
+      repository.ss_users_collection.doc(_myUser?.uid).get().then((data) {
+        if(data.exists) {
+
+          _favouriteServices = data["favouriteServices"];
+        }
+      });
+      if(_favouriteServices.contains(widget.data.id.toString())) {
+        _favouriteIsSelected = true;
+      }
+    }
+    int ratingSum = widget.rating.reduce((a, b) => a+b);
+    if(ratingSum == 0) {
+      ratingSum = 1;
+    }
     // Shop Profile Page
     // |____Cover
     // |____Profile Picture
@@ -241,25 +270,12 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                                       Padding(
                                         padding: const EdgeInsets.only(bottom: 8.0, left: 0),
                                         child: Text(
-                                          "Ratings (" +((widget.rating[0] +
-                                                        widget.rating[1] +
-                                                        widget.rating[2] +
-                                                        widget.rating[3] +
-                                                        widget.rating[4] + 
-                                                        widget.rating[5]) /
-                                                    6).toString() +")",
+                                          "Ratings (" +(ratingSum/6).toStringAsFixed(1) +")",
                                           style: Theme.of(context).textTheme.headline5,
                                         ),
                                       ),
                                       RatingBarIndicator(
-                                        rating: ((widget.rating[0] +
-                                                  widget.rating[1] +
-                                                  widget.rating[2] +
-                                                  widget.rating[3] +
-                                                  widget.rating[4] + 
-                                                  widget.rating[5]) /
-                                              6),
-                                        // rating: widget.rating,
+                                        rating: (ratingSum/6),
                                         unratedColor: const Color(0xFFD1D1D1),
                                         itemBuilder: (context, index) => const Icon(
                                           Icons.star,
@@ -384,7 +400,7 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                                           borderRadius: const BorderRadius.all(
                                               Radius.circular(10.0)),
                                           child: Image.asset(
-                                            'lib/assets/img/service.jpg',
+                                            'lib/assets/img/img.png',
                                             width: 106,
                                             height: 124,
                                             fit: BoxFit.cover,
@@ -398,7 +414,7 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                                           borderRadius: const BorderRadius.all(
                                               Radius.circular(10.0)),
                                           child: Image.asset(
-                                            'lib/assets/img/service.jpg',
+                                            'lib/assets/img/img.png',
                                             width: 106,
                                             height: 124,
                                             fit: BoxFit.cover,
@@ -412,7 +428,7 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                                           borderRadius: const BorderRadius.all(
                                               Radius.circular(10.0)),
                                           child: Image.asset(
-                                            'lib/assets/img/service.jpg',
+                                            'lib/assets/img/img.png',
                                             width: 106,
                                             height: 124,
                                             fit: BoxFit.cover,
@@ -426,7 +442,7 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                                           borderRadius: const BorderRadius.all(
                                               Radius.circular(10.0)),
                                           child: Image.asset(
-                                            'lib/assets/img/service.jpg',
+                                            'lib/assets/img/img.png',
                                             width: 106,
                                             height: 124,
                                             fit: BoxFit.cover,
@@ -634,110 +650,110 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                                     children: [
                                       // Rating Progress Indicators
                                       Row(
-                                        children: const [
-                                          Text("5  "),
+                                        children: [
+                                          const Text("5  "),
                                           SizedBox(
                                               width: 115,
                                               height: 5,
                                               child: ClipRRect(
-                                                borderRadius: BorderRadius.all(
+                                                borderRadius: const BorderRadius.all(
                                                     Radius.circular(5)),
                                                 child: LinearProgressIndicator(
                                                   backgroundColor:
-                                                      Color(0xFFE5E5E5),
+                                                      const Color(0xFFE5E5E5),
                                                   valueColor:
-                                                      AlwaysStoppedAnimation<
+                                                      const AlwaysStoppedAnimation<
                                                               Color>(
                                                           Color(0xFFFFC804)),
-                                                  value: 0.5,
+                                                  value: widget.rating[5] / (ratingSum),
                                                 ),
                                               )),
                                         ],
                                       ),
                                       const Spacer(),
                                       Row(
-                                        children: const [
-                                          Text("4  "),
+                                        children: [
+                                          const Text("4  "),
                                           SizedBox(
                                               width: 115,
                                               height: 5,
                                               child: ClipRRect(
-                                                borderRadius: BorderRadius.all(
+                                                borderRadius: const BorderRadius.all(
                                                     Radius.circular(5)),
                                                 child: LinearProgressIndicator(
                                                   backgroundColor:
-                                                      Color(0xFFE5E5E5),
+                                                      const Color(0xFFE5E5E5),
                                                   valueColor:
-                                                      AlwaysStoppedAnimation<
+                                                      const AlwaysStoppedAnimation<
                                                               Color>(
                                                           Color(0xFFFFC804)),
-                                                  value: 0.5,
+                                                  value: widget.rating[4] / (ratingSum),
                                                 ),
                                               )),
                                         ],
                                       ),
                                       const Spacer(),
                                       Row(
-                                        children: const [
-                                          Text("3  "),
+                                        children: [
+                                          const Text("3  "),
                                           SizedBox(
                                               width: 115,
                                               height: 5,
                                               child: ClipRRect(
-                                                borderRadius: BorderRadius.all(
+                                                borderRadius: const BorderRadius.all(
                                                     Radius.circular(5)),
                                                 child: LinearProgressIndicator(
                                                   backgroundColor:
-                                                      Color(0xFFE5E5E5),
+                                                      const Color(0xFFE5E5E5),
                                                   valueColor:
-                                                      AlwaysStoppedAnimation<
+                                                      const AlwaysStoppedAnimation<
                                                               Color>(
                                                           Color(0xFFFFC804)),
-                                                  value: 0.5,
+                                                  value: widget.rating[3] / (ratingSum),
                                                 ),
                                               )),
                                         ],
                                       ),
                                       const Spacer(),
                                       Row(
-                                        children: const [
-                                          Text("2  "),
+                                        children: [
+                                          const Text("2  "),
                                           SizedBox(
                                               width: 115,
                                               height: 5,
                                               child: ClipRRect(
-                                                borderRadius: BorderRadius.all(
+                                                borderRadius: const BorderRadius.all(
                                                     Radius.circular(5)),
                                                 child: LinearProgressIndicator(
                                                   backgroundColor:
-                                                      Color(0xFFE5E5E5),
+                                                      const Color(0xFFE5E5E5),
                                                   valueColor:
-                                                      AlwaysStoppedAnimation<
+                                                      const AlwaysStoppedAnimation<
                                                               Color>(
                                                           Color(0xFFFFC804)),
-                                                  value: 0.5,
+                                                  value: widget.rating[2] / (ratingSum),
                                                 ),
                                               )),
                                         ],
                                       ),
                                       const Spacer(),
                                       Row(
-                                        children: const [
-                                          Text("1  "),
+                                        children: [
+                                          const Text("1  "),
                                           SizedBox(
                                               width: 115,
                                               height: 5,
                                               child: ClipRRect(
-                                                borderRadius: BorderRadius.all(
+                                                borderRadius: const BorderRadius.all(
                                                     Radius.circular(5)),
                                                 child: LinearProgressIndicator(
                                                   backgroundColor:
-                                                      Color(0xFFE5E5E5),
+                                                      const Color(0xFFE5E5E5),
                                                   valueColor:
-                                                      AlwaysStoppedAnimation<
+                                                      const AlwaysStoppedAnimation<
                                                               Color>(
                                                           Color(0xFFFFC804)),
-                                                  value: 0.5,
+                                                  value: widget.rating[1] / (ratingSum),
                                                 ),
                                               )),
                                         ],
@@ -773,13 +789,7 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                                         padding: const EdgeInsets.only(
                                             bottom: 8.0, left: 0),
                                         child: Text(
-                                          ((widget.rating[0] +
-                                              widget.rating[1] +
-                                              widget.rating[2] +
-                                              widget.rating[3] +
-                                              widget.rating[4] + 
-                                              widget.rating[5]) /
-                                          6).toString(),
+                                          (ratingSum/6).toStringAsFixed(1),
                                           style: const TextStyle(
                                               fontSize: 40.0,
                                               fontWeight: FontWeight.normal,
@@ -788,13 +798,7 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                                         ),
                                       ),
                                       RatingBarIndicator(
-                                      rating: ((widget.rating[0] +
-                                                widget.rating[1] +
-                                                widget.rating[2] +
-                                                widget.rating[3] +
-                                                widget.rating[4] + 
-                                                widget.rating[5]) /
-                                            6),
+                                      rating: (ratingSum/6),
 
                                         unratedColor: const Color(0xFFD1D1D1),
                                         itemBuilder: (context, index) =>
@@ -819,6 +823,7 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                               style: Theme.of(context).textTheme.headline4,
                             ),
                           ),
+                          (widget.reviews.isEmpty)?const Expanded(child: Center(child: Text("No Reviews"),)):
                           Expanded(
                                 child: ListView.builder(
                               itemCount: widget.reviews.length,
@@ -856,6 +861,7 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                                 );
                               },
                             )),
+                            if (_myUser != null)
                             Padding(
                               padding: const EdgeInsets.only(top: 5.0),
                               child: Center(
@@ -982,6 +988,48 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
                     ),
                   ))
             ],
+          ),
+          if (_myUser != null &&_displayFavourite)
+          Positioned(
+            top: 120,
+            right: 20,
+            child: ElevatedButton(
+                // padding: EdgeInsets.zero,
+                onPressed: () {
+                  repository.ss_users_collection.doc(_myUser?.uid).get().then((data) {
+                    if(data.exists) {
+                      _favouriteServices = data["favouriteServices"];
+                    }
+                    if(_favouriteServices.contains(widget.data.id.toString())) {
+                      _favouriteServices.remove(widget.data.id.toString());
+                      repository.ss_users_collection.doc(_myUser?.uid).update({
+                        "favouriteServices" : _favouriteServices
+                      });
+                      setState(() {
+                        _favouriteIsSelected = false;
+                      });
+                    } else {
+                      repository.ss_users_collection.doc(_myUser?.uid).update({
+                        "favouriteServices" : FieldValue.arrayUnion([widget.data.id.toString()])
+                      });
+                      setState(() {
+                        _favouriteIsSelected = true;
+                      });
+                    }
+                  });
+                },
+                child: Icon(
+                  Icons.favorite_sharp,
+                  color: (_favouriteIsSelected)?const Color(0xFFEE4949):const Color(0xFF333333),
+                  size: 27,
+                ),
+                style: TextButton.styleFrom(
+                  backgroundColor: const Color(0xFFFFC804),
+                  primary: const Color(0xFF333333),
+                  minimumSize: const Size(60, 60),
+                  shape: const CircleBorder(),
+                ),
+              ),
           ),
           // Profile Image
           Positioned(
