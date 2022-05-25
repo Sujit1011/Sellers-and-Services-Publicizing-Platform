@@ -6,14 +6,10 @@ import 'package:shosev/assets/design.dart' as design;
 class MyAboutUs extends StatefulWidget {
   final String title;
   final String aboutUs;
-  final Stream<QuerySnapshot> documentFieldStream;
-  final Stream<QuerySnapshot> documentFieldStream1;
 
   const MyAboutUs({Key? key, 
       required this.title, 
-      required this.aboutUs,
-      required this.documentFieldStream,
-      required this.documentFieldStream1,})
+      required this.aboutUs,})
       : super(key: key);
 
   @override
@@ -27,14 +23,14 @@ class _MyAboutUsState extends State<MyAboutUs>{
   final DataRepository repository = DataRepository();
   String shops = "";
 
-  fetchFileData() async{
-    // String responceText;
-    // responceText = await rootBundle.loadString('textFiles/about.txt');
-    // setState(() {
-    //   data = responceText;
-    // });
-    print(widget.documentFieldStream.length);
-  }
+  // fetchFileData() async{
+  //   // String responceText;
+  //   // responceText = await rootBundle.loadString('textFiles/about.txt');
+  //   // setState(() {
+  //   //   data = responceText;
+  //   // });
+  //   // print(widget.documentFieldStream.length);
+  // }
 
   @override
   void initState() {
