@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' show AlertDialog, AlwaysStoppedAnimation, Axis, BorderRadius, BoxDecoration, BoxFit, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, ElevatedButton, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, MaterialPageRoute, Navigator, NeverScrollableScrollPhysics, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, SingleChildScrollView, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
-import 'package:flutter/material.dart' show AlertDialog, AlwaysStoppedAnimation, Axis, BorderRadius, BoxDecoration, BoxFit, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, Flexible, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, Navigator, NeverScrollableScrollPhysics, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, SingleChildScrollView, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
+import 'package:flutter/material.dart' show AlertDialog, AlwaysStoppedAnimation, Axis, BorderRadius, BoxDecoration, BoxFit, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, ElevatedButton, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, MaterialPageRoute, Navigator, NeverScrollableScrollPhysics, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, ScaffoldMessenger, SingleTickerProviderStateMixin, Size, SizedBox, SnackBar, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
+import 'package:flutter/material.dart' show AlertDialog, AlwaysStoppedAnimation, Axis, BorderRadius, BoxDecoration, BoxFit, BuildContext, Center, ChoiceChip, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, Flexible, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, Navigator, NeverScrollableScrollPhysics, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart' show FlutterPhoneDirectCaller;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart' show RatingBarIndicator;
 import 'package:marquee_widget/marquee_widget.dart' show Marquee;
@@ -134,7 +134,7 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
   }
 
   void _writeReview() {
-    print(widget.data);
+    // print(widget.data);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -996,22 +996,25 @@ class _ServicelePageState extends State<ServiceProfilePage> with SingleTickerPro
             child: ElevatedButton(
                 // padding: EdgeInsets.zero,
                 onPressed: () {
-                  repository.ss_users_collection.doc(_myUser?.uid).get().then((data) {
+                  repository.ss_users_collection.doc(_myUser.uid).get().then((data) {
                     if(data.exists) {
                       _favouriteServices = data["favouriteServices"];
                     }
                     if(_favouriteServices.contains(widget.data.id.toString())) {
                       _favouriteServices.remove(widget.data.id.toString());
-                      repository.ss_users_collection.doc(_myUser?.uid).update({
+                      repository.ss_users_collection.doc(_myUser.uid).update({
                         "favouriteServices" : _favouriteServices
                       });
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Favourites Removed")));
                       setState(() {
                         _favouriteIsSelected = false;
                       });
                     } else {
-                      repository.ss_users_collection.doc(_myUser?.uid).update({
+                      repository.ss_users_collection.doc(_myUser.uid).update({
                         "favouriteServices" : FieldValue.arrayUnion([widget.data.id.toString()])
                       });
+                      
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Favourites Added")));
                       setState(() {
                         _favouriteIsSelected = true;
                       });

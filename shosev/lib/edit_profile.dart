@@ -408,12 +408,12 @@ class _EditProfileState extends State<EditProfile> {
                                                       repository.ss_shops_collection.where('businessId', isEqualTo: userId).get().then((snapshot) {
                                                         for (DocumentSnapshot ds in snapshot.docs){
                                                           ds.reference.delete();
-                                                        };
+                                                        }
                                                       });
                                                       repository.ss_services_collection.where('businessId', isEqualTo: userId).get().then((snapshot) {
                                                         for (DocumentSnapshot ds in snapshot.docs){
                                                           ds.reference.delete();
-                                                        };
+                                                        }
                                                       });
                                                       repository.ss_users_collection.doc(userId).delete().then((value){ 
                                                         

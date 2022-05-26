@@ -726,8 +726,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                           children: [
                             FittedBox(
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
                                     (data != null)?data['userName']:"",
@@ -1056,9 +1055,11 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                       builder: (context) =>
                                         FavouriteListPage(
                                           title: "My Favourites",
+                                          userId: userId,
                                           username: (data != null)?data['userName']:"",
                                           phoneNo: (data != null)?data['phoneNo']:"",
-                                          userId: userId,
+                                          favouriteServices: data["favouriteServices"] ?? [],
+                                          favouriteShops: data["favouriteShops"] ?? [],
                                         )
                                     ),
                                   );

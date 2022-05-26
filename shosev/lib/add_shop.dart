@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart' show QueryDocumentSnapshot, Timestamp;
+import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
 import 'package:flutter/foundation.dart' show Factory, Key;
 import 'package:flutter/gestures.dart' show PanGestureRecognizer;
 import 'package:flutter/material.dart' show AlertDialog, BorderRadius, BoxDecoration, BuildContext, Center, CircleAvatar, Color, Colors, Column, Container, CrossAxisAlignment, Divider, DropdownButtonFormField, DropdownMenuItem, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontWeight, Form, FormState, GlobalKey, Icon, Icons, InkWell, InputDecoration, Key, MainAxisAlignment, MediaQuery, Navigator, OutlineInputBorder, Padding, Positioned, Row, Scaffold, SingleChildScrollView, SizedBox, Spacer, Stack, State, StatefulWidget, Text, TextButton, TextEditingController, TextFormField, TextInputAction, TextInputType, TextStyle, Theme, TimeOfDay, Widget, WidgetsBinding, showDialog, showTimePicker;
@@ -1059,7 +1059,7 @@ class _AddShopState extends State<AddShop> {
                                     child: Center(
                                       child: Text(
                                         (widget.update)?"UPDATE":"ADD SHOP",
-                                        style: TextStyle(fontSize: 20, color: Color(0xFFFFFFFF), fontWeight: FontWeight.bold),
+                                        style: const TextStyle(fontSize: 20, color: Color(0xFFFFFFFF), fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                   ),
@@ -1067,7 +1067,7 @@ class _AddShopState extends State<AddShop> {
                                     // FirebaseService service = new FirebaseService();
                                     if (_formKey.currentState!.validate() && _category != "" && _myUser != null) {
                                         double screenWidth = MediaQuery.of(context).size.width * MediaQuery.of(context).devicePixelRatio;
-                                        double screenHeight = MediaQuery.of(context).size.height * MediaQuery.of(context).devicePixelRatio;
+                                        // double screenHeight = MediaQuery.of(context).size.height * MediaQuery.of(context).devicePixelRatio;
 
                                         double middleX = screenWidth / 2;
                                         double middleY = 150;
@@ -1093,7 +1093,7 @@ class _AddShopState extends State<AddShop> {
                                           searchKeywords.add(temp);
                                         }
                                         if(widget.update) {
-                                          print("SHOP ID" + widget.updateData.id);
+                                          // print("SHOP ID" + widget.updateData.id);
                                           repository.ss_shops_collection.doc(widget.updateData.id).update(
                                             {
                                               "name": _shop_name_t.text,

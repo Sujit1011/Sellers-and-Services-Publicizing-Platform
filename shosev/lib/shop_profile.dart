@@ -1,19 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
-import 'package:shosev/assets/design.dart' as design;
 import 'package:shosev/models/SS_User.dart';
 import "package:whatsapp_unilink/whatsapp_unilink.dart" show WhatsAppUnilink;
 import 'package:card_swiper/card_swiper.dart' show Swiper, SwiperLayout;
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:shosev/services/data_repository.dart' show DataRepository;
 import 'package:shosev/ratings_and_reviews.dart' show RatingandReview;
-import 'package:flutter/material.dart' show AlertDialog, Alignment, AlwaysStoppedAnimation, Axis, AxisDirection, Border, BorderRadius, BoxDecoration, BoxFit, BoxShadow, BuildContext, Center, ChoiceChip, CircleBorder, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, ElevatedButton, Expanded, FittedBox, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, IconButton, Icons, IgnorePointer, Image, Ink, Key, LinearProgressIndicator, ListView, MainAxisAlignment, MaterialPageRoute, Navigator, NeverScrollableScrollPhysics, Offset, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, ShapeDecoration, SingleTickerProviderStateMixin, Size, SizedBox, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
+import 'package:flutter/material.dart' show AlertDialog, Alignment, AlwaysStoppedAnimation, Axis, AxisDirection, Border, BorderRadius, BoxDecoration, BoxFit, BoxShadow, BuildContext, Center, ChoiceChip, CircleBorder, ClipOval, ClipRRect, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, ElevatedButton, Expanded, FittedBox, FloatingActionButton, FloatingActionButtonLocation, FontStyle, FontWeight, Icon, Icons, IgnorePointer, Image, Key, LinearProgressIndicator, ListView, MainAxisAlignment, MaterialPageRoute, Navigator, NeverScrollableScrollPhysics, Offset, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Scaffold, ScaffoldMessenger, SingleTickerProviderStateMixin, Size, SizedBox, SnackBar, Spacer, Stack, State, StatefulWidget, Tab, TabBar, TabBarView, TabController, Text, TextAlign, TextButton, TextStyle, Theme, VerticalDivider, Visibility, VisualDensity, Widget, showDialog;
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart' show FlutterPhoneDirectCaller;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart' show RatingBarIndicator;
 import 'package:marquee_widget/marquee_widget.dart' show Marquee;
 import 'package:url_launcher/url_launcher.dart' show launch;
 
-import 'package:shosev/services/data_repository.dart' show DataRepository;
 
 class ShopProfilePage extends StatefulWidget {
   final String username;
@@ -1064,22 +1062,24 @@ class _ShopProfilePageState extends State<ShopProfilePage>  with SingleTickerPro
             child: ElevatedButton(
                 // padding: EdgeInsets.zero,
                 onPressed: () {
-                  repository.ss_users_collection.doc(_myUser?.uid).get().then((data) {
+                  repository.ss_users_collection.doc(_myUser.uid).get().then((data) {
                     if(data.exists) {
                       _favouriteShops = data["favouriteShops"];
                     }
                     if(_favouriteShops.contains(widget.data.id.toString())) {
                       _favouriteShops.remove(widget.data.id.toString());
-                      repository.ss_users_collection.doc(_myUser?.uid).update({
+                      repository.ss_users_collection.doc(_myUser.uid).update({
                         "favouriteShops" : _favouriteShops
                       });
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Favourites Removed")));
                       setState(() {
                         _favouriteIsSelected = false;
                       });
                     } else {
-                      repository.ss_users_collection.doc(_myUser?.uid).update({
+                      repository.ss_users_collection.doc(_myUser.uid).update({
                         "favouriteShops" : FieldValue.arrayUnion([widget.data.id.toString()])
                       });
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Favourites Added")));
                       setState(() {
                         _favouriteIsSelected = true;
                       });

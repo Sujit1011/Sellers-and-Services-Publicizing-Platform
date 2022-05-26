@@ -1,9 +1,9 @@
 import 'dart:math' show Random;
 
-import 'package:cloud_firestore/cloud_firestore.dart' show DocumentSnapshot, FieldValue, QueryDocumentSnapshot, QuerySnapshot, dataSnapshot;
+import 'package:cloud_firestore/cloud_firestore.dart' show DocumentSnapshot, FieldValue, QuerySnapshot;
 import 'package:firebase_core/firebase_core.dart' show Firebase;
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' show Animation, Border, BorderRadius, BorderSide, BottomSheet, BoxConstraints, BoxDecoration, BoxShadow, BuildContext, CircularProgressIndicator, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FocusManager, FontStyle, FontWeight, GestureDetector, GlobalKey, Icon, IconButton, Icons, InkWell, InputBorder, InputDecoration, Key, ListView, MainAxisAlignment, MaterialApp, MaterialPageRoute, Offset, Padding, PopupRoute, Positioned, Radius, Row, Scaffold, ScaffoldState, SizedBox, Spacer, Stack, State, StatefulWidget, StatelessWidget, StreamBuilder, Text, TextBaseline, TextButton, TextEditingController, TextField, TextInputAction, TextInputType, TextStyle, VerticalDivider, Visibility, Widget, WidgetsFlutterBinding, runApp;
+import 'package:flutter/material.dart' show Border, BorderRadius, BorderSide, BoxConstraints, BoxDecoration, BoxShadow, BuildContext, CircularProgressIndicator, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FocusManager, FontWeight, GestureDetector, GlobalKey, Icon, IconButton, Icons, InputBorder, InputDecoration, Key, ListView, MainAxisAlignment, MaterialApp, MaterialPageRoute, Offset, Padding, Positioned, Radius, Row, Scaffold, ScaffoldState, SizedBox, Spacer, Stack, State, StatefulWidget, StatelessWidget, StreamBuilder, Text, TextBaseline, TextButton, TextEditingController, TextField, TextInputAction, TextInputType, TextStyle, VerticalDivider, Visibility, Widget, WidgetsFlutterBinding, runApp;
 import 'package:geocoding/geocoding.dart' show Placemark, placemarkFromCoordinates;
 import 'package:geolocator/geolocator.dart' show Geolocator, LocationPermission, Position;
 import 'package:google_maps_flutter/google_maps_flutter.dart' show CameraPosition, CameraUpdate, GoogleMap, GoogleMapController, LatLng, MapType, Marker;
@@ -21,7 +21,6 @@ import 'package:shosev/services/auth.dart' show AuthService;
 import 'package:shosev/services/data_repository.dart' show DataRepository;
 import 'package:shosev/shop_profile.dart';
 import 'package:shosev/splash.dart' as splash;
-import 'package:shosev/ratings_and_reviews.dart' as ratings_and_reviews; 
 
 Future<void> main() async {
   lic.lisences();
@@ -195,56 +194,14 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Widget _buildSearchResultItem(BuildContext context, DocumentSnapshot<Object?> data, String username, String phone) {
+  Widget _buildShopSearchResultItem(BuildContext context, DocumentSnapshot<Object?> data, String username, String phone) {
 
-    Widget clickWidget = (data.exists && widget.filterButtonIsSelected)?
-      ShopProfilePage(
-        username: username,
-        phoneno: phone,
-        shopName: data["name"], 
-        rating: data["rating"], 
-        joined: monthsToString[data["joined"].toDate().month]! + " " + data["joined"].toDate().year.toString().substring(2,4), 
-        reviewsCount: data["reviewsCount"], 
-        contacted: data["contacted"], 
-        aboutUs: data["description"],
-        products: data["products"],
-        reviews: data["reviews"],
-        data: data,
-      ):
-      ServiceProfilePage(
-        username: username,
-        phoneno: phone,
-        shopName: data["name"], 
-        rating: data["rating"], 
-        joined: monthsToString[data["joined"].toDate().month]! + " " + data["joined"].toDate().year.toString().substring(2,4), 
-        reviewsCount: data["reviewsCount"], 
-        contacted: data["contacted"], 
-        aboutUs: data["description"],
-        services: data["services"],
-        reviews: data["reviews"],
-        data: data,
-      );
     Image img = Image.asset(
-      'lib/assets/img/img.png',
+      'lib/assets/img/shop.png',
       width: 60,
       height: 60,
       fit: BoxFit.fitWidth,
     );
-    if(widget.filterButtonIsSelected) {
-      img = Image.asset(
-        'lib/assets/img/shop.png',
-        width: 60,
-        height: 60,
-        fit: BoxFit.fitWidth,
-      );
-    } else {
-      img = Image.asset(
-        'lib/assets/img/service.jpg',
-        width: 60,
-        height: 60,
-        fit: BoxFit.fitWidth,
-      );
-    }
     if (data.exists) {
       return design.CardDesign1(
         isHeading: true,
@@ -263,7 +220,19 @@ class _MyHomePageState extends State<MyHomePage> {
           if (data.exists) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => clickWidget
+              MaterialPageRoute(builder: (context) => ShopProfilePage(
+                username: username,
+                phoneno: phone,
+                shopName: data["name"], 
+                rating: data["rating"], 
+                joined: monthsToString[data["joined"].toDate().month]! + " " + data["joined"].toDate().year.toString().substring(2,4), 
+                reviewsCount: data["reviewsCount"], 
+                contacted: data["contacted"], 
+                aboutUs: data["description"],
+                products: data["products"] ?? [],
+                reviews: data["reviews"],
+                data: data,
+              )
               )
             )
           }
@@ -275,11 +244,67 @@ class _MyHomePageState extends State<MyHomePage> {
     
   }
 
+  Widget _buildServicesSearchResultItem(BuildContext context, DocumentSnapshot<Object?> data, String username, String phone) {
+
+    Image img = Image.asset(
+      'lib/assets/img/service.jpg',
+      width: 60,
+      height: 60,
+      fit: BoxFit.fitWidth,
+    );
+    if (data.exists) {
+      return design.CardDesign1(
+        isHeading: true,
+        isPhoto: true,
+        isText1: true,
+        isText2: true,
+        updateShow: false,
+        deleteShow: false,
+        img: img,
+        deleteOnClick: (){},
+        updateOnClick: (){},
+        heading: data["name"],
+        text1: data["phoneNo"],
+        text2: data["address"],
+        onClick: () => {
+          if (data.exists) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ServiceProfilePage(
+                username: username,
+                phoneno: phone,
+                shopName: data["name"], 
+                rating: data["rating"], 
+                joined: monthsToString[data["joined"].toDate().month]! + " " + data["joined"].toDate().year.toString().substring(2,4), 
+                reviewsCount: data["reviewsCount"], 
+                contacted: data["contacted"], 
+                aboutUs: data["description"],
+                services: data["services"],
+                reviews: data["reviews"],
+                data: data,
+              )
+              )
+            )
+          }
+        },
+      );
+    }
+    return const SizedBox();
+    
+  }
+
   Widget _buildSearchResultList(BuildContext context, List<DocumentSnapshot<Object?>> list, String username, String phone) {
+      if(!widget.filterButtonIsSelected) {
+      return ListView(
+        padding: const EdgeInsets.all(18),
+        children: list.map<Widget>((data) => _buildServicesSearchResultItem(context, data, username, phone)).toList(),
+      );
+    }
     return ListView(
       padding: const EdgeInsets.all(18),
-      children: list.map<Widget>((data) => _buildSearchResultItem(context, data, username, phone)).toList(),
+      children: list.map<Widget>((data) => _buildShopSearchResultItem(context, data, username, phone)).toList(),
     );
+    
   }
 
   @override
@@ -461,9 +486,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           ],
                         ),
                       ),
+                      if(widget.filterButtonIsSelected)
                       Flexible(
                         child: StreamBuilder<QuerySnapshot>(
-                          stream: (widget.filterButtonIsSelected)?repository.ss_shops_collection.where("searchKeywords", arrayContains: widget.result).snapshots():repository.ss_services_collection.where("searchKeywords", arrayContains: widget.result).snapshots(),
+                          stream: repository.ss_shops_collection.where("searchKeywords", arrayContains: widget.result).snapshots(),
                           builder: (context, snapshot) {
                             if (widget.result.length > 2) {
                               List<String> history = [];
@@ -473,11 +499,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                 history = list.cast<String>();
                               });
                               if(user != null && history.length < 10 && widget.result.length > 3) {
-                                repository.ss_users_collection.doc(user!.uid).update({
+                                repository.ss_users_collection.doc(user.uid).update({
                                 "searchHistory" : FieldValue.arrayUnion([widget.result.toLowerCase()])
                               });
                               } else if (user != null && widget.result.length > 3){
-                                repository.ss_users_collection.doc(user!.uid).update({
+                                repository.ss_users_collection.doc(user.uid).update({
                                 "searchHistory" : FieldValue.delete()
                               });
                               }
@@ -487,14 +513,52 @@ class _MyHomePageState extends State<MyHomePage> {
                             if (!snapshot.hasData) {
                               return const Center(child: CircularProgressIndicator());
                             }
-                            if (snapshot.data!.docs.isEmpty) {
-                              return Center(child: Text("No " + ((widget.filterButtonIsSelected)?"Shop":"Service") + " Results", textScaleFactor: 2));
+                            if (snapshot.data != null && snapshot.data!.docs.isEmpty) {
+                              return const Center(child: Text("No Shop Results", textScaleFactor: 2));
                             }
             
                             if(user == null) {
                               return _buildSearchResultList(context, snapshot.data?.docs ?? [],  "", "");
                             }
-                            return _buildSearchResultList(context, snapshot.data?.docs ?? [], user!.userName ?? "", user.phoneNo ?? "");
+                            return _buildSearchResultList(context, snapshot.data?.docs ?? [], user.userName, user.phoneNo);
+                          }
+                        ),
+                      ),
+                      if(!widget.filterButtonIsSelected)
+                      Flexible(
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: repository.ss_services_collection.where("searchKeywords", arrayContains: widget.result).snapshots(),
+                          builder: (context, snapshot) {
+                            if (widget.result.length > 2) {
+                              List<String> history = [];
+                              Stream historyStream = repository.ss_users_collection.doc(user?.uid).snapshots();
+                              historyStream.forEach((element) {
+                                List<dynamic> list = element["searchHistory"];
+                                history = list.cast<String>();
+                              });
+                              if(user != null && history.length < 10 && widget.result.length > 3) {
+                                repository.ss_users_collection.doc(user.uid).update({
+                                "searchHistory" : FieldValue.arrayUnion([widget.result.toLowerCase()])
+                              });
+                              } else if (user != null && widget.result.length > 3){
+                                repository.ss_users_collection.doc(user.uid).update({
+                                "searchHistory" : FieldValue.delete()
+                              });
+                              }
+                              
+                            }
+                            
+                            if (!snapshot.hasData) {
+                              return const Center(child: CircularProgressIndicator());
+                            }
+                            if (snapshot.data != null && snapshot.data!.docs.isEmpty) {
+                              return const Center(child: Text("No Service Results", textScaleFactor: 2));
+                            }
+            
+                            if(user == null) {
+                              return _buildSearchResultList(context, snapshot.data?.docs ?? [],  "", "");
+                            }
+                            return _buildSearchResultList(context, snapshot.data?.docs ?? [], user.userName, user.phoneNo);
                           }
                         ),
                       )
@@ -571,6 +635,10 @@ class MySearch extends StatefulWidget {
   Function showResultDropbox;
   Function hideResultDropbox;
 
+  
+  List<String> history = [];
+  List<String> historyLocation = [];
+
   final String userId;
 
   @override
@@ -578,8 +646,6 @@ class MySearch extends StatefulWidget {
 }
 
 class _MySearchState extends State<MySearch> {
-  List<String> history = [];
-  List<String> historyLocation = [];
   final historyWidgets = <Widget>[];
   final DataRepository repository = DataRepository();
   bool _short = true;
@@ -591,7 +657,7 @@ class _MySearchState extends State<MySearch> {
   }
 
   void _extend() {
-    if(history.length > 1) {
+    if(widget.history.length > 1) {
       setState(() {
         _short = false;
         widget.hideResultDropbox();
@@ -612,7 +678,7 @@ class _MySearchState extends State<MySearch> {
   void dispose() {
     // Clean up the controller when the widget is disposed.
     _controller.dispose();
-    history.clear();
+    widget.history.clear();
     super.dispose();
   }
 
@@ -623,20 +689,22 @@ class _MySearchState extends State<MySearch> {
       Stream historyStream = repository.ss_users_collection.doc(widget.userId).snapshots();
       historyStream.forEach((element) {
         List<dynamic> list = element["searchHistory"];
-        history = list.cast<String>().reversed.toList();
+        widget.history = list.cast<String>().reversed.toList();
       });
     }
+    print("HISTORY in func");
+    print(widget.history);
   }
 
   @override
   Widget build(BuildContext context) {
-    if(historyWidgets.length < history.length) {
-      for (int i = 0; i < history.length; i++) {
+    if(historyWidgets.length < widget.history.length) {
+      for (int i = 0; i < widget.history.length; i++) {
         historyWidgets.add(divider());
         historyWidgets.add(GestureDetector(
           onTap: () {
             setState(() {
-              _controller.text = history[i];
+              _controller.text = widget.history[i];
             });
           },
           child: Row(
@@ -644,7 +712,7 @@ class _MySearchState extends State<MySearch> {
             textBaseline: TextBaseline.alphabetic,
             children: [
               Text(
-                history[i],
+                widget.history[i],
                 style: const TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.normal,
@@ -667,6 +735,8 @@ class _MySearchState extends State<MySearch> {
         ));
       }
     }
+    print("HISTORY in main");
+    print(widget.history);
     
     
     return Container(

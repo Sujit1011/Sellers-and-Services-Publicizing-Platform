@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
 import 'package:flutter/foundation.dart' show Factory, Key;
 import 'package:flutter/gestures.dart' show PanGestureRecognizer;
-import 'package:flutter/material.dart' show AlertDialog, Align, Alignment, BlendMode, BorderRadius, BoxDecoration, BuildContext, Center, CircleAvatar, Color, ColorFilter, ColorFiltered, Colors, Column, Container, CrossAxisAlignment, Divider, DropdownButtonFormField, DropdownMenuItem, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontWeight, Form, FormState, GlobalKey, Icon, Icons, InkWell, InputDecoration, Key, MainAxisAlignment, MediaQuery, Navigator, OutlineInputBorder, Padding, Positioned, Row, Scaffold, SingleChildScrollView, SizedBox, Spacer, Stack, StackFit, State, StatefulWidget, Text, TextButton, TextEditingController, TextFormField, TextInputAction, TextInputType, TextStyle, Theme, TimeOfDay, Widget, WidgetsBinding, showDialog, showTimePicker;
+import 'package:flutter/material.dart' show AlertDialog, BorderRadius, BoxDecoration, BuildContext, Center, CircleAvatar, Color, Colors, Column, Container, CrossAxisAlignment, Divider, DropdownButtonFormField, DropdownMenuItem, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, FontWeight, Form, FormState, GlobalKey, Icon, Icons, InkWell, InputDecoration, Key, MainAxisAlignment, MediaQuery, Navigator, OutlineInputBorder, Padding, Positioned, Row, Scaffold, SingleChildScrollView, SizedBox, Spacer, Stack, State, StatefulWidget, Text, TextButton, TextEditingController, TextFormField, TextInputAction, TextInputType, TextStyle, Theme, TimeOfDay, Widget, WidgetsBinding, showDialog, showTimePicker;
 import 'package:google_maps_flutter/google_maps_flutter.dart' show CameraPosition, GoogleMap, GoogleMapController, LatLng, MapType, ScreenCoordinate;
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:provider/provider.dart' show Provider;
@@ -1055,7 +1055,6 @@ class _AddServiceState extends State<AddService> {
                                         // FirebaseService service = new FirebaseService();
                                         if (_formKey.currentState!.validate() && _category != "" && _myUser != null) {
                                           double screenWidth = MediaQuery.of(context).size.width * MediaQuery.of(context).devicePixelRatio;
-                                          double screenHeight = MediaQuery.of(context).size.height * MediaQuery.of(context).devicePixelRatio;
 
                                           double middleX = (screenWidth / 2);
                                           double middleY = 150;
