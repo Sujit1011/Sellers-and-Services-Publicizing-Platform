@@ -9,6 +9,30 @@ import 'package:provider/provider.dart' show Provider;
 import 'package:shosev/models/SS_User.dart' show SS_User;
 import 'package:shosev/services/data_repository.dart' show DataRepository;
 
+const List shopCategories = [
+  "Jewellery Shop",
+  "Flower Shop",
+  "Shopping Center",
+  "Barber Shop",
+  "DIY Store",
+  "Eyewear Shop",
+  "Stationary Shop",
+  "Pharmacy",
+  "Fish Market",
+  "Green Grocery",
+  "Bakery Shop",
+  "Toy Shop",
+  "Music Shop",
+  "Shoe Shop",
+  "Book Shop",
+  "Pet Shop",
+  "Tea Shop",
+  "Fuel Station",
+  "Grocery Shop",
+  "Cloth Shop",
+  "Hardware Shop"
+];
+
 class AddShop extends StatefulWidget {
 
   final String username;
@@ -278,29 +302,12 @@ class _AddShopState extends State<AddShop> {
                           Padding(
                             padding: const EdgeInsets.only(top:8.0, bottom: 16),
                             child: DropdownButtonFormField(
-                              items: const [
-                                DropdownMenuItem(child: Text("Jewellery Shop", ), value: "Jewellery Shop"),
-                                DropdownMenuItem(child: Text("Flower Shop"), value: "Flower Shop"),
-                                DropdownMenuItem(child: Text("Shopping Center"), value: "Shopping Center"),
-                                DropdownMenuItem(child: Text("Barber Shop"), value: "Barber Shop"),
-                                DropdownMenuItem(child: Text("DIY Store"), value: "DIY Store"),
-                                DropdownMenuItem(child: Text("Eyewear Shop"), value: "Eyewear Shop"),
-                                DropdownMenuItem(child: Text("Stationary Shop"), value: "Stationary Shop"),
-                                DropdownMenuItem(child: Text("Pharmacy"), value: "Pharmacy"),
-                                DropdownMenuItem(child: Text("Fish Market"), value: "Fish Market"),
-                                DropdownMenuItem(child: Text("Green Grocery"), value: "Green Grocery"),
-                                DropdownMenuItem(child: Text("Bakery Shop"), value: "Bakery Shop"),
-                                DropdownMenuItem(child: Text("Toy Shop"), value: "Toy Shop"),
-                                DropdownMenuItem(child: Text("Music Shop"), value: "Music Shop"),
-                                DropdownMenuItem(child: Text("Shoe Shop"), value: "Shoe Shop"),
-                                DropdownMenuItem(child: Text("Cloth Shop"), value: "Cloth Shop"),
-                                DropdownMenuItem(child: Text("Hardware Shop"), value: "Hardware Shop"),
-                                DropdownMenuItem(child: Text("Book Shop"), value: "Book Shop"),
-                                DropdownMenuItem(child: Text("Pet Shop"), value: "Pet Shop"),
-                                DropdownMenuItem(child: Text("Tea Shop"), value: "Tea Shop"),
-                                DropdownMenuItem(child: Text("Fuel Station"), value: "Fuel Station"),
-                                DropdownMenuItem(child: Text("Grocery Shop"), value: "Grocery Shop"),
-                              ],
+                              items: shopCategories.map((str) {
+                                return DropdownMenuItem(
+                                  child: Text(str),
+                                  value: str
+                                );
+                              }).toList(),
                     
                               style: const TextStyle(
                                 fontSize: 20.0,
@@ -1070,7 +1077,7 @@ class _AddShopState extends State<AddShop> {
                                         LatLng middlePoint = await googleMapController.getLatLng(screenCoordinate);
                                         String userId = _myUser.uid;
                                         DataRepository repository = DataRepository();
-                                        List rating = [0,0,0,0,0];
+                                        List rating = [0,0,0,0,0,0];
                                         productsList = [];
                                         for (int i = 0; i < productNameList.length; i++) {
                                           productsList.add({
@@ -1086,7 +1093,8 @@ class _AddShopState extends State<AddShop> {
                                           searchKeywords.add(temp);
                                         }
                                         if(widget.update) {
-                                          repository.ss_services_collection.doc(widget.updateData.id).update(
+                                          print("SHOP ID" + widget.updateData.id);
+                                          repository.ss_shops_collection.doc(widget.updateData.id).update(
                                             {
                                               "name": _shop_name_t.text,
                                               "address": _address_t.text,
@@ -1113,7 +1121,28 @@ class _AddShopState extends State<AddShop> {
                                               "products" : productsList,
                                               "searchKeywords" : searchKeywords,
                                             }
-                                          );
+                                          ).then((value){ 
+                                            // print(value);
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext builderContext) {
+                                                return AlertDialog(
+                                                  title: const Text("Sucessfully updated your Shop"),
+                                                  content: Text(widget.updateData.id),
+                                                  actions: [
+                                                    TextButton(
+                                                      child: const Text("Ok"),
+                                                      onPressed: () async {
+                                                        Navigator.of(builderContext).pop();
+                                                      },
+                                                    )
+                                                  ],
+                                                );
+                                              }).then((val) {
+                                              Navigator.of(context).pop();
+                                            });
+                                            
+                                          });
                                         } else {
                                           repository.ss_shops_collection.add(
                                           {
@@ -1139,7 +1168,7 @@ class _AddShopState extends State<AddShop> {
                                             "phoneNo": _phoneNo_t.text,
                                             "email": _email_t.text,
                                             "latitute": middlePoint.latitude,
-                                            "longtitide": middlePoint.longitude,
+                                            "longitude": middlePoint.longitude,
                                             "rating": rating,
                                             "contacted": 0,
                                             "joined": Timestamp.now(),

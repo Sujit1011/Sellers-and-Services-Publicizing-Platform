@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' show Alignment, Axis, BorderRadius, BoxDecoration, BoxShadow, BuildContext, ButtonStyle, ChoiceChip, Color, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, FontWeight, GlobalKey, Icon, IconButton, Icons, Key, MainAxisAlignment, MaterialPageRoute, MaterialStateProperty, Navigator, Offset, OutlinedButton, Padding, RoundedRectangleBorder, Row, ScaffoldState, SingleChildScrollView, State, StatefulWidget, StatelessWidget, Text, TextBaseline, TextStyle, Theme, VisualDensity, Widget, Wrap, WrapCrossAlignment;
+import 'package:flutter/material.dart' show Alignment, Axis, BorderRadius, BorderSide, BoxDecoration, BoxShadow, BuildContext, ButtonStyle, ChoiceChip, Color, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, FontWeight, GlobalKey, Icon, IconButton, Icons, Key, MainAxisAlignment, MaterialPageRoute, MaterialStateProperty, Navigator, Offset, OutlinedButton, Padding, RoundedRectangleBorder, Row, ScaffoldState, SingleChildScrollView, State, StatefulWidget, StatelessWidget, Text, TextBaseline, TextStyle, Theme, VisualDensity, Widget, Wrap, WrapCrossAlignment;
 import 'package:marquee_widget/marquee_widget.dart' show Marquee;
 import 'package:shosev/view_categories.dart' show Categories;
 
@@ -104,6 +104,7 @@ class _MyThreeOptionsState extends State<MyThreeOptions> {
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:BorderRadius.circular(18.0),
+                  side: BorderSide.none
                 ),
               ),
             ),
@@ -122,15 +123,20 @@ class _MyThreeOptionsState extends State<MyThreeOptions> {
             },
             child: const Text(
               "SUGGESTIONS",
-              style: TextStyle(color: Color(0xFF333333)),
+              style: TextStyle(
+                color: Color(0xFF333333),
+                fontSize: 12,
+              ),
             ),
           ),
           OutlinedButton(
             style: ButtonStyle(
               backgroundColor:MaterialStateProperty.all<Color>(const Color(0xFFFCE48F)),
+              visualDensity: VisualDensity.compact,
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:BorderRadius.circular(18.0),
+                  side: BorderSide.none
                 ),
               ),
             ),
@@ -149,7 +155,10 @@ class _MyThreeOptionsState extends State<MyThreeOptions> {
             },
             child: const Text(
               "FAVOURITES",
-              style: TextStyle(color: Color(0xFF333333)),
+              style: TextStyle(
+                color: Color(0xFF333333),
+                fontSize: 12,
+              ),
             ),
           ),
           OutlinedButton(
@@ -158,6 +167,7 @@ class _MyThreeOptionsState extends State<MyThreeOptions> {
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:BorderRadius.circular(18.0),
+                  side: BorderSide.none
                 ),
               ),
             ),
@@ -182,7 +192,10 @@ class _MyThreeOptionsState extends State<MyThreeOptions> {
             },
             child: const Text(
               "CATEGORIES",
-              style: TextStyle(color: Color(0xFF333333)),
+              style: TextStyle(
+                color: Color(0xFF333333),
+                fontSize: 12,
+              ),
             ),
           )
         ],

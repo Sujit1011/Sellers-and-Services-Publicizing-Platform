@@ -12,9 +12,11 @@ import 'package:shosev/add_service.dart' show AddService;
 import 'package:shosev/add_shop.dart' show AddShop;
 import 'package:shosev/assets/design.dart' as design;
 import 'package:shosev/edit_profile.dart' show EditProfile;
+import 'package:shosev/favourite_list_page.dart';
 import 'package:shosev/history_list_page.dart';
 import 'package:shosev/list_page.dart' show ListPage, listPageType;
 import 'package:shosev/models/SS_User.dart' show SS_User;
+import 'package:shosev/review_list_page.dart';
 import 'package:shosev/services/auth.dart' show AuthService;
 import 'package:shosev/services/data_repository.dart' show DataRepository;
 
@@ -437,16 +439,16 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
         "phoneNo": _phoneNoController.text,
         "userName": _usernameController.text,
         "email" : "",
-        "searchHistory" : [""],
-        "favouriteShops" : [""],
-        "favouriteServices" : [""],
-        "shopReviews" : [""],
-        "serviceReviews" : [""],
+        "searchHistory" : [],
+        "favouriteShops" : [],
+        "favouriteServices" : [],
+        "shopReviews" : [],
+        "serviceReviews" : [],
         "businessUser" : false,
         "businessName" : "",
-        "licensesAndCertificates" : [""],
-        "myShops" : [""],
-        "myServices" : [""],
+        "licensesAndCertificates" : [],
+        "myShops" : [],
+        "myServices" : [],
 
       });
       setState(() {
@@ -495,16 +497,16 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
       "phoneNo": _phoneNoController.text,
       "userName": _usernameController.text,
       "email" : "",
-      "searchHistory" : [""],
-      "favouriteShops" : [""],
-      "favouriteServices" : [""],
-      "shopReviews" : [""],
-      "serviceReviews" : [""],
+      "searchHistory" : [],
+      "favouriteShops" : [],
+      "favouriteServices" : [],
+      "shopReviews" : [],
+      "serviceReviews" : [],
       "businessUser" : true,
       "businessName" : "",
-      "licensesAndCertificates" : [""],
-      "myShops" : [""],
-      "myServices" : [""],
+      "licensesAndCertificates" : [],
+      "myShops" : [],
+      "myServices" : [],
     });
     
   }
@@ -798,7 +800,6 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           heroLeft: "shop_left",
                                           heroRight: "shop_right",
                                           documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: userId).snapshots(),
-                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: userId).snapshots(),
                                           onClickWidget: true,
                                           type: listPageType.shop,
                                           deleteItemFn: (id) {
@@ -810,7 +811,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) => AddShop(
-                                                  username: (data != null)?data['username']:"", 
+                                                  username: (data != null)?data['userName']:"", 
                                                   phoneNo: (data != null)?data['phoneNo']:"", 
                                                   title: "Update Shop", 
                                                   isLeftFloattingButton: true, 
@@ -897,8 +898,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                           heroLeft: "service_left",
                                           heroRight: "service_right",
                                           documentFieldStream: repository.ss_services_collection.where("businessId", isEqualTo: userId).snapshots(),
-                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: userId).snapshots(),
-
+                                          
                                           onClickWidget: true,
                                           type: listPageType.service,
                                           deleteItemFn: (id) {
@@ -910,7 +910,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) => AddService(
-                                                  username: (data != null)?data['username']:"", 
+                                                  username: (data != null)?data['userName']:"", 
                                                   phoneNo: (data != null)?data['phoneNo']:"", 
                                                   title: "Update Service", 
                                                   isLeftFloattingButton: true, 
@@ -1054,27 +1054,11 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                        ListPage(
+                                        FavouriteListPage(
                                           title: "My Favourites",
                                           username: (data != null)?data['userName']:"",
                                           phoneNo: (data != null)?data['phoneNo']:"",
-                                          isLeftFloattingButton: true,
-                                          isEditFloattingButton: false,
-                                          isRightFloattingButton: false,
-                                          leftClick: () => {
-                                            Navigator.pop(context)
-                                          },
-                                          rightClick: () => {},
-                                          leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
-                                          rightIcon: const Icon(Icons.chevron_right_rounded),
-                                          heroLeft: "favourites_left",
-                                          heroRight: "favourites_right",
-                                          documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: userId).snapshots(),
-                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: userId).snapshots(),
-                                          onClickWidget: false,
-                                          type: listPageType.favourites,
-                                          deleteItemFn: (id){},
-                                          updateItemFn: (id, document){},
+                                          userId: userId,
                                         )
                                     ),
                                   );
@@ -1126,27 +1110,11 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                        ListPage(
+                                        ReviewListPage(
                                           title: "My Reviews",
                                           username: (data != null)?data['userName']:"",
                                           phoneNo: (data != null)?data['phoneNo']:"",
-                                          isLeftFloattingButton: true,
-                                          isEditFloattingButton: false,
-                                          isRightFloattingButton: false,
-                                          leftClick: () => {
-                                            Navigator.pop(context)
-                                          },
-                                          rightClick: () => {},
-                                          leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
-                                          rightIcon: const Icon(Icons.chevron_right_rounded),
-                                          heroLeft: "reviews_left",
-                                          heroRight: "reviews_right",
-                                          documentFieldStream: repository.ss_shops_collection.snapshots(),
-                                          documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: userId).snapshots(),
-                                          onClickWidget: false,
-                                          type: listPageType.reviews,
-                                          deleteItemFn: (id){},
-                                          updateItemFn: (id, document){},
+                                          userId: userId,
                                         )
                                     ),
                                   );
@@ -1436,7 +1404,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
 //                                       builder: (context) =>
 //                                         ListPage(
 //                                           title: "My Chats",
-//                                           username: (data != null)?data['username']:"",
+//                                           username: (data != null)?data['userName']:"",
 //                                           phoneNo: (data != null)?data['phoneNo']:"",
 //                                           isLeftFloattingButton: true,
 //                                           isRightFloattingButton: false,
@@ -1481,7 +1449,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
 //                                       builder: (context) =>
 //                                         ListPage(
 //                                           title: "My Chats",
-//                                           username: (data != null)?data['username']:"",
+//                                           username: (data != null)?data['userName']:"",
 //                                           phoneNo: (data != null)?data['phoneNo']:"",
 //                                           isLeftFloattingButton: true,
 //                                           isRightFloattingButton: false,
@@ -1534,7 +1502,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
 //                                     builder: (context) =>
 //                                       ListPage(
 //                                         title: "My Chats",
-//                                         username: (data != null)?data['username']:"",
+//                                         username: (data != null)?data['userName']:"",
 //                                         phoneNo: (data != null)?data['phoneNo']:"",
 //                                         isLeftFloattingButton: true,
 //                                         isRightFloattingButton: false,
@@ -1586,7 +1554,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
 //                                     builder: (context) =>
 //                                       ListPage(
 //                                         title: "My Chats",
-//                                         username: (data != null)?data['username']:"",
+//                                         username: (data != null)?data['userName']:"",
 //                                         phoneNo: (data != null)?data['phoneNo']:"",
 //                                         isLeftFloattingButton: true,
 //                                         isRightFloattingButton: false,
@@ -1638,7 +1606,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
 //                                     builder: (context) =>
 //                                       ListPage(
 //                                         title: "My Chats",
-//                                         username: (data != null)?data['username']:"",
+//                                         username: (data != null)?data['userName']:"",
 //                                         phoneNo: (data != null)?data['phoneNo']:"",
 //                                         isLeftFloattingButton: true,
 //                                         isRightFloattingButton: false,
@@ -1683,7 +1651,7 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
 //                                     builder: (context) =>
 //                                       ListPage(
 //                                         title: "My Chats",
-//                                         username: (data != null)?data['username']:"",
+//                                         username: (data != null)?data['userName']:"",
 //                                         phoneNo: (data != null)?data['phoneNo']:"",
 //                                         isLeftFloattingButton: true,
 //                                         isRightFloattingButton: false,
