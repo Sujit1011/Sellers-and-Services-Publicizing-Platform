@@ -20,7 +20,6 @@ import 'package:shosev/service_profile.dart';
 import 'package:shosev/services/auth.dart' show AuthService;
 import 'package:shosev/services/data_repository.dart' show DataRepository;
 import 'package:shosev/shop_profile.dart';
-import 'package:shosev/splash.dart' as splash;
 
 Future<void> main() async {
   lic.lisences();
@@ -45,16 +44,8 @@ class MyApp extends StatelessWidget {
         title: 'ShoSev',
         theme: design.myThemeData,
         debugShowCheckedModeBanner: false,
-        home: const splash.Splash(),
-        // home: const ratings_and_reviews.RatingandReview(username: "username", phoneNo: "123456789"),
-        // debugShowCheckedModeBanner: false,
-        // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-        // home: shopProfile.ShopProfilePage(shopName: "My Shop Name", rating: 3.5, joined: "Feb 22", reviews: 350, contacted: 1000, aboutUs: generateRandomString(1000),),
-        // home: serviceProfile.ServiceProfilePage(shopName: "My Service Name", rating: 3.5, joined: "Feb 22", reviews: 350, contacted: 1000, aboutUs: generateRandomString(1000),),
-        // home: about.MyAboutUs(title: "About Us", aboutUs: generateRandomString(1000))
-        // home: listpage.listpage(title: "My Services", aboutUs: generateRandomString(5000)),
-        // home: const chat.Chat(name: "Shop Name", phoneNo: "+91 XXX XXX XXXX", address: "Address, XYZ Street",),
-      )
+        home: MyHomePage(title: 'Flutter Demo Home Page'),
+     )
     );
   }
 
@@ -78,7 +69,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool fab = true;
-  String address = 'Welcome to ShoSev';
+  String address = 'ShoSev';
   bool showResult = false;
   double latitude = 23.176890894138687;
   double longitude = 80.0233220952035;
@@ -156,6 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     // print(placemark);
     Placemark place = placemark[0];
+    
 
     address = '${place.locality}';
     setState(() {});
@@ -692,8 +684,8 @@ class _MySearchState extends State<MySearch> {
         widget.history = list.cast<String>().reversed.toList();
       });
     }
-    print("HISTORY in func");
-    print(widget.history);
+    // print("HISTORY in func");
+    // print(widget.history);
   }
 
   @override
@@ -735,8 +727,8 @@ class _MySearchState extends State<MySearch> {
         ));
       }
     }
-    print("HISTORY in main");
-    print(widget.history);
+    // print("HISTORY in main");
+    // print(widget.history);
     
     
     return Container(
