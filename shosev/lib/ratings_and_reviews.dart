@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart' show BorderRadius,BoxDecoration,BuildContext,Center,CircleAvatar,Color,Colors,Column,Container,CrossAxisAlignment,EdgeInsets,Expanded,FloatingActionButton,FloatingActionButtonLocation,FontWeight,Form,FormState,GlobalKey,Icon,Icons,InkWell,InputDecoration,Key,MainAxisAlignment,Navigator,OutlineInputBorder,Padding,Row,Scaffold,SingleChildScrollView,SizedBox,Spacer,Stack,State,StatefulWidget,Text,TextEditingController,TextFormField,TextInputAction,TextInputType,TextStyle,Theme,Widget;
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart' show Provider;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shosev/models/SS_User.dart' show SS_User;

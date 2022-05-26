@@ -1,13 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart' show DocumentSnapshot, QuerySnapshot;
+import 'package:cloud_firestore/cloud_firestore.dart' show DocumentSnapshot;
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' show AlertDialog, AsyncSnapshot, BuildContext, Center, CircleAvatar, CircularProgressIndicator, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, Icon, Icons, InkWell, Key, ListView, MainAxisAlignment, MaterialPageRoute, Navigator, Padding, Row, Scaffold, ScaffoldMessenger, SizedBox, SnackBar, Spacer, Stack, State, StatefulWidget, StreamBuilder, Text, TextButton, Theme, Widget, showDialog;
+import 'package:flutter/material.dart' show BuildContext, Center, CircleAvatar, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, Icon, Icons, InkWell, Key, ListView, MainAxisAlignment, Padding, Row, Scaffold, ScaffoldMessenger, SizedBox, SnackBar, Spacer, Stack, State, StatefulWidget, StreamBuilder, Text, Theme, Widget;
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import 'package:shosev/assets/design.dart' as design;
 import 'package:shosev/models/SS_User.dart';
-import 'package:shosev/service_profile.dart' show ServiceProfilePage;
-import 'package:shosev/shop_profile.dart' show ShopProfilePage;
 import 'package:shosev/services/data_repository.dart';
 
 

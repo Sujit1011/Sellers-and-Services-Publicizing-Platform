@@ -40,7 +40,7 @@ class _MyAboutUsState extends State<MyAboutUs>{
 
   getshopno() async{
     setState(() async{
-      shops = await repository.ss_shops_collection.snapshots().length.toString();
+      shops = repository.ss_shops_collection.snapshots().length.toString();
     });
   }
 

@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart' show AlertDialog, AsyncSnapshot, Axis, BorderRadius, BuildContext, Card, Center, CircleAvatar, CircularProgressIndicator, Color, Colors, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, FittedBox, FloatingActionButton, FloatingActionButtonLocation, FlutterLogo, GestureDetector, GridView, Icon, Icons, InkWell, Key, ListView, MainAxisAlignment, MainAxisSize, MaterialPageRoute, Navigator, Padding, RoundedRectangleBorder, Row, Scaffold, SizedBox, Spacer, Stack, State, StatefulWidget, StreamBuilder, Text, TextAlign, TextButton, Theme, Widget, Wrap, showDialog;
+import 'package:flutter/material.dart' show Axis, BorderRadius, BuildContext, Card, Center, CircleAvatar, Color, Colors, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, FittedBox, FloatingActionButton, FloatingActionButtonLocation, GestureDetector, GridView, Icon, Icons, Key, MainAxisAlignment, MaterialPageRoute, Navigator, Padding, RoundedRectangleBorder, Row, Scaffold, Spacer, Stack, State, StatefulWidget, Text, TextAlign, Theme, Widget;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart' show FaIcon, FontAwesomeIcons;
 import 'package:provider/provider.dart' show Provider;
 
-import 'package:shosev/add_service.dart' show serviceCategories;
-import 'package:shosev/add_shop.dart' show shopCategories;
 import 'package:shosev/list_page.dart' show ListPage, listPageType;
 import 'package:shosev/models/SS_User.dart' show SS_User;
 import 'package:shosev/services/data_repository.dart' show DataRepository;
@@ -141,11 +139,11 @@ class _CategoriesState extends State<Categories> {
   @override
   Widget build(BuildContext context) {
     final data = Provider.of<SS_User?>(context);
-    print(data?.userName);
-    String _myUser = data?.uid as String;
+    // print(data?.userName);
+    // String _myUser = data?.uid as String;
     // print(_myUser);
-    DataRepository repository = DataRepository();
-    print(repository.ss_services_collection.where("businessId", isEqualTo: "XHHcrmhIxpNX2jnjWlSZaWpX7DI3").snapshots());
+    // DataRepository repository = DataRepository();
+    // print(repository.ss_services_collection.where("businessId", isEqualTo: "XHHcrmhIxpNX2jnjWlSZaWpX7DI3").snapshots());
     return Scaffold(
       body: Stack(
         children: <Widget>[

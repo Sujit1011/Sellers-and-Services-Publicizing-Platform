@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' show Alignment, Axis, BorderRadius, BorderSide, BoxDecoration, BoxShadow, BuildContext, ButtonStyle, ChoiceChip, Color, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, FontWeight, GlobalKey, Icon, IconButton, Icons, Key, MainAxisAlignment, MaterialPageRoute, MaterialStateProperty, Navigator, Offset, OutlinedButton, Padding, RoundedRectangleBorder, Row, ScaffoldState, SingleChildScrollView, State, StatefulWidget, StatelessWidget, Text, TextBaseline, TextStyle, Theme, VisualDensity, Widget, Wrap, WrapCrossAlignment;
+import 'package:flutter/material.dart' show Alignment, Axis, BorderRadius, BorderSide, BoxDecoration, BoxShadow, BuildContext, ButtonStyle, Color, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, GlobalKey, Icon, IconButton, Icons, Key, MainAxisAlignment, MaterialPageRoute, MaterialStateProperty, Navigator, Offset, OutlinedButton, Padding, RoundedRectangleBorder, Row, ScaffoldState, SingleChildScrollView, State, StatefulWidget, StatelessWidget, Text, TextBaseline, TextStyle, Theme, VisualDensity, Widget, Wrap, WrapCrossAlignment;
 import 'package:marquee_widget/marquee_widget.dart' show Marquee;
 import 'package:shosev/view_categories.dart' show Categories;
 
@@ -84,7 +84,7 @@ class MyThreeOptions extends StatefulWidget {
 }
 
 class _MyThreeOptionsState extends State<MyThreeOptions> {
-  int? _value = 0;
+  // int? _value = 0;
   // 0 = SEARCH
   // 1 = SUGGESTIONS
   // 2 = FAVOURITES

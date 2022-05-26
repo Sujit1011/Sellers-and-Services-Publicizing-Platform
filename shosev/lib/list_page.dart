@@ -1,6 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart' show QueryDocumentSnapshot, QuerySnapshot;
-import 'package:flutter/material.dart' show AlertDialog, AsyncSnapshot, BoxFit, BuildContext, Center, CircleAvatar, CircularProgressIndicator, Color, Colors, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, Icon, Icons, Image, Key, ListView, MainAxisAlignment, MaterialPageRoute, Navigator, Padding, Row, Scaffold, SingleChildScrollView, SizedBox, Spacer, Stack, State, StatefulWidget, StreamBuilder, Text, TextButton, Theme, Widget, showDialog;
-import 'package:shosev/add_shop.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' show QuerySnapshot;
+import 'package:flutter/material.dart' show AlertDialog, AsyncSnapshot, BoxFit, BuildContext, Center, CircleAvatar, CircularProgressIndicator, Color, Colors, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, Icon, Icons, Image, Key, ListView, MainAxisAlignment, MaterialPageRoute, Navigator, Padding, Row, Scaffold, SizedBox, Spacer, Stack, State, StatefulWidget, StreamBuilder, Text, TextButton, Theme, Widget, showDialog;
 
 import 'package:shosev/assets/design.dart' as design;
 import 'package:shosev/service_profile.dart' show ServiceProfilePage;
@@ -191,7 +190,7 @@ class _ListPageState extends State<ListPage> {
                                   'lib/assets/img/img.png',
                                   width: 60,
                                   height: 60,
-                                  fit: BoxFit.fitWidth,
+                                  fit: BoxFit.fitWidth, 
                                 );
 
                                 if (widget.onClickWidget) {
