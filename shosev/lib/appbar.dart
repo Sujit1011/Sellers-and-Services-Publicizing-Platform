@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart' show Alignment, Axis, BoxDecoration, BoxShadow, BuildContext, ChoiceChip, Color, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, FontWeight, GlobalKey, Icon, IconButton, Icons, Key, MainAxisAlignment, Offset, Padding, Row, ScaffoldState, SingleChildScrollView, State, StatefulWidget, StatelessWidget, Text, TextBaseline, TextStyle, Theme, VisualDensity, Widget, Wrap, WrapCrossAlignment;
+import 'package:flutter/material.dart' show Alignment, Axis, BorderRadius, BorderSide, BoxDecoration, BoxShadow, BuildContext, ButtonStyle, Color, Column, Container, CrossAxisAlignment, EdgeInsets, EdgeInsetsGeometry, Expanded, GlobalKey, Icon, IconButton, Icons, Key, MainAxisAlignment, MaterialPageRoute, MaterialStateProperty, Navigator, Offset, OutlinedButton, Padding, RoundedRectangleBorder, Row, ScaffoldState, SingleChildScrollView, State, StatefulWidget, StatelessWidget, Text, TextBaseline, TextButton, TextStyle, Theme, VisualDensity, Widget, Wrap, WrapCrossAlignment;
 import 'package:marquee_widget/marquee_widget.dart' show Marquee;
+import 'package:shosev/view_categories.dart' show Categories;
+
 
 // void fadeSystemUI() {
 //   SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
@@ -41,7 +43,7 @@ class AppBarContents extends StatelessWidget {
               children: [
                 Expanded(
                   child: Marquee(
-                    child: Text(title, style: Theme.of(context).textTheme.headline1),
+                    child: Text(title, style: Theme.of(context).textTheme.displayMedium, textScaleFactor: 1.0,),
                     animationDuration: const Duration(seconds: 2),
                     direction: Axis.horizontal,
                     backDuration: const Duration(milliseconds: 1000),
@@ -82,7 +84,7 @@ class MyThreeOptions extends StatefulWidget {
 }
 
 class _MyThreeOptionsState extends State<MyThreeOptions> {
-  int? _value = 0;
+  // int? _value = 0;
   // 0 = SEARCH
   // 1 = SUGGESTIONS
   // 2 = FAVOURITES
@@ -96,70 +98,112 @@ class _MyThreeOptionsState extends State<MyThreeOptions> {
         spacing: 7.0,
         crossAxisAlignment: WrapCrossAlignment.center,
         children: <Widget>[
-          ChoiceChip(
-            // shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
-            disabledColor: const Color(0xFFD1D1D1),
-            selectedColor: const Color(0xFF333333),
-            backgroundColor: const Color(0xFFFCE48F),
-            tooltip: "Get Suggestions",
-            label: const Text('SUGGESTIONS'),
-            labelStyle: TextStyle(
-              fontSize: 12.0, 
-              fontWeight: FontWeight.normal, 
-              color: _value == 1 ? const Color(0xFFFFFFFF) : const Color(0xFF333333), 
-              letterSpacing: -0.5
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor:MaterialStateProperty.all<Color>(const Color(0xFFFCE48F)),
+              visualDensity: VisualDensity.compact,
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.only(left: 15, right: 15)),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius:BorderRadius.circular(18.0),
+                ),
+              ),
             ),
-            visualDensity: VisualDensity.compact,
-            selected: _value == 1,
-            onSelected: (bool selected) {
-              setState(() {
-                // fadeSystemUI();
-                _value = selected ? 1 : 0;
-              });
+            onPressed: () {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => about.MyAboutUs(
+              //       title: "About Us",
+              //       aboutUs: widget.generateRandomString(2000),
+              //       documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: user_id).snapshots(),
+              //       documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
+              //     )
+              //   ),
+              // );
             },
+            child: const Text(
+              "SUGGESTIONS",
+              style: TextStyle(
+                color: Color(0xFF333333),
+                fontSize: 13,
+              ),
+              textScaleFactor: 1.0,
+            ),
           ),
-          ChoiceChip(
-            disabledColor: const Color(0xFFD1D1D1),
-            selectedColor: const Color(0xFF333333),
-            backgroundColor: const Color(0xFFFCE48F),
-            tooltip: "My Favourites",
-            label: const Text('FAVOURITES'),
-            labelStyle: TextStyle(
-              fontSize: 12.0, 
-              fontWeight: FontWeight.normal, 
-              color: _value == 2 ? const Color(0xFFFFFFFF) : const Color(0xFF333333), 
-              letterSpacing: -0.5
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor:MaterialStateProperty.all<Color>(const Color(0xFFFCE48F)),
+              visualDensity: VisualDensity.compact,
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.only(left: 15, right: 15)),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius:BorderRadius.circular(18.0),
+                  side: BorderSide.none
+                ),
+              ),
             ),
-            visualDensity: VisualDensity.compact,
-            selected: _value == 2,
-            onSelected: (bool selected) {
-              setState(() {
-                // fadeSystemUI();
-                _value = selected ? 2 : 0;
-              });
+            onPressed: () {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => about.MyAboutUs(
+              //       title: "About Us",
+              //       aboutUs: widget.generateRandomString(2000),
+              //       documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: user_id).snapshots(),
+              //       documentFieldStream1: repository.ss_services_collection.where("businessId", isEqualTo: user_id).snapshots(),
+              //     )
+              //   ),
+              // );
             },
-            
+            child: const Text(
+              "FAVOURITES",
+              style: TextStyle(
+                color: Color(0xFF333333),
+                fontSize: 13,
+              ),
+              textScaleFactor: 1.0,
+            ),
           ),
-          ChoiceChip(
-            disabledColor: const Color(0xFFD1D1D1),
-            selectedColor: const Color(0xFF333333),
-            backgroundColor: const Color(0xFFFCE48F),
-            tooltip: "Find Categories",
-            label: const Text('CATEGORIES'),
-            labelStyle: TextStyle(
-              fontSize: 12.0, 
-              fontWeight: FontWeight.normal, 
-              color: _value == 3 ? const Color(0xFFFFFFFF) : const Color(0xFF333333), 
-              letterSpacing: -0.5
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFFFCE48F)),
+              visualDensity: VisualDensity.compact,
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.only(left: 15, right: 15)),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius:BorderRadius.circular(18.0),
+                  side: BorderSide.none
+                ),
+              ),
             ),
-            visualDensity: VisualDensity.compact,
-            selected: _value == 3,
-            onSelected: (bool selected) {
-              setState(() {
-                // fadeSystemUI();
-                _value = selected ? 3 : 0;
-              });
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => 
+                  Categories(
+                    title:"Categories",
+                    isLeftFloattingButton: true,
+                    leftClick: () => {
+                      Navigator.pop(context)
+                    },
+                    leftIcon: const Icon(Icons.chevron_left_rounded),
+                    rightIcon: const Icon(Icons.chevron_right_rounded),
+                    heroLeft: "reviews_left",
+                    heroRight: "reviews_right",
+                  )
+                ),
+              );
             },
+            child: const Text(
+              "CATEGORIES",
+              style: TextStyle(
+                color: Color(0xFF333333),
+                fontSize: 13,
+              ),
+              textScaleFactor: 1.0,
+            ),
           )
         ],
       ),
