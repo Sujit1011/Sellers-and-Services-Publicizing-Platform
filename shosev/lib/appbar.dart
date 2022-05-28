@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' show Alignment, Axis, BorderRadius, BorderSide, BoxDecoration, BoxShadow, BuildContext, ButtonStyle, Color, Column, Container, CrossAxisAlignment, EdgeInsets, Expanded, GlobalKey, Icon, IconButton, Icons, Key, MainAxisAlignment, MaterialPageRoute, MaterialStateProperty, Navigator, Offset, OutlinedButton, Padding, RoundedRectangleBorder, Row, ScaffoldState, SingleChildScrollView, State, StatefulWidget, StatelessWidget, Text, TextBaseline, TextStyle, Theme, VisualDensity, Widget, Wrap, WrapCrossAlignment;
+import 'package:flutter/material.dart' show Alignment, Axis, BorderRadius, BorderSide, BoxDecoration, BoxShadow, BuildContext, ButtonStyle, Color, Column, Container, CrossAxisAlignment, EdgeInsets, EdgeInsetsGeometry, Expanded, GlobalKey, Icon, IconButton, Icons, Key, MainAxisAlignment, MaterialPageRoute, MaterialStateProperty, Navigator, Offset, OutlinedButton, Padding, RoundedRectangleBorder, Row, ScaffoldState, SingleChildScrollView, State, StatefulWidget, StatelessWidget, Text, TextBaseline, TextButton, TextStyle, Theme, VisualDensity, Widget, Wrap, WrapCrossAlignment;
 import 'package:marquee_widget/marquee_widget.dart' show Marquee;
 import 'package:shosev/view_categories.dart' show Categories;
 
@@ -43,7 +43,7 @@ class AppBarContents extends StatelessWidget {
               children: [
                 Expanded(
                   child: Marquee(
-                    child: Text(title, style: Theme.of(context).textTheme.headline1),
+                    child: Text(title, style: Theme.of(context).textTheme.displayMedium, textScaleFactor: 1.0,),
                     animationDuration: const Duration(seconds: 2),
                     direction: Axis.horizontal,
                     backDuration: const Duration(milliseconds: 1000),
@@ -98,13 +98,14 @@ class _MyThreeOptionsState extends State<MyThreeOptions> {
         spacing: 7.0,
         crossAxisAlignment: WrapCrossAlignment.center,
         children: <Widget>[
-          OutlinedButton(
+          TextButton(
             style: ButtonStyle(
               backgroundColor:MaterialStateProperty.all<Color>(const Color(0xFFFCE48F)),
+              visualDensity: VisualDensity.compact,
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.only(left: 15, right: 15)),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:BorderRadius.circular(18.0),
-                  side: BorderSide.none
                 ),
               ),
             ),
@@ -125,14 +126,16 @@ class _MyThreeOptionsState extends State<MyThreeOptions> {
               "SUGGESTIONS",
               style: TextStyle(
                 color: Color(0xFF333333),
-                fontSize: 12,
+                fontSize: 13,
               ),
+              textScaleFactor: 1.0,
             ),
           ),
-          OutlinedButton(
+          TextButton(
             style: ButtonStyle(
               backgroundColor:MaterialStateProperty.all<Color>(const Color(0xFFFCE48F)),
               visualDensity: VisualDensity.compact,
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.only(left: 15, right: 15)),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:BorderRadius.circular(18.0),
@@ -157,13 +160,16 @@ class _MyThreeOptionsState extends State<MyThreeOptions> {
               "FAVOURITES",
               style: TextStyle(
                 color: Color(0xFF333333),
-                fontSize: 12,
+                fontSize: 13,
               ),
+              textScaleFactor: 1.0,
             ),
           ),
-          OutlinedButton(
+          TextButton(
             style: ButtonStyle(
-              backgroundColor:MaterialStateProperty.all<Color>(const Color(0xFFFCE48F)),
+              backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFFFCE48F)),
+              visualDensity: VisualDensity.compact,
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.only(left: 15, right: 15)),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:BorderRadius.circular(18.0),
@@ -194,8 +200,9 @@ class _MyThreeOptionsState extends State<MyThreeOptions> {
               "CATEGORIES",
               style: TextStyle(
                 color: Color(0xFF333333),
-                fontSize: 12,
+                fontSize: 13,
               ),
+              textScaleFactor: 1.0,
             ),
           )
         ],

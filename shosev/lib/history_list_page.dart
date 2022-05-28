@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' show BuildContext, Center, CircleAvatar, Color, Colors, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, Expanded, FloatingActionButton, FloatingActionButtonLocation, Icon, Icons, InkWell, Key, ListView, MainAxisAlignment, Padding, Row, Scaffold, ScaffoldMessenger, SizedBox, SnackBar, Spacer, Stack, State, StatefulWidget, StreamBuilder, Text, Theme, Widget;
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:shosev/assets/design.dart';
 
 import 'package:shosev/models/SS_User.dart';
 import 'package:shosev/services/data_repository.dart';
@@ -90,111 +91,121 @@ class _ListPageState extends State<HistoryListPage> {
     // final _myUser = Provider.of<SS_User?>(context);
     // print(_myUser);
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Column(
-            children: [
-              //Cover
-              Container(
-                height: 146,
-                width: double.infinity,
-                color: const Color(0xFFD1D1D1),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 26, right: 26),
-                  child: Row(
-                    children: [
-                      const CircleAvatar(
-                        backgroundColor: Colors.black,
-                        minRadius: 44.5,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.username,
-                              style: Theme.of(context).textTheme.headline2
-                            ),
-                            Text(
-                              widget.phoneNo,
-                              style: Theme.of(context).textTheme.headline5
-                            )
-                          ],
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(
+          systemNavigationBarColor: textColor, // navigation bar color
+          statusBarColor: textColor, // status bar color
+          statusBarBrightness: Brightness.dark,
+          statusBarIconBrightness: Brightness.light // status bar color
+        ),
+        child: Stack(
+          children: <Widget>[
+            Column(
+              children: [
+                //Cover
+                Container(
+                  height: 146,
+                  width: double.infinity,
+                  color: const Color(0xFFD1D1D1),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 26, right: 26),
+                    child: Row(
+                      children: [
+                        const CircleAvatar(
+                          backgroundColor: textColor,
+                          minRadius: 44.5,
                         ),
-                      ),
-                      const Spacer()
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.username,
+                                style: Theme.of(context).textTheme.headlineMedium,
+                                textScaleFactor: 1.0,
+                              ),
+                              Text(
+                                widget.phoneNo,
+                                style: Theme.of(context).textTheme.titleMedium,
+                                textScaleFactor: 1.0,
+                              )
+                            ],
+                          ),
+                        ),
+                        const Spacer()
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Container(
-              padding: const EdgeInsets.fromLTRB(35, 120, 30, 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 12, top: 38),
-                    child: Center(
-                      child: Text(
-                        widget.title,
-                        style: Theme.of(context).textTheme.headline4,
+              ],
+            ),
+            Container(
+                padding: const EdgeInsets.fromLTRB(35, 120, 30, 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12, top: 38),
+                      child: Center(
+                        child: Text(
+                          widget.title,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: 
-                    StreamBuilder(
-                      stream: repository.ss_users_collection.doc(userId).snapshots(),
-                      builder: ((context, snapshot) {
-                        dynamic historys = [];
-                        if(snapshot.hasData) {
-                          var val = snapshot.data as DocumentSnapshot;
-                          historys = val['searchHistory'];
-                          return ListView.builder(
-                            itemCount: historys.length,
-                            itemBuilder: (context, index) => Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                InkWell(
-                                  child: SizedBox(
-                                    height: 25,
-                                    width: double.infinity,
-                                    child: Text(
-                                      historys[index], 
-                                      textScaleFactor: 1.2,
-                                      textAlign: TextAlign.center,
-                                    )
+                    Expanded(
+                      child: 
+                      StreamBuilder(
+                        stream: repository.ss_users_collection.doc(userId).snapshots(),
+                        builder: ((context, snapshot) {
+                          dynamic historys = [];
+                          if(snapshot.hasData) {
+                            var val = snapshot.data as DocumentSnapshot;
+                            historys = val['searchHistory'];
+                            return ListView.builder(
+                              itemCount: historys.length,
+                              itemBuilder: (context, index) => Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  InkWell(
+                                    child: SizedBox(
+                                      height: 25,
+                                      width: double.infinity,
+                                      child: Text(
+                                        historys[index], 
+                                        textScaleFactor: 1.2,
+                                        textAlign: TextAlign.center,
+                                      )
+                                    ),
+                                    onTap: () {
+                                      Clipboard.setData(ClipboardData(text: historys[index])).then((_){
+                                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Text has been copied to clipboard")));
+                                      });
+                                    },
                                   ),
-                                  onTap: () {
-                                    Clipboard.setData(ClipboardData(text: historys[index])).then((_){
-                                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Text has been copied to clipboard")));
-                                    });
-                                  },
-                                ),
-                                const Divider()
-                              ],
-                            )
-                          );
+                                  const Divider()
+                                ],
+                              )
+                            );
+                          }
+                          return const SizedBox();
+                          
                         }
-                        return const SizedBox();
-                        
-                      }
-                      )
+                        )
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 47,
-                  )
-                ],
-              ),
-            )
-        ],
+                    const SizedBox(
+                      height: 47,
+                    )
+                  ],
+                ),
+              )
+          ],
+        ),
       ),
       //Floating Buttons
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
