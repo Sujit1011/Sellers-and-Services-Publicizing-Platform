@@ -3,8 +3,8 @@ import 'dart:math' show Random;
 import 'package:cloud_firestore/cloud_firestore.dart' show DocumentSnapshot;
 import 'package:dotted_border/dotted_border.dart' show BorderType, DottedBorder;
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth, FirebaseAuthException, PhoneAuthCredential, PhoneAuthProvider, User, UserCredential;
-import 'package:flutter/material.dart' show AlertDialog, Alignment, Border, BorderRadius, BorderSide, BoxDecoration, BuildContext, ButtonStyle, Center, ChoiceChip, CircularProgressIndicator, Color, Colors, Column, Container, CrossAxisAlignment, Drawer, EdgeInsets, Expanded, FittedBox, FontWeight, Form, FormState, GlobalKey, Icon, Icons, InkWell, InputDecoration, Key, LinearProgressIndicator, MainAxisAlignment, MaterialPageRoute, MaterialStateProperty, Navigator, OutlineInputBorder, OutlinedButton, Padding, Positioned, Radius, RoundedRectangleBorder, Row, Size, SizedBox, Spacer, Stack, State, StatefulWidget, StrokeCap, Text, TextAlign, TextButton, TextEditingController, TextFormField, TextInputAction, TextInputType, TextStyle, Theme, VisualDensity, Widget, showDialog;
-import 'package:flutter/services.dart' show LengthLimitingTextInputFormatter, TextInputAction, TextInputType;
+import 'package:flutter/material.dart' show AlertDialog, Alignment, AnnotatedRegion, Border, BorderRadius, BorderSide, BoxDecoration, Brightness, BuildContext, ButtonStyle, Center, ChoiceChip, CircularProgressIndicator, Color, Colors, Column, Container, CrossAxisAlignment, Drawer, EdgeInsets, Expanded, FittedBox, Flexible, FontWeight, Form, FormState, GlobalKey, Icon, Icons, InkWell, InputDecoration, Key, LinearProgressIndicator, MainAxisAlignment, MainAxisSize, MaterialPageRoute, MaterialStateProperty, MediaQuery, Navigator, OutlineInputBorder, OutlinedButton, Padding, Positioned, Radius, RoundedRectangleBorder, Row, SafeArea, SingleChildScrollView, Size, SizedBox, Spacer, Stack, State, StatefulWidget, StrokeCap, Text, TextAlign, TextButton, TextEditingController, TextFormField, TextInputAction, TextInputType, TextStyle, Theme, VisualDensity, Widget, showDialog;
+import 'package:flutter/services.dart' show LengthLimitingTextInputFormatter, SystemUiOverlayStyle, TextInputAction, TextInputType;
 import 'package:provider/provider.dart' show Provider;
 
 import 'package:shosev/about.dart' as about;
@@ -57,348 +57,368 @@ class _SignInRegisteDrawerrState extends State<RegisterDrawer> {
     // if (user != null) {
     //   widget.state = AuthState.loggedIn;
     // }
-    return Padding(
-      padding: const EdgeInsets.only(top:15.0, bottom: 15, right: 11),
-      child: SizedBox(
-        width: 272,
-        child: Drawer(
-          backgroundColor: const Color(0xFFFFC804),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30)),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Spacer(flex: 8,),
-              const design.LogoOnColored(),
-              const Spacer(flex: 4,),
-              if (widget.state == AuthState.phoneNo)
-                Form(
-                  key: _formKey1,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(34, 0, 34, 11),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            color: Colors.white,
-                          ),
-                          child: TextFormField(
-                            controller: _phoneNoController,
-                            style: const TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF333333),
-                              letterSpacing: -0.5
-                            ),
-                            cursorColor: const Color(0xFF333333),
-                            keyboardType: TextInputType.phone,
-                            textInputAction: TextInputAction.next,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30.0)
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        systemNavigationBarColor: design.textColor, // navigation bar color
+        statusBarColor: design.primaryDarkColor, // status bar color
+        statusBarBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.light // status bar color
+      ),
+      child: SafeArea(
+        minimum: const EdgeInsets.only(top:30.0, bottom: 10, right: 11),
+        child: SizedBox(
+          width: 272,
+          child: Drawer(
+            backgroundColor: const Color(0xFFFFC804),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Spacer(flex: 8,),
+                const design.LogoOnColored(),
+                const Spacer(flex: 4,),
+                if (widget.state == AuthState.phoneNo)
+                  MediaQuery(
+                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                    child: Form(
+                      key: _formKey1,
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(34, 0, 34, 11),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                color: Colors.white,
                               ),
-                              contentPadding: const EdgeInsets.fromLTRB(20, 0, 5, 5),
-                              hintText: "Phone Number",
-                              hintStyle: const TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFFD1D1D1),
-                                letterSpacing: -0.5
-                              ),
-                            ),
-                            validator: (val){
-                              if (val!.isEmpty) {
-                                return "Enter Phone Number";
-                              }
-                              if (val.length > 15) {
-                                return "Enter less than 15 characters";
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(34, 0, 34, 11),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            color: Colors.white,
-                          ),
-                          child: TextFormField(
-                            controller: _usernameController,
-                            style: const TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF333333),
-                              letterSpacing: -0.5
-                            ),
-                            cursorColor: const Color(0xFF333333),
-                            keyboardType: TextInputType.name,
-                            textInputAction: TextInputAction.done,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30.0)
-                              ),
-                              contentPadding: const EdgeInsets.fromLTRB(20, 0, 5, 5),
-                              hintText: "User Name",
-                              hintStyle: const TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFFD1D1D1),
-                                letterSpacing: -0.5
-                              ),
-                            ),
-                            validator: (val){
-                              if (val!.isEmpty) {
-                                return "Enter User Name";
-                              }
-                              if (val.length > 20) {
-                                return "Enter less than 20 characters";
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(34, 0, 34, 11),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            !_isLoading?InkWell(
-                              child: Container(
-                                width: 195,
-                                height: 30.0,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  color: const Color(0xFF333333)
+                              child: TextFormField(
+                                controller: _phoneNoController,
+                                style: const TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF333333),
+                                  letterSpacing: -0.5
                                 ),
-                                child: const Center(
-                                  child: Text(
-                                    "SIGN-IN/UP",
-                                    style: TextStyle(color: Color(0xFFFFFFFF), fontWeight: FontWeight.bold),
+                                cursorColor: const Color(0xFF333333),
+                                keyboardType: TextInputType.phone,
+                                textInputAction: TextInputAction.next,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30.0)
+                                  ),
+                                  contentPadding: const EdgeInsets.fromLTRB(20, 0, 5, 5),
+                                  hintText: "Phone Number",
+                                  hintStyle: const TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFD1D1D1),
+                                    letterSpacing: -0.5
                                   ),
                                 ),
-                              ),
-                              onTap: () async {
-                                // FirebaseService service = new FirebaseService();
-                                if (_formKey1.currentState!.validate()) {
-                                  setState(() {
-                                    _gotOTP = false;
-                                    _isLoading = true;
-                                  });
-                                  await widget.authService.phoneSignIn(
-                                    phoneNumber: _phoneNoController.text,
-                                    onVerificationCompleted: _onVerificationCompleted,
-                                    onVerificationFailed: _onVerificationFailed,
-                                    onCodeSent: _onCodeSent,
-                                    onCodeTimeout: _onCodeTimeout
-                                  );
-                                }
-                              }
-                            ):const CircularProgressIndicator(
-                              color: Color(0xFF333333),
-                              strokeWidth: 3,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              if (widget.state == AuthState.otp)
-                Form(
-                  key: _formKey2,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(34, 0, 34, 11),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            color: Colors.white,
-                          ),
-                          child: TextFormField(
-                            controller: _otpController,
-                            obscureText: true,
-                            // maxLength: 6,
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(6),
-                            ],
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF333333),
-                              // letterSpacing: -0.5
-                              letterSpacing: 15.0,
-                            ),
-                            cursorColor: const Color(0xFF333333),
-                            keyboardType: TextInputType.number,
-                            textInputAction: TextInputAction.done,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(30.0)),
-                              contentPadding: const EdgeInsets.fromLTRB(20, 0, 5, 5),
-                              hintText: "6 Digit OTP",
-                              hintStyle: const TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFFD1D1D1),
-                                letterSpacing: -0.5
+                                validator: (val){
+                                  if (val!.isEmpty) {
+                                    return "Enter Phone Number";
+                                  }
+                                  if (val.length > 15) {
+                                    return "Enter less than 15 characters";
+                                  }
+                                  return null;
+                                },
                               ),
                             ),
-                            validator: (val) => val!.length < 6 ? 'Enter valid OTP > 5' : null,
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(34, 0, 34, 11),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              child: DottedBorder(
-                                borderType: BorderType.RRect,
-                                radius: const Radius.circular(30),
-                                dashPattern: const [8, 4],
-                                strokeWidth: 2,
-                                padding: EdgeInsets.zero,
-                                strokeCap: StrokeCap.round,
-                                child: Container(
-                                  width: 195,
-                                  height: 30.0,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(34, 0, 34, 11),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                color: Colors.white,
+                              ),
+                              child: TextFormField(
+                                controller: _usernameController,
+                                style: const TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF333333),
+                                  letterSpacing: -0.5
+                                ),
+                                cursorColor: const Color(0xFF333333),
+                                keyboardType: TextInputType.name,
+                                textInputAction: TextInputAction.done,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30.0)
                                   ),
-                                  child: const Center(
-                                    child: Text(
-                                      "BACK",
-                                      style: TextStyle(color: Color(0xFF333333), fontWeight: FontWeight.bold),
+                                  contentPadding: const EdgeInsets.fromLTRB(20, 0, 5, 5),
+                                  hintText: "User Name",
+                                  hintStyle: const TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFD1D1D1),
+                                    letterSpacing: -0.5
+                                  ),
+                                ),
+                                validator: (val){
+                                  if (val!.isEmpty) {
+                                    return "Enter User Name";
+                                  }
+                                  if (val.length > 20) {
+                                    return "Enter less than 20 characters";
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(34, 0, 34, 11),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                !_isLoading?InkWell(
+                                  child: Container(
+                                    width: 195,
+                                    height: 30.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      color: const Color(0xFF333333)
+                                    ),
+                                    child: const Center(
+                                      child: Text(
+                                        "SIGN-IN",
+                                        style: TextStyle(color: Color(0xFFFFFFFF), fontWeight: FontWeight.normal, fontSize: 15),
+                                      ),
                                     ),
                                   ),
+                                  onTap: () async {
+                                    // FirebaseService service = new FirebaseService();
+                                    if (_formKey1.currentState!.validate()) {
+                                      setState(() {
+                                        _gotOTP = false;
+                                        _isLoading = true;
+                                      });
+                                      await widget.authService.phoneSignIn(
+                                        phoneNumber: _phoneNoController.text,
+                                        onVerificationCompleted: _onVerificationCompleted,
+                                        onVerificationFailed: _onVerificationFailed,
+                                        onCodeSent: _onCodeSent,
+                                        onCodeTimeout: _onCodeTimeout
+                                      );
+                                    }
+                                  }
+                                ):const CircularProgressIndicator(
+                                  color: Color(0xFF333333),
+                                  strokeWidth: 3,
                                 ),
-                              ),
-                              onTap: () async {
-                                setState(() {
-                                  widget.state = AuthState.phoneNo;
-                                });
-                              }
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(34, 0, 34, 11),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            !_isLoading?InkWell(
-                              child: Container(
-                                width: 195,
-                                height: 30.0,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  color: const Color(0xFF333333)
+                    ),
+                  ),
+                if (widget.state == AuthState.otp)
+                  MediaQuery(
+                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                    child: Form(
+                      key: _formKey2,
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(34, 0, 34, 11),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                color: Colors.white,
+                              ),
+                              child: TextFormField(
+                                controller: _otpController,
+                                obscureText: true,
+                                // maxLength: 6,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(6),
+                                ],
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF333333),
+                                  // letterSpacing: -0.5
+                                  letterSpacing: 15.0,
                                 ),
-                                child: const Center(
-                                  child: Text(
-                                    "VALIDATE",
-                                    style: TextStyle(color: Color(0xFFFFFFFF), fontWeight: FontWeight.bold),
+                                cursorColor: const Color(0xFF333333),
+                                keyboardType: TextInputType.number,
+                                textInputAction: TextInputAction.done,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(30.0)),
+                                  contentPadding: const EdgeInsets.fromLTRB(20, 0, 5, 5),
+                                  hintText: "6 Digit OTP",
+                                  hintStyle: const TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFD1D1D1),
+                                    letterSpacing: -0.5
                                   ),
                                 ),
+                                validator: (val) => val!.length < 6 ? 'Enter valid OTP > 5' : null,
                               ),
-                              onTap: () {
-                                // FirebaseService service = new FirebaseService();
-                                if (_formKey2.currentState!.validate()) {
-                                  setState(() {
-                                    _isLoading = true;
-                                    _gotOTP = true;
-                                  });
-                                  }
-                                }
-                            ):const CircularProgressIndicator(
-                              color: Color(0xFF333333),
-                              strokeWidth: 3,
                             ),
-                          ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(34, 0, 34, 11),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                InkWell(
+                                  child: DottedBorder(
+                                    borderType: BorderType.RRect,
+                                    radius: const Radius.circular(30),
+                                    dashPattern: const [8, 4],
+                                    strokeWidth: 2,
+                                    padding: EdgeInsets.zero,
+                                    strokeCap: StrokeCap.round,
+                                    child: Container(
+                                      width: 195,
+                                      height: 30.0,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      child: const Center(
+                                        child: Text(
+                                          "BACK",
+                                          style: TextStyle(color: Color(0xFF333333), fontWeight: FontWeight.normal, fontSize: 15),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () async {
+                                    setState(() {
+                                      widget.state = AuthState.phoneNo;
+                                    });
+                                  }
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(34, 0, 34, 11),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                !_isLoading?InkWell(
+                                  child: Container(
+                                    width: 195,
+                                    height: 30.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      color: const Color(0xFF333333)
+                                    ),
+                                    child: const Center(
+                                      child: Text(
+                                        "VALIDATE",
+                                        style: TextStyle(color: Color(0xFFFFFFFF), fontWeight: FontWeight.normal, fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    // FirebaseService service = new FirebaseService();
+                                    if (_formKey2.currentState!.validate()) {
+                                      setState(() {
+                                        _isLoading = true;
+                                        _gotOTP = true;
+                                      });
+                                      }
+                                    }
+                                ):const CircularProgressIndicator(
+                                  color: Color(0xFF333333),
+                                  strokeWidth: 3,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                const Spacer(flex: 16,),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(34, 0, 34, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: ChoiceChip(
+                          padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+                          disabledColor: const Color(0xFFD1D1D1),
+                          selectedColor: const Color(0xFF333333),
+                          backgroundColor: const Color(0xFFFCE48F),
+                          tooltip: "",
+                          label: const SizedBox(
+                            width: 70,
+                            height: 23,
+                            child: Center(child: Text('ABOUT US'))
+                          ),
+                          labelStyle: TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.normal,
+                            color: _aboutUsSelected
+                                ? const Color(0xFFFFFFFF)
+                                : const Color(0xFF333333),
+                            letterSpacing: -0.5
+                          ),
+                          visualDensity: VisualDensity.compact,
+                          selected: _aboutUsSelected,
+                          onSelected: (val) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const about.MyAboutUs()
+                              ),
+                            );
+                          },
                         ),
                       ),
+                      Center(
+                        child: ChoiceChip(
+                          padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+                          disabledColor: const Color(0xFFD1D1D1),
+                          selectedColor: const Color(0xFF333333),
+                          backgroundColor: const Color(0xFFFCE48F),
+                          tooltip: "Help",
+                          label: const SizedBox(
+                            width: 70,
+                            height: 23,
+                            child: Center(child: Text('HELP'))
+                          ),
+                          labelStyle: TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.normal,
+                            color: _helpSelected
+                                ? const Color(0xFFFFFFFF)
+                                : const Color(0xFF333333),
+                            letterSpacing: -0.5
+                          ),
+                          visualDensity: VisualDensity.compact,
+                          selected: _helpSelected,
+                          onSelected: (val) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const about.MyAboutUs()
+                              ),
+                            );
+                          },
+                        ),
+                      )
                     ],
                   ),
                 ),
-              const Spacer(flex: 16,),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(34, 0, 34, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: ChoiceChip(
-                        padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-                        disabledColor: const Color(0xFFD1D1D1),
-                        selectedColor: const Color(0xFF333333),
-                        backgroundColor: const Color(0xFFFCE48F),
-                        tooltip: "",
-                        label: const SizedBox(
-                          width: 70,
-                          height: 23,
-                          child: Center(child: Text('ABOUT US'))
-                        ),
-                        labelStyle: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.normal,
-                          color: _aboutUsSelected
-                              ? const Color(0xFFFFFFFF)
-                              : const Color(0xFF333333),
-                          letterSpacing: -0.5
-                        ),
-                        visualDensity: VisualDensity.compact,
-                        selected: _aboutUsSelected,
-                        onSelected: (bool selected) {
-                          setState(() {
-                            // appbar.fadeSystemUI();
-                          });
-                        },
-                      ),
-                    ),
-                    Center(
-                      child: ChoiceChip(
-                        padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-                        disabledColor: const Color(0xFFD1D1D1),
-                        selectedColor: const Color(0xFF333333),
-                        backgroundColor: const Color(0xFFFCE48F),
-                        tooltip: "Help",
-                        label: const SizedBox(
-                          width: 70,
-                          height: 23,
-                          child: Center(child: Text('HELP'))
-                        ),
-                        labelStyle: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.normal,
-                          color: _helpSelected
-                              ? const Color(0xFFFFFFFF)
-                              : const Color(0xFF333333),
-                          letterSpacing: -0.5
-                        ),
-                        visualDensity: VisualDensity.compact,
-                        selected: _helpSelected,
-                        onSelected: (bool selected) {
-                          setState(() {
-                            // appbar.fadeSystemUI();
-                          });
-                        },
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -584,636 +604,544 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
     }
     
 
-    return Padding(
-      padding: const EdgeInsets.all(11.0),
-      child: Container(
-        width: 272,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(30)),
-          border: Border(
-            left: BorderSide(color: Color(0xFFFFC804), width: 2.0),
-            top: BorderSide(color: Color(0xFFFFC804), width: 2.0),
-            right: BorderSide(color: Color(0xFFFFC804), width: 2.0),
-            bottom: BorderSide(color: Color(0xFFFFC804), width: 2.0)
-          )
-        ),
-        child: Drawer(
-          shape: const RoundedRectangleBorder(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        systemNavigationBarColor: design.textColor, // navigation bar color
+        statusBarColor: design.primaryDarkColor, // status bar color
+        statusBarBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.light // status bar color
+      ),
+      child: SafeArea(
+        minimum: const EdgeInsets.only(top:30.0, bottom: 10, right: 11),
+        child: Container(
+          width: 272,
+          decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(30)),
+            border: Border(
+              left: BorderSide(color: Color(0xFFFFC804), width: 2.0),
+              top: BorderSide(color: Color(0xFFFFC804), width: 2.0),
+              right: BorderSide(color: Color(0xFFFFC804), width: 2.0),
+              bottom: BorderSide(color: Color(0xFFFFC804), width: 2.0)
+            )
           ),
-          child: Stack(
-            children: <Widget>[
-              Column(
-                children: [
-                  Container(
-                    height: 146,
-                    // width: double.infinity,
-                    // color: Color(0xFFFFC804),
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(28.0),
-                          topRight: Radius.circular(28.0)),
-                      color: Color(0xFFE5E5E5),
-                    )
-                  ),
-                  (data == null)?
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(35, 80, 30, 10),
-                      child: Column(
-                        children: [
-                          const LinearProgressIndicator(
-                            color: Color(0xFFFFC804),
-                            minHeight: 4,
-                          ),
-                          const Spacer(),
-                          // const Spacer(flex: 5),
-                          OutlinedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFFEE4949)),
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
-                              ),
-                            ),
-                            onPressed: () async {
-                              await widget.authService.auth.signOut();
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) =>
-                              //       const all_shops_services
-                              //           .All_Shops_Services(
-                              //         title: "My Reviews",
-                              //         aboutUs: "Sujit Soren",
-                              //       )
-                              //   ),
-                              // );
-                            },
-                            child: const Text(
-                              "Logout",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          // const Spacer(flex: 5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              OutlinedButton(
-                                style: ButtonStyle(
-                                  backgroundColor:MaterialStateProperty.all<Color>(const Color(0xFFFCE48F)),
-                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius:BorderRadius.circular(18.0),
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => about.MyAboutUs(
-                                        title: "About Us",
-                                        aboutUs: widget.generateRandomString(2000),
-                                      )
-                                    ),
-                                  );
-                                },
-                                child: const Text(
-                                  "About Us",
-                                  style: TextStyle(color: Color(0xFF333333)),
-                                ),
-                              ),
-                              OutlinedButton(
-                                style: ButtonStyle(
-                                  backgroundColor:MaterialStateProperty.all<Color>(const Color(0xFFFCE48F)),
-                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => about.MyAboutUs(
-                                        title: "About Us",
-                                        aboutUs: widget.generateRandomString(2000),
-                                      )
-                                    ),
-                                  );
-                                },
-                                child: const Text(
-                                  "Help",
-                                  style: TextStyle(color: Color(0xFF333333)),
-                                ),
-                              )
-                            ],
-                          ),
-                          
-                        ],
-                      ),
-                    ) 
-                  )
-                  :Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(35, 80, 30, 10),
-                      // child: SingleChildScrollView(
+          child: Drawer(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+            ),
+            child: Stack(
+              children: <Widget>[
+                Column(
+                  children: [
+                    Container(
+                      height: 146,
+                      // width: double.infinity,
+                      // color: Color(0xFFFFC804),
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(28.0),
+                            topRight: Radius.circular(28.0)),
+                        color: Color(0xFFE5E5E5),
+                      )
+                    ),
+                    (data == null)?
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(35, 80, 30, 10),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            FittedBox(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    (data != null)?data['userName']:"",
-                                    style: Theme.of(context).textTheme.headline2,
-                                    textAlign: TextAlign.center,
+                          children: const [
+                            LinearProgressIndicator(
+                              color: Color(0xFFFFC804),
+                              minHeight: 4,
+                            ),
+                            Spacer(),
+                          ],
+                        ),
+                      ) 
+                    )
+                    :Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(35, 80, 30, 10),
+                        child: SingleChildScrollView(
+                          child: MediaQuery(
+                            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              
+                              children: [
+                                FittedBox(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        (data != null)?data['userName']:"",
+                                        style: Theme.of(context).textTheme.headlineMedium,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Text((data != null)?data['phoneNo']:"",
+                                        style: Theme.of(context).textTheme.titleMedium,
+                                        textAlign: TextAlign.center,
+                                      )
+                                    ],
                                   ),
-                                  Text((data != null)?data['phoneNo']:"",
-                                    style: const TextStyle(
-                                      color: Color(0xFFAAAAAA),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold
+                                ),
+                                // const Spacer(flex: 2),
+                                const SizedBox(height: 30,),
+                                if (data != null && data['businessUser'] == true)
+                                  TextButton.icon(
+                                    style: TextButton.styleFrom(
+                                      alignment: Alignment.centerLeft,
+                                      backgroundColor: const Color(0xFFFFC804),
+                                      primary: const Color(0xFF333333),
+                                      minimumSize: const Size(210, 40),
+                                      maximumSize: const Size(210, 40),
+                                      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14),
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                      ),
                                     ),
-                                    textAlign: TextAlign.center,
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                            ListPage(
+                                              title: "My Shops",
+                                              username: (data != null)?data['userName']:"",
+                                              phoneNo: (data != null)?data['phoneNo']:"",
+                                              isLeftFloattingButton: true,
+                                              isEditFloattingButton: true,
+                                              isRightFloattingButton: true,
+                                              leftClick: () => {
+                                                Navigator.pop(context)
+                                              },
+                                              rightClick: () => {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => AddShop(
+                                                      username: (data != null)?data['userName']:"", 
+                                                      phoneNo: (data != null)?data['phoneNo']:"", 
+                                                      title: "Add Shop", 
+                                                      isLeftFloattingButton: true, 
+                                                      isRightFloattingButton: false, 
+                                                      leftClick: () => {
+                                                        Navigator.pop(context)
+                                                      },
+                                                      rightClick: () => {}, 
+                                                      leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
+                                                      rightIcon: const Icon(Icons.add_rounded, size: 30),
+                                                      update: false,
+                                                      updateData: null,
+                                                    )
+                                                  )
+                                                )
+                                              },
+                                              leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
+                                              rightIcon: const Icon(Icons.add_rounded, size: 30),
+                                              heroLeft: "shop_left",
+                                              heroRight: "shop_right",
+                                              documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: userId).snapshots(),
+                                              onClickWidget: true,
+                                              type: listPageType.shop,
+                                              deleteItemFn: (id) {
+                                                repository.ss_shops_collection.doc(id).delete();
+                                                // print(data["id"].toString() + "deleted");
+                                              },
+                                              updateItemFn: (id, document){
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => AddShop(
+                                                      username: (data != null)?data['userName']:"", 
+                                                      phoneNo: (data != null)?data['phoneNo']:"", 
+                                                      title: "Update Shop", 
+                                                      isLeftFloattingButton: true, 
+                                                      isRightFloattingButton: false, 
+                                                      leftClick: () => {
+                                                        Navigator.pop(context)
+                                                      },
+                                                      rightClick: () => {}, 
+                                                      leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
+                                                      rightIcon: const Icon(Icons.add_rounded, size: 30),
+                                                      update: true,
+                                                      updateData: document,
+                                                    )
+                                                  )
+                                                );
+                                              },
+                                            )
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.shopping_bag),
+                                    label: const Text(
+                                      "MY SHOPS",
+                                      style: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.normal,
+                                        color: Color(0xFF333333),
+                                        letterSpacing: -0.5
+                                      ),
+                                    ),
+                                  ),
+                                // const Spacer(flex: 1),
+                                const SizedBox(height: 7,),
+                                if (data != null && data['businessUser'] == true)
+                                  TextButton.icon(
+                                    style: TextButton.styleFrom(
+                                      alignment: Alignment.centerLeft,
+                                      backgroundColor: const Color(0xFFFFC804),
+                                      primary: const Color(0xFF333333),
+                                      minimumSize: const Size(210, 40),
+                                      maximumSize: const Size(210, 40),
+                                      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14),
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                            ListPage(
+                                              title: "My Services",
+                                              username: (data != null)?data['userName']:"",
+                                              phoneNo: (data != null)?data['phoneNo']:"",
+                                              isLeftFloattingButton: true,
+                                              isEditFloattingButton: true,
+                                              isRightFloattingButton: true,
+                                              leftClick: () => {
+                                                Navigator.pop(context)
+                                              },
+                                              rightClick: () => {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => AddService(
+                                                      username: (data != null)?data['userName']:"", 
+                                                      phoneNo: (data != null)?data['phoneNo']:"", 
+                                                      title: "Add Services", 
+                                                      isLeftFloattingButton: true, 
+                                                      isRightFloattingButton: false, 
+                                                      leftClick: () => {
+                                                        Navigator.pop(context)
+                                                      },
+                                                      rightClick: () => {}, 
+                                                      leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
+                                                      rightIcon: const Icon(Icons.add_rounded, size: 30),
+                                                      update: false,
+                                                      updateData: null
+                                                    )
+                                                  )
+                                                )
+                                              },
+                                              leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
+                                              rightIcon: const Icon(Icons.add_rounded, size: 30),
+                                              heroLeft: "service_left",
+                                              heroRight: "service_right",
+                                              documentFieldStream: repository.ss_services_collection.where("businessId", isEqualTo: userId).snapshots(),
+                                              
+                                              onClickWidget: true,
+                                              type: listPageType.service,
+                                              deleteItemFn: (id) {
+                                                repository.ss_services_collection.doc(id).delete();
+                                                // print(data["id"].toString() + "deleted");
+                                              },
+                                              updateItemFn: (id, document){
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => AddService(
+                                                      username: (data != null)?data['userName']:"", 
+                                                      phoneNo: (data != null)?data['phoneNo']:"", 
+                                                      title: "Update Service", 
+                                                      isLeftFloattingButton: true, 
+                                                      isRightFloattingButton: false, 
+                                                      leftClick: () => {
+                                                        Navigator.pop(context)
+                                                      },
+                                                      rightClick: () => {}, 
+                                                      leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
+                                                      rightIcon: const Icon(Icons.add_rounded, size: 30),
+                                                      update: true,
+                                                      updateData: document,
+                                                    )
+                                                  )
+                                                );
+                                              },
+                                            )
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.home_repair_service_rounded),
+                                    label: const Text(
+                                      "MY SERVICES",
+                                      style: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.normal,
+                                        color: Color(0xFF333333),
+                                        letterSpacing: -0.5
+                                      ),
+                                    ),
+                                  ),
+                                // const Spacer(flex: 1),
+                                const SizedBox(height: 7,),
+                                DottedBorder(
+                                  borderType: BorderType.RRect,
+                                  radius: const Radius.circular(30),
+                                  dashPattern: const [4, 4],
+                                  strokeWidth: 2,
+                                  padding: EdgeInsets.zero,
+                                  color: const Color(0xFFFFC804),
+                                  strokeCap: StrokeCap.round,
+                                  child: TextButton.icon(
+                                    style: TextButton.styleFrom(
+                                      alignment: Alignment.centerLeft,
+                                      backgroundColor: const Color(0xFFFFFFFF),
+                                      primary: const Color(0xFF333333),
+                                      minimumSize: const Size(210, 40),
+                                      maximumSize: const Size(210, 40),
+                                      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14),
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.all(Radius.circular(28.0)),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                            HistoryListPage(
+                                              title: "My History",
+                                              username: (data != null)?data['userName']:"",
+                                              phoneNo: (data != null)?data['phoneNo']:"",
+                                              isLeftFloattingButton: true,
+                                              isEditFloattingButton: false,
+                                              isRightFloattingButton: false,
+                                              leftClick: () => {
+                                                Navigator.pop(context)
+                                              },
+                                              rightClick: () => {},
+                                              leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
+                                              rightIcon: const Icon(Icons.chevron_right_rounded),
+                                              heroLeft: "history_left",
+                                              heroRight: "history_right",
+                                              documentFieldStream: repository.ss_users_collection.doc(userId).snapshots(),
+                                              onClickWidget: false,
+                                              deleteItemFn: (id){},
+                                              updateItemFn: (id){},
+                                              // history: historys
+                                            )
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.history),
+                                    label: const Text(
+                                      "MY HISTORY",
+                                      style: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.normal,
+                                        color: Color(0xFF333333),
+                                        letterSpacing: -0.5
+                                      ),
+                                    ),
                                   )
-                                ],
-                              ),
-                            ),
-                            const Spacer(flex: 2),
-                            if (data != null && data['businessUser'] == true)
-                              TextButton.icon(
-                                style: TextButton.styleFrom(
-                                  alignment: Alignment.centerLeft,
-                                  backgroundColor: const Color(0xFFFFC804),
-                                  primary: const Color(0xFF333333),
-                                  minimumSize: const Size(204, 40),
-                                  padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14),
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                  ),
                                 ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                        ListPage(
-                                          title: "My Shops",
-                                          username: (data != null)?data['userName']:"",
-                                          phoneNo: (data != null)?data['phoneNo']:"",
-                                          isLeftFloattingButton: true,
-                                          isEditFloattingButton: true,
-                                          isRightFloattingButton: true,
-                                          leftClick: () => {
-                                            Navigator.pop(context)
-                                          },
-                                          rightClick: () => {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => AddShop(
-                                                  username: (data != null)?data['userName']:"", 
-                                                  phoneNo: (data != null)?data['phoneNo']:"", 
-                                                  title: "Add Shop", 
-                                                  isLeftFloattingButton: true, 
-                                                  isRightFloattingButton: false, 
-                                                  leftClick: () => {
-                                                    Navigator.pop(context)
-                                                  },
-                                                  rightClick: () => {}, 
-                                                  leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
-                                                  rightIcon: const Icon(Icons.add_rounded, size: 30),
-                                                  update: false,
-                                                  updateData: null,
-                                                )
-                                              )
+                                // const Spacer(flex: 1),
+                                const SizedBox(height: 7,),
+                                DottedBorder(
+                                  borderType: BorderType.RRect,
+                                  radius: const Radius.circular(30),
+                                  dashPattern: const [4, 4],
+                                  strokeWidth: 2,
+                                  padding: EdgeInsets.zero,
+                                  color: const Color(0xFFFFC804),
+                                  strokeCap: StrokeCap.round,
+                                  child: TextButton.icon(
+                                    style: TextButton.styleFrom(
+                                      alignment: Alignment.centerLeft,
+                                      backgroundColor: const Color(0xFFFFFFFF),
+                                      primary: const Color(0xFF333333),
+                                      minimumSize: const Size(210, 40),
+                                      maximumSize: const Size(210, 40),
+                                      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14),
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.all(Radius.circular(28.0)),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                            FavouriteListPage(
+                                              title: "My Favourites",
+                                              userId: userId,
+                                              username: (data != null)?data['userName']:"",
+                                              phoneNo: (data != null)?data['phoneNo']:"",
+                                              favouriteServices: data["favouriteServices"] ?? [],
+                                              favouriteShops: data["favouriteShops"] ?? [],
                                             )
-                                          },
-                                          leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
-                                          rightIcon: const Icon(Icons.add_rounded, size: 30),
-                                          heroLeft: "shop_left",
-                                          heroRight: "shop_right",
-                                          documentFieldStream: repository.ss_shops_collection.where("businessId", isEqualTo: userId).snapshots(),
-                                          onClickWidget: true,
-                                          type: listPageType.shop,
-                                          deleteItemFn: (id) {
-                                            repository.ss_shops_collection.doc(id).delete();
-                                            // print(data["id"].toString() + "deleted");
-                                          },
-                                          updateItemFn: (id, document){
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => AddShop(
-                                                  username: (data != null)?data['userName']:"", 
-                                                  phoneNo: (data != null)?data['phoneNo']:"", 
-                                                  title: "Update Shop", 
-                                                  isLeftFloattingButton: true, 
-                                                  isRightFloattingButton: false, 
-                                                  leftClick: () => {
-                                                    Navigator.pop(context)
-                                                  },
-                                                  rightClick: () => {}, 
-                                                  leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
-                                                  rightIcon: const Icon(Icons.add_rounded, size: 30),
-                                                  update: true,
-                                                  updateData: document,
-                                                )
-                                              )
-                                            );
-                                          },
-                                        )
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.favorite),
+                                    label: const FittedBox(
+                                      child: Text(
+                                        "MY FAVOURITES",
+                                        style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.normal,
+                                          color: Color(0xFF333333),
+                                          letterSpacing: -0.5
+                                        ),
+                                      ),
                                     ),
-                                  );
-                                },
-                                icon: const Icon(Icons.shopping_bag),
-                                label: const Text(
-                                  "MY SHOPS",
-                                  style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.normal,
-                                    color: Color(0xFF333333),
-                                    letterSpacing: -0.5
-                                  ),
+                                  )
                                 ),
-                              ),
-                            const Spacer(flex: 1),
-                            if (data != null && data['businessUser'] == true)
-                              TextButton.icon(
-                                style: TextButton.styleFrom(
-                                  alignment: Alignment.centerLeft,
-                                  backgroundColor: const Color(0xFFFFC804),
-                                  primary: const Color(0xFF333333),
-                                  minimumSize: const Size(204, 40),
-                                  padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14),
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                        ListPage(
-                                          title: "My Services",
-                                          username: (data != null)?data['userName']:"",
-                                          phoneNo: (data != null)?data['phoneNo']:"",
-                                          isLeftFloattingButton: true,
-                                          isEditFloattingButton: true,
-                                          isRightFloattingButton: true,
-                                          leftClick: () => {
-                                            Navigator.pop(context)
-                                          },
-                                          rightClick: () => {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => AddService(
-                                                  username: (data != null)?data['userName']:"", 
-                                                  phoneNo: (data != null)?data['phoneNo']:"", 
-                                                  title: "Add Services", 
-                                                  isLeftFloattingButton: true, 
-                                                  isRightFloattingButton: false, 
-                                                  leftClick: () => {
-                                                    Navigator.pop(context)
-                                                  },
-                                                  rightClick: () => {}, 
-                                                  leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
-                                                  rightIcon: const Icon(Icons.add_rounded, size: 30),
-                                                  update: false,
-                                                  updateData: null
-                                                )
-                                              )
+                                // const Spacer(flex: 1),
+                                const SizedBox(height: 7,),
+                                DottedBorder(
+                                  borderType: BorderType.RRect,
+                                  radius: const Radius.circular(30),
+                                  dashPattern: const [4, 4],
+                                  strokeWidth: 2,
+                                  padding: EdgeInsets.zero,
+                                  color: const Color(0xFFFFC804),
+                                  strokeCap: StrokeCap.round,
+                                  child: TextButton.icon(
+                                    style: TextButton.styleFrom(
+                                      alignment: Alignment.centerLeft,
+                                      backgroundColor: const Color(0xFFFFFFFF),
+                                      primary: const Color(0xFF333333),
+                                      minimumSize: const Size(210, 40),
+                                      maximumSize: const Size(210, 40),
+                                      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14),
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.all(Radius.circular(28.0)),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                            ReviewListPage(
+                                              title: "My Reviews",
+                                              username: (data != null)?data['userName']:"",
+                                              phoneNo: (data != null)?data['phoneNo']:"",
+                                              userId: userId,
                                             )
-                                          },
-                                          leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
-                                          rightIcon: const Icon(Icons.add_rounded, size: 30),
-                                          heroLeft: "service_left",
-                                          heroRight: "service_right",
-                                          documentFieldStream: repository.ss_services_collection.where("businessId", isEqualTo: userId).snapshots(),
-                                          
-                                          onClickWidget: true,
-                                          type: listPageType.service,
-                                          deleteItemFn: (id) {
-                                            repository.ss_services_collection.doc(id).delete();
-                                            // print(data["id"].toString() + "deleted");
-                                          },
-                                          updateItemFn: (id, document){
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => AddService(
-                                                  username: (data != null)?data['userName']:"", 
-                                                  phoneNo: (data != null)?data['phoneNo']:"", 
-                                                  title: "Update Service", 
-                                                  isLeftFloattingButton: true, 
-                                                  isRightFloattingButton: false, 
-                                                  leftClick: () => {
-                                                    Navigator.pop(context)
-                                                  },
-                                                  rightClick: () => {}, 
-                                                  leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
-                                                  rightIcon: const Icon(Icons.add_rounded, size: 30),
-                                                  update: true,
-                                                  updateData: document,
-                                                )
-                                              )
-                                            );
-                                          },
-                                        )
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.reviews),
+                                    label: const Text(
+                                      "MY REVIEWS",
+                                      style: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.normal,
+                                        color: Color(0xFF333333),
+                                        letterSpacing: -0.5
+                                      ),
                                     ),
-                                  );
-                                },
-                                icon: const Icon(Icons.home_repair_service_rounded),
-                                label: const Text(
-                                  "MY SERVICES",
-                                  style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.normal,
-                                    color: Color(0xFF333333),
-                                    letterSpacing: -0.5
-                                  ),
+                                  )
                                 ),
-                              ),
-                            const Spacer(flex: 1),
-                            DottedBorder(
-                              borderType: BorderType.RRect,
-                              radius: const Radius.circular(30),
-                              dashPattern: const [4, 4],
-                              strokeWidth: 2,
-                              padding: EdgeInsets.zero,
-                              color: const Color(0xFFFFC804),
-                              strokeCap: StrokeCap.round,
-                              child: TextButton.icon(
-                                style: TextButton.styleFrom(
-                                  alignment: Alignment.centerLeft,
-                                  backgroundColor: const Color(0xFFFFFFFF),
-                                  primary: const Color(0xFF333333),
-                                  minimumSize: const Size(204, 40),
-                                  padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14),
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(28.0)),
-                                  ),
-                                  // shape: RoundedRectangleBorder(
-                                  //   side: const BorderSide(
-                                  //     color: Color(0xFFFFC804),
-                                  //     width: 1,
-                                  //     style: BorderStyle.solid
-                                  //   ),
-                                  //   borderRadius: BorderRadius.circular(30)
-                                  // ),
-                                ),
-                                onPressed: () {
-                                  // List<String> historys = <String>[];
-                                  // () async {
-                                  //   repository.ss_users_collection.doc(userId).get().then((value) => {
-                                  //     if (value.exists) {
-                                  //       historys = value.get("searchHistory")
-                                  //     }
-                                  //   });
-                                  // };
-                                  // print(historys);
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                        HistoryListPage(
-                                          title: "My History",
-                                          username: (data != null)?data['userName']:"",
-                                          phoneNo: (data != null)?data['phoneNo']:"",
-                                          isLeftFloattingButton: true,
-                                          isEditFloattingButton: false,
-                                          isRightFloattingButton: false,
-                                          leftClick: () => {
-                                            Navigator.pop(context)
-                                          },
-                                          rightClick: () => {},
-                                          leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
-                                          rightIcon: const Icon(Icons.chevron_right_rounded),
-                                          heroLeft: "history_left",
-                                          heroRight: "history_right",
-                                          documentFieldStream: repository.ss_users_collection.doc(userId).snapshots(),
-                                          onClickWidget: false,
-                                          deleteItemFn: (id){},
-                                          updateItemFn: (id){},
-                                          // history: historys
-                                        )
+                                // const Spacer(flex: 1),
+                                const SizedBox(height: 7,),
+                                TextButton.icon(
+                                  style: TextButton.styleFrom(
+                                    alignment: Alignment.centerLeft,
+                                    backgroundColor: const Color(0xFFE5E5E5),
+                                    primary: const Color(0xFF333333),
+                                    minimumSize: const Size(210, 40),
+                                    maximumSize: const Size(210, 40),
+                                    padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14),
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(30.0)),
                                     ),
-                                  );
-                                },
-                                icon: const Icon(Icons.history),
-                                label: const Text(
-                                  "MY HISTORY",
-                                  style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.normal,
-                                    color: Color(0xFF333333),
-                                    letterSpacing: -0.5
                                   ),
-                                ),
-                              )
-                            ),
-                            const Spacer(flex: 1),
-                            DottedBorder(
-                              borderType: BorderType.RRect,
-                              radius: const Radius.circular(30),
-                              dashPattern: const [4, 4],
-                              strokeWidth: 2,
-                              padding: EdgeInsets.zero,
-                              color: const Color(0xFFFFC804),
-                              strokeCap: StrokeCap.round,
-                              child: TextButton.icon(
-                                style: TextButton.styleFrom(
-                                  alignment: Alignment.centerLeft,
-                                  backgroundColor: const Color(0xFFFFFFFF),
-                                  primary: const Color(0xFF333333),
-                                  minimumSize: const Size(204, 40),
-                                  padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14),
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(28.0)),
-                                  ),
-                                  // shape: RoundedRectangleBorder(
-                                  //   side: const BorderSide(
-                                  //       color: Color(0xFFFFC804),
-                                  //       width: 1,
-                                  //       style: BorderStyle.solid),
-                                  //   borderRadius: BorderRadius.circular(28)
-                                  // ),
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                        FavouriteListPage(
-                                          title: "My Favourites",
-                                          userId: userId,
-                                          username: (data != null)?data['userName']:"",
-                                          phoneNo: (data != null)?data['phoneNo']:"",
-                                          favouriteServices: data["favouriteServices"] ?? [],
-                                          favouriteShops: data["favouriteShops"] ?? [],
-                                        )
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(Icons.favorite),
-                                label: const FittedBox(
-                                  child: Text(
-                                    "MY FAVOURITES",
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                          EditProfile(
+                                            title: "EDIT PROFILE",
+                                            username: (data != null)?data['userName']:"",
+                                            phoneNo: (data != null)?data['phoneNo']:"",
+                                            isLeftFloattingButton: true,
+                                            isRightFloattingButton: false,
+                                            leftClick: () => {
+                                              Navigator.pop(context)
+                                            },
+                                            rightClick: () => {},
+                                            leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
+                                            rightIcon: const Icon(Icons.chevron_right_rounded),
+                                            authService: widget.authService,
+                                            data: data,
+                                          )
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(Icons.edit),
+                                  label: const Text(
+                                    "EDIT PROFILE",
                                     style: TextStyle(
-                                      fontSize: 18.0,
+                                      fontSize: 20.0,
                                       fontWeight: FontWeight.normal,
                                       color: Color(0xFF333333),
                                       letterSpacing: -0.5
                                     ),
                                   ),
                                 ),
-                              )
+                                // const Spacer(flex: 5),
+                                const SizedBox(height: 7,),
+                              ],
                             ),
-                            const Spacer(flex: 1),
-                            DottedBorder(
-                              borderType: BorderType.RRect,
-                              radius: const Radius.circular(30),
-                              dashPattern: const [4, 4],
-                              strokeWidth: 2,
-                              padding: EdgeInsets.zero,
-                              color: const Color(0xFFFFC804),
-                              strokeCap: StrokeCap.round,
-                              child: TextButton.icon(
-                                style: TextButton.styleFrom(
-                                  alignment: Alignment.centerLeft,
-                                  backgroundColor: const Color(0xFFFFFFFF),
-                                  primary: const Color(0xFF333333),
-                                  minimumSize: const Size(204, 40),
-                                  padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14),
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(28.0)),
-                                  ),
-                                  // shape: RoundedRectangleBorder(
-                                  //   side: const BorderSide(
-                                  //       color: Color(0xFFFFC804),
-                                  //       width: 1,
-                                  //       style: BorderStyle.solid),
-                                  //   borderRadius: BorderRadius.circular(30)
-                                  // ),
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                        ReviewListPage(
-                                          title: "My Reviews",
-                                          username: (data != null)?data['userName']:"",
-                                          phoneNo: (data != null)?data['phoneNo']:"",
-                                          userId: userId,
-                                        )
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(Icons.reviews),
-                                label: const Text(
-                                  "MY REVIEWS",
-                                  style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.normal,
-                                    color: Color(0xFF333333),
-                                    letterSpacing: -0.5
-                                  ),
-                                ),
-                              )
-                            ),
-                            const Spacer(flex: 1),
-                            TextButton.icon(
-                              style: TextButton.styleFrom(
-                                alignment: Alignment.centerLeft,
-                                backgroundColor: const Color(0xFFE5E5E5),
-                                primary: const Color(0xFF333333),
-                                minimumSize: const Size(204, 40),
-                                padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14),
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(30.0)),
-                                ),
-                              ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                      EditProfile(
-                                        title: "EDIT PROFILE",
-                                        username: (data != null)?data['userName']:"",
-                                        phoneNo: (data != null)?data['phoneNo']:"",
-                                        isLeftFloattingButton: true,
-                                        isRightFloattingButton: false,
-                                        leftClick: () => {
-                                          Navigator.pop(context)
-                                        },
-                                        rightClick: () => {},
-                                        leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
-                                        rightIcon: const Icon(Icons.chevron_right_rounded),
-                                        authService: widget.authService,
-                                        data: data,
-                                      )
-                                  ),
-                                );
-                              },
-                              icon: const Icon(Icons.edit),
-                              label: const Text(
-                                "EDIT PROFILE",
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.normal,
-                                  color: Color(0xFF333333),
-                                  letterSpacing: -0.5
-                                ),
-                              ),
-                            ),
-                            const Spacer(flex: 5),
-                            OutlinedButton(
+                          )
+                        ),
+                      )
+                    ),
+                    SizedBox(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(35, 0, 30, 0),
+                        child: Column(
+                          children: [
+                            TextButton(
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFFEE4949)),
+                                minimumSize: MaterialStateProperty.all<Size>(const Size(105, 35)),
                                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
                                 ),
                               ),
                               onPressed: () async {
                                 await widget.authService.auth.signOut();
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (context) =>
-                                //       const all_shops_services
-                                //           .All_Shops_Services(
-                                //         title: "My Reviews",
-                                //         aboutUs: "Sujit Soren",
-                                //       )
-                                //   ),
-                                // );
                               },
                               child: const Text(
-                                "Logout",
-                                style: TextStyle(color: Colors.white),
+                                "LOGOUT",
+                                style: TextStyle(color: Colors.white, fontSize: 14),
+                                textScaleFactor: 1.0
                               ),
                             ),
-                            const Spacer(flex: 5),
+                            // const Spacer(flex: 5),
+                            const SizedBox(height: 15,),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                OutlinedButton(
+                                TextButton(
                                   style: ButtonStyle(
                                     backgroundColor:MaterialStateProperty.all<Color>(const Color(0xFFFCE48F)),
+                                    minimumSize: MaterialStateProperty.all<Size>(const Size(90, 35)),
                                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
                                         borderRadius:BorderRadius.circular(18.0),
@@ -1224,21 +1152,20 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => about.MyAboutUs(
-                                          title: "About Us",
-                                          aboutUs: widget.generateRandomString(2000),
-                                        )
+                                        builder: (context) => const about.MyAboutUs()
                                       ),
                                     );
                                   },
                                   child: const Text(
-                                    "About Us",
-                                    style: TextStyle(color: Color(0xFF333333)),
+                                    "ABOUT US",
+                                    style: TextStyle(color: Color(0xFF333333), fontSize: 14),
+                                    textScaleFactor: 1.0,
                                   ),
                                 ),
-                                OutlinedButton(
+                                TextButton(
                                   style: ButtonStyle(
                                     backgroundColor:MaterialStateProperty.all<Color>(const Color(0xFFFCE48F)),
+                                    minimumSize: MaterialStateProperty.all<Size>(const Size(90, 35)),
                                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(18.0),
@@ -1249,532 +1176,30 @@ class _SignedInDrawerState extends State<SignedInDrawer> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => about.MyAboutUs(
-                                          title: "About Us",
-                                          aboutUs: widget.generateRandomString(2000),
-                                        )
+                                        builder: (context) => const about.MyAboutUs()
                                       ),
                                     );
                                   },
                                   child: const Text(
-                                    "Help",
-                                    style: TextStyle(color: Color(0xFF333333)),
+                                    "HELP",
+                                    style: TextStyle(color: Color(0xFF333333), fontSize: 14),
+                                    textScaleFactor: 1.0,
                                   ),
                                 )
                               ],
                             ),
                           ],
-                        )
-                      ),
+                        ),
+                      )
                     )
-                  // )
-                ],
-              ),
-              const Positioned(top: 62, left: 30, right: 30, child: design.LogoSimple())
-            ],
-          ),
-        )
-      )
+                  ],
+                ),
+                const Positioned(top: 62, left: 30, right: 30, child: design.LogoSimple())
+              ],
+            ),
+          )
+        ),
+      ),
     );
   }
 }
-// class signindrawer1 extends StatelessWidget {
-
-//   final AuthService authService;
-//   final bool businessmember;
-//   signindrawer1({
-//     Key? key,
-//     required this.authService,
-//     required this.businessmember,
-//   }) : super(key: key);
-
-//   String username = '';
-//   String phoneNo = '';
-  
-//   @override
-//   void initState() {
-//     super.initState();
-    
-    
-   
-//   }
-
-//   void initialize() async{
-//     DataRepository repository = DataRepository();
-//     DocumentSnapshot snap = await repository.ss_users_collection.doc().get() as DocumentSnapshot<Object?>;
-//     username = snap['userName'];
-//     phoneNo = snap['phoneNo'];
-//   }
-
-//   String generateRandomString(int len) {
-//     var r = Random();
-//     const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-//     return List.generate(len, (index) => _chars[r.nextInt(_chars.length)]).join();
-//   }
-
-//   // DataRepository repository = DataRepository();
-  
-  
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // bool isSwitched = false;
-//     // bool _shareValue = false;
-//     // repository.ss_users_collection.doc(authService.auth.currentUser?.uid).snapshots();
-//     return Padding(
-//       padding: const EdgeInsets.all(11.0),
-//       child: Container(
-//         width: 272,
-//         decoration: const BoxDecoration(
-//           borderRadius: BorderRadius.all(Radius.circular(30)),
-//           border: Border(
-//             left: BorderSide(color: Color(0xFFFFC804), width: 2.0),
-//             top: BorderSide(color: Color(0xFFFFC804), width: 2.0),
-//             right: BorderSide(color: Color(0xFFFFC804), width: 2.0),
-//             bottom: BorderSide(color: Color(0xFFFFC804), width: 2.0)
-//           )
-//         ),
-//         child: Drawer(
-//           shape: const RoundedRectangleBorder(
-//             borderRadius: BorderRadius.all(Radius.circular(30)),
-//           ),
-//           child: Stack(
-//             children: <Widget>[
-//               Column(
-//                 children: [
-//                   Container(
-//                     height: 146,
-//                     // width: double.infinity,
-//                     // color: Color(0xFFFFC804),
-//                     decoration: const BoxDecoration(
-//                       borderRadius: BorderRadius.only(
-//                           topLeft: Radius.circular(28.0),
-//                           topRight: Radius.circular(28.0)),
-//                       color: Color(0xFFE5E5E5),
-//                     )
-//                   ),
-//                   Expanded(
-//                     child: Padding(
-//                       padding: const EdgeInsets.fromLTRB(35, 80, 30, 10),
-//                       // child: SingleChildScrollView(
-//                         child: Column(
-//                           mainAxisAlignment: MainAxisAlignment.start,
-//                           crossAxisAlignment: CrossAxisAlignment.center,
-//                           children: [
-//                             // Padding(
-//                             //   padding: const EdgeInsets.only(top: 0, bottom: 20.0),
-//                             //   child: 
-//                             // ),
-//                             SizedBox(
-//                               height: 55,
-//                               child: Column(
-//                                 crossAxisAlignment: CrossAxisAlignment.start,
-//                                 mainAxisAlignment: MainAxisAlignment.start,
-//                                 children: [
-//                                   Text(
-//                                     username,
-//                                     style:
-//                                         Theme.of(context).textTheme.headline2,
-//                                   ),
-//                                   Text(phoneNo,
-//                                   style: const TextStyle(
-//                                     color: Color(0xFFAAAAAA),
-//                                     fontSize: 14,
-//                                     fontWeight: FontWeight.bold)
-//                                   )
-//                                 ],
-//                               ),
-//                             ),
-//                             const Spacer(flex: 3),
-//                             if (businessmember == true)
-//                               TextButton.icon(
-//                                 style: TextButton.styleFrom(
-//                                   alignment: Alignment.centerLeft,
-//                                   backgroundColor: const Color(0xFFFFC804),
-//                                   primary: const Color(0xFF333333),
-//                                   minimumSize: const Size(204, 40),
-//                                   padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14),
-//                                   shape: const RoundedRectangleBorder(
-//                                     borderRadius: BorderRadius.all(Radius.circular(30.0)),
-//                                   ),
-//                                 ),
-//                                 onPressed: () {
-//                                   Navigator.push(
-//                                     context,
-//                                     MaterialPageRoute(
-//                                       builder: (context) =>
-//                                         ListPage(
-//                                           title: "My Chats",
-//                                           username: (data != null)?data['userName']:"",
-//                                           phoneNo: (data != null)?data['phoneNo']:"",
-//                                           isLeftFloattingButton: true,
-//                                           isRightFloattingButton: false,
-//                                           leftClick: () => {
-//                                             Navigator.pop(context)
-//                                           },
-//                                           rightClick: () => {},
-//                                           leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
-//                                           rightIcon: const Icon(Icons.chevron_right_rounded),
-//                                         )
-//                                     ),
-//                                   );
-//                                 },
-//                                 icon: const Icon(Icons.shopping_bag),
-//                                 label: const Text(
-//                                   "MY SHOPS",
-//                                   style: TextStyle(
-//                                     fontSize: 18.0,
-//                                     fontWeight: FontWeight.normal,
-//                                     color: Color(0xFF333333),
-//                                     letterSpacing: -0.5
-//                                   ),
-//                                 ),
-//                               ),
-//                             const Spacer(flex: 1),
-//                             if (businessmember == true)
-//                               TextButton.icon(
-//                                 style: TextButton.styleFrom(
-//                                   alignment: Alignment.centerLeft,
-//                                   backgroundColor: const Color(0xFFFFC804),
-//                                   primary: const Color(0xFF333333),
-//                                   minimumSize: const Size(204, 40),
-//                                   padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14),
-//                                   shape: const RoundedRectangleBorder(
-//                                     borderRadius: BorderRadius.all(Radius.circular(30.0)),
-//                                   ),
-//                                 ),
-//                                 onPressed: () {
-//                                   Navigator.push(
-//                                     context,
-//                                     MaterialPageRoute(
-//                                       builder: (context) =>
-//                                         ListPage(
-//                                           title: "My Chats",
-//                                           username: (data != null)?data['userName']:"",
-//                                           phoneNo: (data != null)?data['phoneNo']:"",
-//                                           isLeftFloattingButton: true,
-//                                           isRightFloattingButton: false,
-//                                           leftClick: () => {
-//                                             Navigator.pop(context)
-//                                           },
-//                                           rightClick: () => {},
-//                                           leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
-//                                           rightIcon: const Icon(Icons.chevron_right_rounded),
-//                                         )
-//                                     ),
-//                                   );
-//                                 },
-//                                 icon: const Icon(Icons.home_repair_service_rounded),
-//                                 label: const Text(
-//                                   "MY SERVICES",
-//                                   style: TextStyle(
-//                                     fontSize: 18.0,
-//                                     fontWeight: FontWeight.normal,
-//                                     color: Color(0xFF333333),
-//                                     letterSpacing: -0.5
-//                                   ),
-//                                 ),
-//                               ),
-//                             const Spacer(flex: 1),
-//                             TextButton.icon(
-//                               style: TextButton.styleFrom(
-//                                 alignment: Alignment.centerLeft,
-//                                 backgroundColor: const Color(0xFFFFFFFF),
-//                                 primary: const Color(0xFF333333),
-//                                 minimumSize: const Size(204, 40),
-//                                 padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14),
-//                                 // shape: const RoundedRectangleBorder(
-//                                 //   borderRadius:
-//                                 //       BorderRadius.all(Radius.circular(30.0)),
-//                                 // ),
-//                                 shape: RoundedRectangleBorder(
-//                                   side: const BorderSide(
-//                                     color: Color(0xFFFFC804),
-//                                     width: 1,
-//                                     style: BorderStyle.solid
-//                                   ),
-//                                   borderRadius: BorderRadius.circular(30)
-//                                 ),
-//                               ),
-//                               onPressed: () {
-//                                 Navigator.push(
-//                                   context,
-//                                   MaterialPageRoute(
-//                                     builder: (context) =>
-//                                       ListPage(
-//                                         title: "My Chats",
-//                                         username: (data != null)?data['userName']:"",
-//                                         phoneNo: (data != null)?data['phoneNo']:"",
-//                                         isLeftFloattingButton: true,
-//                                         isRightFloattingButton: false,
-//                                         leftClick: () => {
-//                                           Navigator.pop(context)
-//                                         },
-//                                         rightClick: () => {},
-//                                         leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
-//                                         rightIcon: const Icon(Icons.chevron_right_rounded),
-//                                       )
-//                                   ),
-//                                 );
-//                               },
-//                               icon: const Icon(Icons.history),
-//                               label: const Text(
-//                                 "MY HISTORY",
-//                                 style: TextStyle(
-//                                   fontSize: 18.0,
-//                                   fontWeight: FontWeight.normal,
-//                                   color: Color(0xFF333333),
-//                                   letterSpacing: -0.5
-//                                 ),
-//                               ),
-//                             ),
-//                             const Spacer(flex: 1),
-//                             TextButton.icon(
-//                               style: TextButton.styleFrom(
-//                                 alignment: Alignment.centerLeft,
-//                                 backgroundColor: const Color(0xFFFFFFFF),
-//                                 primary: const Color(0xFF333333),
-//                                 minimumSize: const Size(204, 40),
-//                                 padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14),
-//                                 // shape: const RoundedRectangleBorder(
-//                                 //   borderRadius:
-//                                 //       BorderRadius.all(Radius.circular(30.0)),
-//                                 // ),
-//                                 shape: RoundedRectangleBorder(
-//                                   side: const BorderSide(
-//                                       color: Color(0xFFFFC804),
-//                                       width: 1,
-//                                       style: BorderStyle.solid),
-//                                   borderRadius: BorderRadius.circular(30)
-//                                 ),
-//                               ),
-//                               onPressed: () {
-//                                 Navigator.push(
-//                                   context,
-//                                   MaterialPageRoute(
-//                                     builder: (context) =>
-//                                       ListPage(
-//                                         title: "My Chats",
-//                                         username: (data != null)?data['userName']:"",
-//                                         phoneNo: (data != null)?data['phoneNo']:"",
-//                                         isLeftFloattingButton: true,
-//                                         isRightFloattingButton: false,
-//                                         leftClick: () => {
-//                                           Navigator.pop(context)
-//                                         },
-//                                         rightClick: () => {},
-//                                         leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
-//                                         rightIcon: const Icon(Icons.chevron_right_rounded),
-//                                       )
-//                                   ),
-//                                 );
-//                               },
-//                               icon: const Icon(Icons.favorite),
-//                               label: const Text(
-//                                 "MY FAVOURITES",
-//                                 style: TextStyle(
-//                                   fontSize: 18.0,
-//                                   fontWeight: FontWeight.normal,
-//                                   color: Color(0xFF333333),
-//                                   letterSpacing: -0.5
-//                                 ),
-//                               ),
-//                             ),
-//                             const Spacer(flex: 1),
-//                             TextButton.icon(
-//                               style: TextButton.styleFrom(
-//                                 alignment: Alignment.centerLeft,
-//                                 backgroundColor: const Color(0xFFFFFFFF),
-//                                 primary: const Color(0xFF333333),
-//                                 minimumSize: const Size(204, 40),
-//                                 padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14),
-//                                 // shape: const RoundedRectangleBorder(
-//                                 //   borderRadius:
-//                                 //       BorderRadius.all(Radius.circular(30.0)),
-//                                 // ),
-//                                 shape: RoundedRectangleBorder(
-//                                   side: const BorderSide(
-//                                       color: Color(0xFFFFC804),
-//                                       width: 1,
-//                                       style: BorderStyle.solid),
-//                                   borderRadius: BorderRadius.circular(30)
-//                                 ),
-//                               ),
-//                               onPressed: () {
-//                                 Navigator.push(
-//                                   context,
-//                                   MaterialPageRoute(
-//                                     builder: (context) =>
-//                                       ListPage(
-//                                         title: "My Chats",
-//                                         username: (data != null)?data['userName']:"",
-//                                         phoneNo: (data != null)?data['phoneNo']:"",
-//                                         isLeftFloattingButton: true,
-//                                         isRightFloattingButton: false,
-//                                         leftClick: () => {
-//                                           Navigator.pop(context)
-//                                         },
-//                                         rightClick: () => {},
-//                                         leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
-//                                         rightIcon: const Icon(Icons.chevron_right_rounded),
-//                                       )
-//                                   ),
-//                                 );
-//                               },
-//                               icon: const Icon(Icons.reviews),
-//                               label: const Text(
-//                                 "MY REVIEWS",
-//                                 style: TextStyle(
-//                                   fontSize: 18.0,
-//                                   fontWeight: FontWeight.normal,
-//                                   color: Color(0xFF333333),
-//                                   letterSpacing: -0.5
-//                                 ),
-//                               ),
-//                             ),
-//                             const Spacer(flex: 1),
-//                             TextButton.icon(
-//                               style: TextButton.styleFrom(
-//                                 alignment: Alignment.centerLeft,
-//                                 backgroundColor: const Color(0xFFE5E5E5),
-//                                 primary: const Color(0xFF333333),
-//                                 minimumSize: const Size(204, 40),
-//                                 padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14),
-//                                 shape: const RoundedRectangleBorder(
-//                                   borderRadius:
-//                                       BorderRadius.all(Radius.circular(30.0)),
-//                                 ),
-//                               ),
-//                               onPressed: () {
-//                                 Navigator.push(
-//                                   context,
-//                                   MaterialPageRoute(
-//                                     builder: (context) =>
-//                                       ListPage(
-//                                         title: "My Chats",
-//                                         username: (data != null)?data['userName']:"",
-//                                         phoneNo: (data != null)?data['phoneNo']:"",
-//                                         isLeftFloattingButton: true,
-//                                         isRightFloattingButton: false,
-//                                         leftClick: () => {
-//                                           Navigator.pop(context)
-//                                         },
-//                                         rightClick: () => {},
-//                                         leftIcon: const Icon(Icons.chevron_left_rounded, size: 35),
-//                                         rightIcon: const Icon(Icons.chevron_right_rounded),
-//                                       )
-//                                   ),
-//                                 );
-//                               },
-//                               icon: const Icon(Icons.edit),
-//                               label: const Text(
-//                                 "EDIT PROFILE",
-//                                 style: TextStyle(
-//                                   fontSize: 18.0,
-//                                   fontWeight: FontWeight.normal,
-//                                   color: Color(0xFF333333),
-//                                   letterSpacing: -0.5
-//                                 ),
-//                               ),
-//                             ),
-//                             const Spacer(flex: 5),
-//                             OutlinedButton(
-//                               style: ButtonStyle(
-//                                 backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFFEE4949)),
-//                                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-//                                   RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
-//                                 ),
-//                               ),
-//                               onPressed: () async {
-//                                 await authService.auth.signOut();
-//                                 // Navigator.push(
-//                                 //   context,
-//                                 //   MaterialPageRoute(
-//                                 //     builder: (context) =>
-//                                 //       const all_shops_services
-//                                 //           .All_Shops_Services(
-//                                 //         title: "My Reviews",
-//                                 //         aboutUs: "Sujit Soren",
-//                                 //       )
-//                                 //   ),
-//                                 // );
-//                               },
-//                               child: const Text(
-//                                 "Logout",
-//                                 style: TextStyle(color: Colors.white),
-//                               ),
-//                             ),
-//                             const Spacer(flex: 5),
-//                             Row(
-//                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                               crossAxisAlignment: CrossAxisAlignment.center,
-//                               children: [
-//                                 OutlinedButton(
-//                                   style: ButtonStyle(
-//                                     backgroundColor:MaterialStateProperty.all<Color>(const Color(0xFFFCE48F)),
-//                                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-//                                       RoundedRectangleBorder(
-//                                         borderRadius:BorderRadius.circular(18.0),
-//                                       ),
-//                                     ),
-//                                   ),
-//                                   onPressed: () {
-//                                     Navigator.push(
-//                                       context,
-//                                       MaterialPageRoute(
-//                                         builder: (context) => about.MyAboutUs(
-//                                           title: "About Us",
-//                                           aboutUs:generateRandomString(2000)
-//                                         )
-//                                       ),
-//                                     );
-//                                   },
-//                                   child: const Text(
-//                                     "About Us",
-//                                     style: TextStyle(color: Color(0xFF333333)),
-//                                   ),
-//                                 ),
-//                                 OutlinedButton(
-//                                   style: ButtonStyle(
-//                                     backgroundColor:MaterialStateProperty.all<Color>(const Color(0xFFFCE48F)),
-//                                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-//                                       RoundedRectangleBorder(
-//                                         borderRadius: BorderRadius.circular(18.0),
-//                                       ),
-//                                     ),
-//                                   ),
-//                                   onPressed: () {
-//                                     Navigator.push(
-//                                       context,
-//                                       MaterialPageRoute(
-//                                         builder: (context) => about.MyAboutUs(
-//                                           title: "About Us",
-//                                           aboutUs: generateRandomString(2000)
-//                                         )
-//                                       ),
-//                                     );
-//                                   },
-//                                   child: const Text(
-//                                     "Help",
-//                                     style: TextStyle(color: Color(0xFF333333)),
-//                                   ),
-//                                 )
-//                               ],
-//                             ),
-//                           ],
-//                         )
-//                       ),
-//                     )
-//                   // )
-//                 ],
-//               ),
-//               const Positioned(top: 62, left: 30, right: 30, child: design.LogoSimple())
-//             ],
-//           ),
-//         )
-//       )
-//     );
-//   }
-
-//   void setState(Null Function() param0) {}
-// }

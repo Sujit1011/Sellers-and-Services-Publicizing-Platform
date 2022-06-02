@@ -1,55 +1,93 @@
 import 'package:flutter/material.dart';
 
 // My Colors
-const Color _primiaryColor = Color(0xFFFFC804);
-const Color _secondaryColor = Color(0xFFD1D1D1);
-const Color _textColor = Color(0xFF333333);
-const Color _textColor2 = Color(0xFFAAAAAA);
-const Color _placeholder = Color(0xFFE5E5E5);
-const Color _placeholder2 = Color(0xFFD1D1D1);
-const Color _white = Color(0xFFFFFFFF);
-const Color _red = Color(0xFFEE4949);
+const Color primaryColor = Color(0xFFFFC804);
+const Color primaryDarkColor = Color(0xFF755c02);
+const Color primaryLightColor = Color(0xFFFFFB51);
+const Color secondaryColor = Color(0xFFD1D1D1);
+const Color secondaryDarkColor = Color(0xFFA0A0A0);
+const Color textColor = Color(0xFF333333);
+const Color textColor2 = Color(0xFFAAAAAA);
+const Color placeholder = Color(0xFFE5E5E5);
+const Color placeholder2 = Color(0xFFD1D1D1);
+const Color white = Color(0xFFFFFFFF);
+const Color red = Color(0xFFEE4949);
 
 // My TextStyles
-const TextStyle _heading1 = TextStyle(
+const TextStyle displayLarge = TextStyle(
+    fontSize: 48.0,
+    fontWeight: FontWeight.bold,
+    color: textColor,
+    letterSpacing: -0.5);
+const TextStyle displayMedium = TextStyle(
     fontSize: 40.0,
     fontWeight: FontWeight.bold,
-    color: _textColor,
+    color: textColor,
     letterSpacing: -0.5);
-const TextStyle _heading2 = TextStyle(
+const TextStyle displaySmall = TextStyle(
+    fontSize: 36.0,
+    fontWeight: FontWeight.bold,
+    color: textColor,
+    letterSpacing: -0.5);
+const TextStyle headlineLarge = TextStyle(
+    fontSize: 32.0,
+    fontWeight: FontWeight.bold,
+    color: textColor,
+    letterSpacing: -0.5);
+const TextStyle headlineMedium = TextStyle(
     fontSize: 24.0,
     fontWeight: FontWeight.bold,
-    color: _textColor,
+    color: textColor,
     letterSpacing: -0.5);
-const TextStyle _heading3 = TextStyle(
+const TextStyle headlineSmall = TextStyle(
     fontSize: 20.0,
-    fontWeight: FontWeight.normal,
-    color: _textColor,
+    fontWeight: FontWeight.bold,
+    color: textColor,
     letterSpacing: -0.5);
-const TextStyle _heading4 = TextStyle(
+const TextStyle titleLarge = TextStyle(
     fontSize: 18.0,
     fontWeight: FontWeight.bold,
-    color: _textColor,
+    color: textColor,
     letterSpacing: -0.5);
-const TextStyle _heading5 = TextStyle(
-    fontSize: 14.0,
-    fontWeight: FontWeight.bold,
-    color: _textColor,
+const TextStyle titleMedium = TextStyle(
+    fontSize: 16.0,
+    fontWeight: FontWeight.normal,
+    color: textColor,
     letterSpacing: -0.5);
-const TextStyle _heading6 = TextStyle(
+const TextStyle titleSmall = TextStyle(
     fontSize: 12.0,
     fontWeight: FontWeight.normal,
-    color: _textColor,
+    color: textColor,
     letterSpacing: -0.5);
-const TextStyle _heading6Placeholder = TextStyle(
+const TextStyle labelLarge = TextStyle(
     fontSize: 14.0,
-    fontWeight: FontWeight.bold,
-    color: _textColor2,
+    fontWeight: FontWeight.normal,
+    color: textColor2,
     letterSpacing: -0.5);
-const TextStyle _bodyText = TextStyle(
+const TextStyle labelMedium = TextStyle(
     fontSize: 12.0,
-    fontWeight: FontWeight.bold,
-    color: _textColor,
+    fontWeight: FontWeight.normal,
+    color: textColor,
+    letterSpacing: -0.5);
+const TextStyle labelSmall = TextStyle(
+    fontSize: 10.0,
+    fontWeight: FontWeight.normal,
+    color: textColor,
+    letterSpacing: -0.5);
+const TextStyle bodyLarge = TextStyle(
+    fontSize: 16.0,
+    fontWeight: FontWeight.normal,
+    color: textColor,
+    letterSpacing: -0.5);
+const TextStyle bodyMedium = TextStyle(
+    fontSize: 13.0,
+    fontWeight: FontWeight.normal,
+    color: textColor,
+    letterSpacing: -0.5);
+const TextStyle bodySmall = TextStyle(
+    fontSize: 9.0,
+    fontWeight: FontWeight.normal,
+    color: textColor,
     letterSpacing: -0.5);
 
 // My Buttton Styles
@@ -65,34 +103,41 @@ final simpleButtonStyle = TextButton.styleFrom(
 
 // My ThemeData
 final myThemeData = ThemeData(
-  // primarySwatch: _primiary_color,
-  primaryColor: _primiaryColor,
-  scaffoldBackgroundColor: _white,
-  dividerColor: _placeholder2,
+  // primarySwatch: _primaryColor,
+  primaryColor: primaryColor,
+  scaffoldBackgroundColor: white,
+  dividerColor: placeholder2,
   fontFamily: 'Nunito Sans',
-  splashColor: _secondaryColor,
+  splashColor: secondaryColor,
   visualDensity: VisualDensity.compact,
   colorScheme: const ColorScheme(
       brightness: Brightness.light,
-      primary: _primiaryColor,
-      onPrimary: _textColor,
-      secondary: _primiaryColor,
-      onSecondary: _textColor,
-      error: _red,
-      onError: _textColor,
-      background: _placeholder,
-      onBackground: _textColor,
-      surface: _white,
-      onSurface: _textColor),
+      primary: primaryColor,
+      onPrimary: textColor,
+      secondary: primaryColor,
+      onSecondary: textColor,
+      error: red,
+      onError: textColor,
+      background: placeholder,
+      onBackground: textColor,
+      surface: white,
+      onSurface: textColor),
   textTheme: const TextTheme(
-    headline1: _heading1,
-    headline2: _heading2,
-    headline3: _heading3,
-    headline4: _heading4,
-    headline5: _heading5,
-    headline6: _heading6,
-    bodyText1: _bodyText,
-    overline: _heading6Placeholder,
+    displayLarge: displayLarge,
+    displayMedium: displayMedium,
+    displaySmall: displaySmall,
+    headlineLarge: headlineLarge,
+    headlineMedium: headlineMedium,
+    headlineSmall: headlineSmall,
+    titleLarge: titleLarge,
+    titleMedium: titleMedium,
+    titleSmall: titleSmall,
+    labelLarge: labelLarge,
+    labelMedium: labelMedium,
+    labelSmall: labelSmall,
+    bodyLarge: bodyLarge,
+    bodyMedium: bodyMedium,
+    bodySmall: bodySmall
   ),
   // dividerTheme: const DividerThemeData(
   //   space: 42,
@@ -116,23 +161,25 @@ class LogoSimple extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: _white,
+        color: white,
         border: Border.all(
           width: 1,
-          color: _textColor,
+          color: textColor,
         ),
       ),
       child: const FittedBox(
         fit: BoxFit.scaleDown,
           child: Text(
-        'ShoSev',
-        style: TextStyle(
-          fontSize: 38.0,
-          fontWeight: FontWeight.bold,
-          color: _textColor,
-          letterSpacing: -0.5
-        ),
-      )),
+            'ShoSev',
+            style: TextStyle(
+              fontSize: 38.0,
+              fontWeight: FontWeight.bold,
+              color: textColor,
+              letterSpacing: -0.5
+            ),
+          textScaleFactor: 1.0,
+        )
+      ),
     );
   }
 }
@@ -149,19 +196,21 @@ class LogoOnWhite extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
-        color: _primiaryColor,
+        color: primaryColor,
       ),
       child: const FittedBox(
         fit: BoxFit.scaleDown,
           child: Text(
-        'ShoSev',
-        style: TextStyle(
-          fontSize: 38.0,
-          fontWeight: FontWeight.bold,
-          color: _textColor,
-          letterSpacing: -0.5
-        ),
-      )),
+          'ShoSev',
+          textScaleFactor: 1.0,
+          style: TextStyle(
+            fontSize: 38.0,
+            fontWeight: FontWeight.bold,
+            color: textColor,
+            letterSpacing: -0.5
+          ),
+        )
+      ),
     );
   }
 }
@@ -178,19 +227,21 @@ class LogoOnColored extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
-        color: _white,
+        color: white,
       ),
       child: const FittedBox(
         fit: BoxFit.scaleDown,
           child: Text(
-        'ShoSev',
-        style: TextStyle(
-          fontSize: 38.0,
-          fontWeight: FontWeight.bold,
-          color: _textColor,
-          letterSpacing: -0.5
-        ),
-      )),
+          'ShoSev',
+          textScaleFactor: 1.0,
+          style: TextStyle(
+            fontSize: 38.0,
+            fontWeight: FontWeight.bold,
+            color: textColor,
+            letterSpacing: -0.5
+          ),
+        )
+      ),
     );
   }
 }
@@ -257,11 +308,11 @@ class CardDesign1 extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (isHeading)
-                        Text(heading, style: Theme.of(context).textTheme.headline4, overflow: TextOverflow.ellipsis,),
+                        Text(heading, style: Theme.of(context).textTheme.titleLarge, overflow: TextOverflow.ellipsis,),
                       if (isText1)
-                        Text(text1, style: Theme.of(context).textTheme.headline5, overflow: TextOverflow.ellipsis,),
+                        Text(text1, style: Theme.of(context).textTheme.bodyMedium, overflow: TextOverflow.ellipsis,),
                       if (isText2)
-                        Text(text2, style: Theme.of(context).textTheme.headline5, overflow: TextOverflow.ellipsis,),
+                        Text(text2, style: Theme.of(context).textTheme.bodyMedium, overflow: TextOverflow.ellipsis,),
                     ],
                   )
                 ),
